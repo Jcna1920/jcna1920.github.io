@@ -498,14 +498,22 @@ const charsOfWork = w => CHARACTERS.filter(c => c.work === w.id);
 const workOf = c => WORKS.find(w => w.id === c.work);
 const workTitle = w => w.fullTitle || (w.id === "others" ? w.title : `《${w.title}》`);
 
+const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 /* ---------- platforms section ---------- */
+/* 平台圖示（取自 lit.link 頁面的紫色平台圖） */
+const PICON_DIR = "assets/platforms/";
+const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": "heartbeat", "Caveduck": "caveduck", "Storyaichat": "storyaichat",
+  "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
+  "Touchie": "touchie", "MiraiMind": "miraimind", "Floze": "floze", "Paradise": "paradise", "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa" };
+const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.name)} 邀請碼">複製</button></div>` : "";
-$("#platformGrid").innerHTML = PLATFORMS.map(p => `<div class="pcard reveal${p.url ? "" : " pending"}">
+$("#platformGrid").innerHTML = PLATFORMS.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.name)}"></a>` : ""}
+  ${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}
   <span class="pname">${esc(p.name)}</span><span class="pdesc">${esc(p.desc)}</span>
   ${inviteHTML(p)}
-  <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`).join("");
+  <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
   const btn = e.target.closest(".copy"); if (!btn) return;
   e.preventDefault(); e.stopPropagation();
@@ -523,7 +531,6 @@ function avatarHTML(c) {
 }
 const plabel = p => PLAT_LABEL[p] || p;
 /* GPTs、Gemini Gem 連結目前失效：保留資料，按鈕標示「暫停」且不可點擊 */
-const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 function linksHTML(c) {
   if (!c.links.length) return `<p class="lempty">平台連結待補</p>`;
   const pname = p => p === "Caveduck" ? "Caveduck" : plabel(p);
@@ -571,7 +578,7 @@ function coverHTML(w) {
 /* ---------- views ---------- */
 const view = $("#charView"), pf = $("#platformFilter");
 pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}</span></a>` + PLATFORM_FILTERS.map(p =>
-  `<a href="#platform/${p.id}" data-p="${p.id}">${esc(p.label)}<span>${p.count}</span></a>`).join("");
+  `<a href="#platform/${p.id}" data-p="${p.id}">${piconOf(p.key) ? `<img class="fico" src="${piconOf(p.key)}" alt="" width="18" height="18" loading="lazy">` : ""}${esc(p.label)}<span>${p.count}</span></a>`).join("");
 
 function viewWorks() {
   return `<div class="work-grid">${WORKS.map(w => {
