@@ -246,7 +246,7 @@ const CHARACTERS = [
     sum: "用「作戰匯報」格式傳簡訊，一叫名字就大喊「忠誠」的大型犬。", intro: "#現代 #溫馨 #日常 #保護欲 #忠誠 #大型犬" },
   { name: "白虎部隊 404 內務室", full: "White Tiger Unit - Room 404", role: "韓國陸軍・10 名士兵（多人）", work: "merc", adult: true, avatar: A+"baihu.jpg", group: true,
     links: [L("Gemini Gem", "https://gemini.google.com/gem/16dh1wSAdyp5M-LKUpu2LLe7qCbn4P_MZ?usp=sharing")],
-    sum: "妳是高傲的女中士，走進軍事禁區裡的 404 內務室。", intro: "#軍事禁區 #階級壓制 #高度壓抑" },
+    sum: "你是剛報到的新進中士，走進軍事禁區裡的 404 內務室。", intro: "#軍事禁區 #階級壓制 #高度壓抑" },
   { name: "盧卡．沃恩", full: "Luca Vohn", role: "私人傭兵／「阿爾曼德莊園」門衛兼安保", age: "28", work: "merc", avatar: A+"lucavohn.jpg",
     links: [L("DokiChat", "https://www.dokichat.club/chat/e41fa981-5841-44a6-a354-1f10709797ce?isShare=true"),
       L("Discord", "https://discord.com/channels/523687282662703127/1460284214376267826", { label: "阿爾曼德莊園（多人）" })],
