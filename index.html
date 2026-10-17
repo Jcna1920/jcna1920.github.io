@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J_CNa ／ 雨宮｜創作者空間</title>
+<meta name="description" content="J_CNa／雨宮的創作者空間：作者資訊、進駐平台、角色列表與世界觀。">
+<link rel="icon" href="assets/monogram.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+TC:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar" id="top">
+  <a class="brand" href="#top" aria-label="回到頂端">
+    <img src="assets/monogram.svg" alt="" width="34" height="34">
+    <span>J_CNa</span>
+  </a>
+  <button class="nav-toggle" aria-label="開啟選單" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+  <nav class="nav" aria-label="主選單">
+    <a href="#about">作者資訊</a>
+    <a href="#platforms">進駐平台</a>
+    <a href="#characters">角色列表</a>
+    <a href="#worlds">世界觀</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <img class="hero-mark" src="assets/monogram.svg" alt="章魚紋章" width="96" height="96">
+      <p class="eyebrow">Creator Atelier</p>
+      <h1>J_CNa <span class="sep">／</span> 雨宮</h1>
+      <p class="tagline">「你可愛的🐙弟弟」</p>
+      <div class="rule"><span></span></div>
+      <p class="hero-copy">深海紫色裡的一隻章魚，<br class="sm">寫角色、造世界，也畫畫。</p>
+      <a class="btn-ghost" href="#characters">瀏覽角色</a>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="section-head">
+      <p class="eyebrow">I · About</p>
+      <h2>作者資訊</h2>
+      <div class="rule"><span></span></div>
+    </div>
+
+    <div class="about-grid">
+      <article class="panel intro">
+        <h3>關於我</h3>
+        <p>這裡是 <strong>J_CNa／雨宮</strong>，也是大家「你可愛的🐙弟弟」。一隻會畫畫的紫色章魚，在多個 AI 聊天平台上創作原創角色與世界觀。</p>
+        <p>本站整理我的角色、作品世界與各平台入口。歡迎慢慢逛，找到喜歡的他們。</p>
+      </article>
+
+      <article class="panel rules">
+        <h3>使用規範</h3>
+        <p class="lead">本站與各平台上的圖像，多為 AI 算圖後經作者手動修圖完成，皆為作者本人的創作。</p>
+        <h4>嚴格禁止</h4>
+        <ul class="ban-list">
+          <li><span>疊圖</span>以本作圖像作為底圖、參考圖、圖生圖（img2img）、局部重繪（inpainting）或拼貼素材</li>
+          <li><span>改圖</span>任何形式的編輯、修改</li>
+          <li><span>裁切</span>裁切圖像</li>
+          <li><span>去簽名</span>移除簽名或浮水印</li>
+          <li><span>轉載</span>轉載、截圖至其他平台</li>
+          <li><span>AI 訓練</span>用於任何 AI 模型訓練</li>
+          <li><span>盜用</span>冒充、宣稱為自己的作品</li>
+        </ul>
+        <p class="warn">違者將視情況追究法律責任。</p>
+        <div class="note">
+          <h4>灰骨 Ashbone 販售之提示詞</h4>
+          <p>僅限購買者個人使用，禁止分享、轉售或二次改作。</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="platforms">
+    <div class="section-head">
+      <p class="eyebrow">II · Platforms</p>
+      <h2>進駐平台</h2>
+      <div class="rule"><span></span></div>
+    </div>
+    <div class="platform-grid" id="platformGrid"></div>
+  </section>
+
+  <section class="section" id="characters">
+    <div class="section-head">
+      <p class="eyebrow">III · Works &amp; Characters</p>
+      <h2>角色列表</h2>
+      <div class="rule"><span></span></div>
+      <p class="section-sub">依作品瀏覽，或以平台篩選。標示 <span class="badge-18">18+</span> 者為成人向角色。</p>
+    </div>
+
+    <nav class="pfilter" id="platformFilter" aria-label="依平台篩選"></nav>
+    <div id="charView" aria-live="polite"></div>
+  </section>
+
+  <section class="section" id="worlds">
+    <div class="section-head">
+      <p class="eyebrow">IV · Worlds</p>
+      <h2>世界觀</h2>
+      <div class="rule"><span></span></div>
+      <p class="section-sub">各作品的完整世界觀介紹收錄於作品頁內，點擊即可前往。</p>
+    </div>
+    <ol class="world-index" id="worldIndex"></ol>
+  </section>
+</main>
+
+<footer class="footer">
+  <img src="assets/monogram.svg" alt="" width="40" height="40">
+  <p>© J_CNa ／ 雨宮 · 圖像與文字版權所有，未經許可禁止轉載與使用。</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
