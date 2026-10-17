@@ -367,7 +367,7 @@ const CHARACTERS = [
   { name: "褚赫", full: "Chu He", role: "重案組狂犬", work: "evilspouse", avatar: A+"chuhe.jpg",
     links: [L("Melting", "https://t.melting.chat/spmkvvv"), L("HeartBeat", "https://heartbeat-app.net/characters/ac264dfb-5a36-4097-920f-f6cdeac69b5e", { status: "可能無法玩" })],
     sum: "雨宮警局重案組的狂犬——馴服瘋狗，成為銀手鐲彼端的合法配偶。", intro: "#現代 #重案組狂犬 #暴力強制 #寫實感官 #血腥共生 #銀手鐲配偶 #馴服瘋狗！ #雨宮警局嗶啵嗶啵" },
-  // 惹禍上身！你沒說那是你舅舅啊！
+  // 惹禍上身！
   { name: "黎熾", role: "豪門霸總", work: "rehuo", avatar: A+"lichi.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/375f8a67-a6b2-4b53-afb8-12d06bb7f324")],
     sum: "以為只是位香香的牛郎，沒想到惹上的是豪門大佬。", intro: "#現代 #佔有慾 #腹黑攻 #強取豪奪 #歡喜冤家 #霸總 #豪門 #甜寵 #年上" },
@@ -455,7 +455,7 @@ const WORKS = [
   { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
     hook: "黑道、斯文敗類與重案組的狂犬。",
     world: "現代都市裡的三位「惡人」：佔有慾極強的黑道權泰錫、以心理博弈操弄人心的權在京，以及雨宮警局重案組的狂犬褚赫。" },
-  { id: "rehuo", title: "惹禍上身！你沒說那是你舅舅啊！", cover: "assets/covers/rehuo.jpg", tags: "現代・豪門・歡喜冤家",
+  { id: "rehuo", title: "惹禍上身！", cover: "assets/covers/rehuo.jpg", tags: "現代・豪門・歡喜冤家",
     hook: "牛郎、布丁劫匪、冰山直男與純情猛犬。",
     world: "現代豪門的歡喜冤家喜劇：黎熾、黎赫、顧柏谷與顧俇俇，一連串破鏡重圓與甜寵的意外。" },
   { id: "multisports", title: "「多人」運動中心", cover: "assets/covers/multisports.jpg", tags: "多人・喜劇・懸疑",
