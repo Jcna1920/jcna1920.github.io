@@ -478,3 +478,12 @@ body{background:transparent}
   .pcard .invite{flex-wrap:wrap;max-width:100%}
   .pcard .invite code{min-width:0;overflow-wrap:anywhere}
 }
+
+/* ===== 作者資訊：社群小連結 ===== */
+.intro .social{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px;padding-top:14px;border-top:1px dashed rgba(217,191,140,.18)}
+.intro .social .slabel{font-family:var(--serif-tc);font-size:.72rem;letter-spacing:.2em;color:var(--mist)}
+.intro .slink{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border:1px solid var(--gold-dim);border-radius:999px;color:var(--gold);
+  font-size:.85rem;text-decoration:none;background:rgba(26,13,34,.42);transition:background .3s,border-color .3s}
+.intro .slink em{font-style:normal;font-family:ui-monospace,Menlo,monospace;font-size:.76rem;color:var(--mist)}
+.intro .slink:hover{border-color:var(--gold);background:rgba(217,191,140,.1)}
+@media (max-width:640px){.platform-grid .pcard:last-child:nth-child(odd){grid-column:1/-1}}
