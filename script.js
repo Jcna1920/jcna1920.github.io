@@ -446,10 +446,20 @@ function cardHTML(c, showWork) {
     <div class="chint">More</div>
   </article>`;
 }
+/* 星圖座標（裝飾用，依作品 id 固定產生） */
+const hashOf = str => [...str].reduce((a, ch) => (a * 31 + ch.codePointAt(0)) >>> 0, 7);
+function coordOf(w) {
+  const h = hashOf(w.id);
+  const ra = `${String(h % 24).padStart(2, "0")}h ${String((h >> 5) % 60).padStart(2, "0")}m`;
+  const d = ((h >> 11) % 90) * ((h >> 17) & 1 ? 1 : -1);
+  return `RA ${ra} · DEC ${d >= 0 ? "+" : "−"}${String(Math.abs(d)).padStart(2, "0")}°`;
+}
 function coverHTML(w) {
-  return w.cover
-    ? `<img src="${esc(w.cover)}" alt="">`
-    : `<div class="cover-mono"><img src="assets/monogram.svg" alt=""></div>`;
+  if (w.cover) return `<img src="${esc(w.cover)}" alt=""><span class="reticle" aria-hidden="true"></span>`;
+  const h = hashOf(w.id), hue = 255 + (h % 50), tilt = (h % 40) - 20, size = 34 + (h % 14);
+  return `<div class="cover-planet" style="--hue:${hue};--tilt:${tilt}deg;--size:${size}%" aria-hidden="true">
+    <span class="planet"></span><span class="orbit"><span class="moon"></span></span>
+    <img class="emblem" src="assets/monogram.svg" alt=""></div>`;
 }
 
 /* ---------- views ---------- */
@@ -461,7 +471,7 @@ function viewWorks() {
   return `<div class="work-grid">${WORKS.map(w => {
     const n = charsOfWork(w).length;
     return `<a class="wkcard reveal" href="#work/${w.id}">
-      <div class="wkcover">${coverHTML(w)}</div>
+      <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(WORKS.indexOf(w) + 1).padStart(2, "0")}</span></div>
       <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3>${esc(w.title)}</h3>
       <p class="wkhook">${esc(w.hook)}</p>
       <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
@@ -474,7 +484,7 @@ function viewWork(w) {
     <a class="back" href="#characters">← 返回作品列表</a>
     <header class="work-hero">
       <div class="work-hero-cover">${coverHTML(w)}</div>
-      <div><p class="eyebrow">World</p><h3 class="work-title">${esc(workTitle(w))}</h3>
+      <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
       <p class="work-meta">${list.length} 位角色${platSet ? `｜${esc(platSet)}` : ""}</p></div>
@@ -537,3 +547,83 @@ function observe(nodes) { nodes.forEach(n => io ? io.observe(n) : n.classList.ad
 observe(document.querySelectorAll(".reveal"));
 route(false);
 if (/^#(work|platform)\//.test(location.hash)) setTimeout(() => $("#characters").scrollIntoView(), 0);
+
+/* ---------- starfield（多層星空、緩慢視差；尊重 prefers-reduced-motion） ---------- */
+(() => {
+  const cv = document.getElementById("starfield");
+  if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext("2d");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const LAYERS = [ { n: 0.00022, r: [0.3, 0.8], a: 0.55, speed: 0.015 },
+                   { n: 0.00010, r: [0.6, 1.2], a: 0.75, speed: 0.04 },
+                   { n: 0.00003, r: [1.0, 1.7], a: 0.95, speed: 0.08 } ];
+  let W = 0, H = 0, dpr = 1, stars = [], motes = [], raf = 0, last = 0, depth = 0;
+  const root = document.documentElement;
+  function measure() {
+    const max = Math.max(1, root.scrollHeight - innerHeight);
+    depth = Math.min(1, Math.max(0, scrollY / max));
+    root.style.setProperty("--depth", depth.toFixed(3));
+  }
+  addEventListener("scroll", () => { measure(); if (reduce.matches) draw(0); }, { passive: true });
+  function seed() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    stars = [];
+    LAYERS.forEach((L, li) => {
+      const count = Math.round(W * H * L.n) + 6;
+      for (let i = 0; i < count; i++) {
+        const gold = Math.random() < 0.12, lav = !gold && Math.random() < 0.35;
+        stars.push({ li, x: Math.random() * W, y: Math.random() * H,
+          r: L.r[0] + Math.random() * (L.r[1] - L.r[0]), a: L.a * (0.5 + Math.random() * 0.5),
+          tw: 0.4 + Math.random() * 1.4, ph: Math.random() * Math.PI * 2,
+          c: gold ? "232,212,168" : lav ? "214,198,236" : "246,242,252" });
+      }
+    });
+    /* 深海生物光微粒 */
+    motes = [];
+    const mc = Math.round(Math.min(46, W * H * 0.000035)) + 8;
+    for (let i = 0; i < mc; i++) motes.push({ x: Math.random() * W, y: Math.random() * H,
+      r: 0.7 + Math.random() * 1.3, v: 4 + Math.random() * 10, sw: 6 + Math.random() * 18,
+      ph: Math.random() * Math.PI * 2, a: 0.25 + Math.random() * 0.45,
+      c: Math.random() < 0.55 ? "128,214,206" : Math.random() < 0.5 ? "186,150,240" : "232,212,168" });
+  }
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const sy = reduce.matches ? 0 : scrollY;
+    for (const s of stars) {
+      const L = LAYERS[s.li];
+      let y = (s.y - sy * L.speed) % H; if (y < 0) y += H;
+      const tw = reduce.matches ? 1 : 0.65 + 0.35 * Math.sin(t * 0.001 * s.tw + s.ph);
+      ctx.globalAlpha = s.a * tw * (1 - depth * 0.65);
+      ctx.fillStyle = `rgb(${s.c})`;
+      ctx.beginPath(); ctx.arc(s.x, y, s.r, 0, Math.PI * 2); ctx.fill();
+      if (s.r > 1.3) { ctx.globalAlpha = s.a * tw * 0.18; ctx.beginPath(); ctx.arc(s.x, y, s.r * 3.2, 0, Math.PI * 2); ctx.fill(); }
+    }
+    /* 越往下捲，星光越淡、生物光越明顯 */
+    const sk = t * 0.001, mAlpha = 0.18 + depth * 0.82;
+    for (const m of motes) {
+      let y = reduce.matches ? m.y : (m.y - sk * m.v) % (H + 20);
+      if (y < -10) y += H + 20;
+      const x = m.x + (reduce.matches ? 0 : Math.sin(sk * 0.3 + m.ph) * m.sw);
+      const pulse = reduce.matches ? 1 : 0.6 + 0.4 * Math.sin(sk * 0.8 + m.ph);
+      const g = ctx.createRadialGradient(x, y, 0, x, y, m.r * 5);
+      g.addColorStop(0, `rgba(${m.c},${(m.a * pulse * mAlpha).toFixed(3)})`);
+      g.addColorStop(1, `rgba(${m.c},0)`);
+      ctx.globalAlpha = 1; ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, m.r * 5, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function loop(t) {
+    raf = requestAnimationFrame(loop);
+    if (t - last < 33) return; // ~30fps
+    last = t; draw(t);
+  }
+  function start() { cancelAnimationFrame(raf); if (reduce.matches) draw(0); else raf = requestAnimationFrame(loop); }
+  measure(); seed(); start();
+  let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { seed(); start(); }, 150); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
+  (reduce.addEventListener ? reduce.addEventListener("change", start) : reduce.addListener(start));
+})();

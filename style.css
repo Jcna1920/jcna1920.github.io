@@ -283,3 +283,174 @@ a.lbtn:hover{background:rgba(217,191,140,.14);border-color:var(--gold);color:#ff
 .invite .ilabel,.invite .copy,.invite code{white-space:nowrap;flex:none}
 .invite{gap:6px;padding:6px 6px 6px 9px}
 .invite .ilabel{letter-spacing:.1em}
+
+/* =====================================================================
+   星際探索 Space-exploration layer (overrides; palette unchanged)
+   ===================================================================== */
+:root{
+  --mist:#a08fb3;
+  --glass:rgba(34,17,44,.46);
+  --glass-strong:rgba(26,13,34,.66);
+  --glass-line:rgba(214,198,236,.14);
+}
+html{background:#08050d}
+body{background:transparent}
+.space{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(140% 90% at 50% 0%,#1a0d22 0%,#0d0714 55%,#07040b 100%)}
+.space canvas{position:absolute;inset:0;width:100%;height:100%}
+.nebula{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;mix-blend-mode:screen}
+.nebula.n1{width:70vmax;height:46vmax;left:-18vmax;top:-12vmax;background:radial-gradient(closest-side,rgba(118,58,140,.55),rgba(70,30,95,.18) 60%,transparent)}
+.nebula.n2{width:60vmax;height:40vmax;right:-20vmax;top:28vh;background:radial-gradient(closest-side,rgba(88,52,150,.42),rgba(52,26,92,.14) 60%,transparent)}
+.nebula.n3{width:50vmax;height:30vmax;left:20vw;bottom:-14vmax;background:radial-gradient(closest-side,rgba(217,191,140,.10),rgba(120,60,120,.12) 55%,transparent)}
+.topbar,main,.footer{position:relative;z-index:1}
+.topbar{z-index:20;background:rgba(10,6,16,.62);backdrop-filter:blur(14px) saturate(130%)}
+
+/* hero: orbit rings around the emblem */
+.hero-orbit{position:relative;width:220px;height:220px;margin:0 auto 26px;display:grid;place-items:center}
+.hero-orbit .hero-mark{margin:0;position:relative;z-index:1}
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(217,191,140,.22)}
+.ring.r1{inset:52px;border-color:rgba(217,191,140,.35)}
+.ring.r2{inset:22px;border-style:dashed;border-color:rgba(214,198,236,.16);animation:spin 90s linear infinite}
+.ring.r3{inset:-6px;transform:rotateX(68deg) rotate(0deg);border-color:rgba(217,191,140,.26);animation:spin3 120s linear infinite}
+.ring i{position:absolute;top:-3px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px 2px rgba(217,191,140,.55)}
+.ring.r2 i{background:var(--lavender-soft);box-shadow:0 0 8px 2px rgba(214,198,236,.45);width:4px;height:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes spin3{from{transform:rotateX(68deg) rotate(0)}to{transform:rotateX(68deg) rotate(360deg)}}
+.hero h1{text-shadow:0 0 50px rgba(185,140,220,.35),0 0 2px rgba(255,255,255,.2)}
+.hero-coord{margin-top:34px;font-family:var(--serif);font-style:italic;font-size:.82rem;letter-spacing:.32em;color:var(--gold);opacity:.88}
+.hero::before{background:linear-gradient(90deg,transparent,rgba(217,191,140,.28),transparent)}
+
+/* constellation divider */
+.rule{width:min(300px,70%);height:22px;margin:34px auto;gap:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 22'%3E%3Cg fill='none' stroke='%23d9bf8c' stroke-width='.6' stroke-opacity='.55'%3E%3Cpath d='M8 14 L46 9 L82 16 L118 7 M182 7 L218 16 L254 9 L292 14'/%3E%3Ccircle cx='150' cy='11' r='9' stroke-opacity='.35'/%3E%3Cellipse cx='150' cy='11' rx='22' ry='5' stroke-opacity='.4'/%3E%3C/g%3E%3Cg fill='%23d9bf8c'%3E%3Ccircle cx='8' cy='14' r='1'/%3E%3Ccircle cx='46' cy='9' r='1.4'/%3E%3Ccircle cx='82' cy='16' r='1'/%3E%3Ccircle cx='118' cy='7' r='1.6'/%3E%3Ccircle cx='182' cy='7' r='1.6'/%3E%3Ccircle cx='218' cy='16' r='1'/%3E%3Ccircle cx='254' cy='9' r='1.4'/%3E%3Ccircle cx='292' cy='14' r='1'/%3E%3Ccircle cx='150' cy='11' r='2.2'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+.rule::before,.rule::after,.rule span{display:none}
+
+/* section heads: faint orbit ring behind the title */
+.section-head{position:relative}
+.section-head::before{content:"";position:absolute;left:50%;top:-34px;width:min(520px,90%);aspect-ratio:3.2;transform:translateX(-50%);
+  border:1px solid rgba(217,191,140,.10);border-radius:50%;pointer-events:none;
+  -webkit-mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent)}
+.eyebrow{opacity:.9}
+
+/* glass panels */
+.panel,.pcard,.ccard,.wkcard,.work-hero,.wcard{
+  background:linear-gradient(160deg,rgba(52,26,64,.48),rgba(20,10,28,.52));
+  border:1px solid var(--glass-line);
+  backdrop-filter:blur(10px) saturate(125%);-webkit-backdrop-filter:blur(10px) saturate(125%)}
+.panel{box-shadow:0 30px 70px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.04)}
+.panel::before,.work-hero::before{border-color:rgba(217,191,140,.16)}
+.pcard:hover,.ccard:hover,.ccard:focus-visible,.wkcard:hover{
+  border-color:rgba(217,191,140,.42);
+  box-shadow:0 0 0 1px rgba(217,191,140,.06),0 0 28px -4px rgba(185,140,220,.30),0 24px 50px -30px rgba(0,0,0,.8)}
+.ccard.open{border-color:rgba(217,191,140,.32);box-shadow:0 0 34px -8px rgba(185,140,220,.28)}
+.invite{background:rgba(8,5,13,.5)}
+.filters select,.pfilter a{backdrop-filter:blur(6px)}
+.pfilter a{background:rgba(26,13,34,.42)}
+.world-index{background:rgba(20,10,28,.28);backdrop-filter:blur(6px)}
+.note{background:rgba(217,191,140,.05)}
+.ban-list li{border-bottom-color:rgba(214,198,236,.10)}
+
+/* work cards as star charts / planets */
+.wkcover{background:#0b0611;border-bottom:1px solid rgba(217,191,140,.18)}
+.wkcover>img{filter:saturate(.8) brightness(.82) contrast(1.02)}
+.wkcover::after{z-index:1;background:linear-gradient(180deg,rgba(8,5,13,.55),transparent 28%,transparent 55%,rgba(8,5,13,.85))}
+.reticle{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.5;
+  background:
+    radial-gradient(circle at 50% 46%,transparent 0 31%,rgba(217,191,140,.35) 31.2% 31.5%,transparent 31.7%),
+    linear-gradient(90deg,transparent calc(50% - .5px),rgba(217,191,140,.22) 50%,transparent calc(50% + .5px)),
+    linear-gradient(0deg,transparent calc(46% - .5px),rgba(217,191,140,.22) 46%,transparent calc(46% + .5px)),
+    repeating-linear-gradient(90deg,rgba(214,198,236,.05) 0 1px,transparent 1px 25%),
+    repeating-linear-gradient(0deg,rgba(214,198,236,.05) 0 1px,transparent 1px 25%)}
+.wkcard:hover .reticle{opacity:.75}
+.cover-planet{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;
+  background:
+    radial-gradient(1px 1px at 18% 22%,rgba(255,255,255,.8),transparent),
+    radial-gradient(1px 1px at 72% 18%,rgba(232,212,168,.8),transparent),
+    radial-gradient(1px 1px at 84% 64%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1px 1px at 30% 78%,rgba(214,198,236,.7),transparent),
+    radial-gradient(1.5px 1.5px at 58% 86%,rgba(255,255,255,.7),transparent),
+    radial-gradient(120% 90% at 50% 30%,hsla(var(--hue),45%,26%,.55),transparent 70%),
+    linear-gradient(170deg,#170b20,#0a060f)}
+.cover-planet .planet{position:absolute;width:var(--size);aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,hsla(var(--hue),40%,62%,.95),hsla(var(--hue),45%,32%,.95) 45%,hsla(var(--hue),55%,10%,1) 78%);
+  box-shadow:inset -14px -10px 30px rgba(0,0,0,.55),0 0 40px hsla(var(--hue),60%,55%,.25)}
+.cover-planet .orbit{position:absolute;width:calc(var(--size) * 1.9);aspect-ratio:1;transform:rotate(var(--tilt))}
+.cover-planet .orbit::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(217,191,140,.38);transform:scaleY(.28)}
+.cover-planet .moon{position:absolute;right:-3px;top:calc(50% - 3px);width:6px;height:6px;border-radius:50%;background:var(--gold);
+  box-shadow:0 0 10px 2px rgba(217,191,140,.5)}
+.cover-planet .emblem{position:absolute;right:12px;top:12px;width:26px;height:26px;opacity:.55}
+.wkcoord,.wksector{position:absolute;z-index:2;font-family:var(--serif);font-style:italic;font-size:.72rem;letter-spacing:.16em;color:rgba(232,212,168,.85);text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.wkcoord{left:14px;bottom:10px}
+.wksector{left:14px;top:10px;font-style:normal;font-size:.62rem;letter-spacing:.3em;opacity:.9}
+.wkcard:hover .cover-planet .planet{box-shadow:inset -14px -10px 30px rgba(0,0,0,.5),0 0 56px hsla(var(--hue),60%,60%,.38)}
+.work-hero-cover{position:relative;background:#0b0611}
+.work-hero-cover .reticle{opacity:.35}
+.work-hero-cover .cover-planet .emblem{display:none}
+.work-hero-cover .cover-planet .moon{display:none}
+
+/* footer */
+.footer{border-top-color:rgba(217,191,140,.14);background:linear-gradient(180deg,transparent,rgba(8,5,13,.6))}
+
+@media (max-width:680px){
+  .hero-orbit{width:170px;height:170px}
+  .ring.r1{inset:38px}.ring.r2{inset:16px}
+  .hero-coord{letter-spacing:.2em;font-size:.74rem}
+  .hero .eyebrow{letter-spacing:.2em;font-size:.68rem}
+  .nebula{filter:blur(40px)}
+  .wkcoord{font-size:.62rem;letter-spacing:.08em;left:10px;bottom:8px}
+  .wksector{left:10px;top:8px;font-size:.56rem}
+  .cover-planet .emblem{width:20px;height:20px;right:8px;top:8px}
+  .panel,.pcard,.ccard,.wkcard,.work-hero{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+}
+@media (prefers-reduced-motion:reduce){.ring{animation:none!important}}
+
+/* =====================================================================
+   Dark Academia × 深海神秘學 (Abyssal Occultism) layer
+   ===================================================================== */
+:root{--parchment:#e9dcc0;--parchment-dim:rgba(233,220,192,.72);--abyss:#05060f;--depth:0}
+/* 星空往下沉入深海：plum → 近黑靛藍 */
+.abyss{position:absolute;inset:0;opacity:var(--depth);
+  background:radial-gradient(120% 70% at 50% 110%,rgba(18,40,72,.55),transparent 70%),
+             linear-gradient(180deg,rgba(10,8,26,.55),rgba(5,6,15,.94))}
+.nebula{opacity:calc(.55 - var(--depth) * .3)}
+.sigil{position:absolute;left:50%;top:50%;width:min(120vmin,980px);aspect-ratio:1;
+  transform:translate(-50%,-50%) rotate(calc(var(--depth) * 40deg));
+  background:url(assets/astrolabe.svg) center/contain no-repeat;opacity:.04}
+/* 典籍字體：羊皮紙金 */
+.section-head h2,.work-title,.panel h3,.cname,.wkbody h3,.wktitle{color:var(--parchment)}
+.section-head .eyebrow,.hero .eyebrow{font-family:var(--serif);font-style:italic;color:var(--gold)}
+.section-head h2{font-weight:500;letter-spacing:.32em}
+.section-head h2::after{content:"❦";display:block;margin-top:10px;font-size:.9rem;letter-spacing:0;color:var(--gold);opacity:.55}
+/* 神秘學紋章：章魚印 */
+.seal{position:absolute;inset:44px;background:url(assets/seal.svg) center/contain no-repeat;opacity:.9;animation:spin 240s linear infinite reverse}
+.hero-orbit .ring.r1{display:none}
+.hero-mark{filter:drop-shadow(0 0 14px rgba(217,191,140,.35))}
+/* 書票 bookplate 標籤 */
+.wksector{font-family:var(--serif);font-style:normal;color:var(--parchment);opacity:1;
+  padding:3px 9px 2px;border:1px solid rgba(217,191,140,.45);outline:1px solid rgba(217,191,140,.18);outline-offset:2px;
+  background:rgba(12,8,20,.72);letter-spacing:.24em}
+.wkcoord{color:var(--parchment-dim)}
+/* 18+ 蠟封 */
+.badge-18{border:none;border-radius:50%;width:26px;height:26px;padding:0;line-height:26px;text-align:center;font-size:.6rem;letter-spacing:0;
+  color:#f3dcc8;background:radial-gradient(circle at 35% 30%,#9a3a4e,#5e1a2e 70%);box-shadow:0 0 0 2px rgba(94,26,46,.45),inset 0 -2px 4px rgba(0,0,0,.4)}
+/* 角色卡：館藏索引卡 */
+.char-grid{counter-reset:card}
+.ccard{counter-increment:card;position:relative;
+  background:linear-gradient(180deg,rgba(233,220,192,.035),transparent 30%),linear-gradient(160deg,rgba(46,24,58,.5),rgba(16,9,24,.55));
+  border-color:rgba(233,220,192,.14)}
+.ccard::before{content:"";position:absolute;left:16px;right:16px;top:8px;height:3px;border-top:1px solid rgba(217,191,140,.28);border-bottom:1px solid rgba(217,191,140,.14);pointer-events:none}
+.ccard::after{content:"Nº " counter(card,decimal-leading-zero);position:absolute;right:14px;top:14px;
+  font-family:var(--serif);font-style:italic;font-size:.74rem;letter-spacing:.08em;color:var(--gold);opacity:.65;pointer-events:none}
+.ccard .ctop{padding-top:22px}
+.ccard .cmeta dt{font-family:var(--serif);font-variant:small-caps;letter-spacing:.12em}
+/* 作品卡：天文台館藏目錄 */
+.wkcard{border-color:rgba(233,220,192,.14)}
+.wkbody{background:linear-gradient(180deg,rgba(233,220,192,.03),transparent 40%)}
+.work-hero{border-color:rgba(217,191,140,.24)}
+.work-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;background:url(assets/astrolabe.svg) center/contain no-repeat;opacity:.08;pointer-events:none}
+.work-hero{position:relative;overflow:hidden}
+/* 細飾線 */
+.panel h3{border-bottom:1px solid rgba(217,191,140,.16);padding-bottom:10px}
+.footer::before{content:"✶ ✶ ✶";display:block;text-align:center;letter-spacing:1.4em;color:var(--gold);opacity:.4;font-size:.6rem;margin-bottom:14px}
+@media (max-width:680px){.seal{inset:32px}.sigil{width:150vmin;opacity:.045}}
+@media (prefers-reduced-motion:reduce){.seal{animation:none!important}.sigil{transform:translate(-50%,-50%)}}
