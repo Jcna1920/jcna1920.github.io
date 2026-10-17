@@ -45,7 +45,7 @@ const CHARACTERS = [
   { name: "Roi", full: "無", code: "Shadow（影子）", role: "現任會長（影武者）", age: "36", work: "vespers", avatar: A+"roi.jpg",
     links: [L("卿卿我我"), L("CRUSH")],
     sum: "以心率與沉默塑造節拍的影武者，只守護唯一的光源。",
-    intro: "他不以言語指揮，只用心率與沉默塑造節拍：一句「影在」，足以令整座據點收聲。面對外人目光淡漠；唯獨對「手足（你）」那唯一光源，以脈搏同步、守護。" },
+    intro: "他不以言語指揮，只用心率與沉默塑造節拍：一句「影在」，足以令整座據點收聲。面對外人目光淡漠；唯獨對「妹妹（妳）」那唯一光源，以脈搏同步、守護。" },
   { name: "米卡耶爾", full: "米卡耶爾·卡日涅夫", code: "夜鴞 Strix", role: "晚禱之家—右副手", age: "34", work: "vespers", avatar: A+"mikael.jpg",
     links: [L("GPTs", null, { status: "已退" })],
     sum: "曾受赦免的「叛徒」，十年隱伏夜色，只在你的呼喚裡現身。",
@@ -154,7 +154,7 @@ const CHARACTERS = [
   // ── 🪽古風
   { name: "顧雲熠", role: "江南顧氏嫡子／科舉狀元／少將軍", age: "28｜185cm", work: "gufeng", avatar: A+"guyunyi.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/1ea0c1d9-72e3-4ef0-8f49-eceaef6e882c")],
-    sum: "帶著戰功重返煙雨江南，心儀多年的你卻已成了父親名義上的新伴侶。",
+    sum: "帶著戰功重返煙雨江南，心儀多年的妳卻已成了父親名義上的續絃。",
     intro: "黑髮長身、文人氣質濃厚，能提筆論策，也能披甲上陣。白日沉穩守禮，夜裡喜歡在庭中飲酒閒談。\n#江南儒將 #少將軍 #暗戀 #禁忌戀 #隱忍 #熠光不渡卿" },
   { name: "《殿下》", role: "暗黑古風宮廷奇幻", work: "gufeng", avatar: A+"dianxia.jpg", group: true,
     links: [L("鴨答", "https://zh-hant.cvdk.io/c/UftFfRGwQdGylKhJOpLGYA?rc=gZ2QckNAlD", { label: "多人模擬" }),
@@ -211,7 +211,7 @@ const CHARACTERS = [
     links: [L("Touchie", null), L("Hearbeat", "https://heartbeat-app.net/characters/996d8381-5a00-4e78-9999-52ec7f125d2a"),
       L("鴨答鴨答", "https://zh-hant.cvdk.io/c/bkt-jqb2SjKQNelkCWluLA?rc=gZ2QckNAlD"), L("Floze", "https://s.floze.ai/r/IosL2jEPgm4KN2a8kyaF6YASg?locale=tw"),
       L("Whif", "https://whif.io/characters/66e8afc2-4fd6-4e62-bda9-7194377dcc05"), L("TIKITA", "https://tikita.ai/story/ZKN2BGJK")],
-    sum: "跨國集團的霸道總裁，也是你那無能伴侶的父親。", intro: "NTR 題材，感情潔癖者請勿遊玩。" },
+    sum: "跨國集團的霸道總裁，也是妳那無能丈夫的父親。", intro: "NTR 題材，感情潔癖者請勿遊玩。" },
 
   // ── ☀️玖曜朝
   { name: "雲悼·刃羅", code: "骸樂監", role: "戶部「斷曜司」主事，暗裡統轄骸樂監", age: "39（視之若 30 初）", work: "jiuyao", avatar: A+"yundao.jpg", links: [],
