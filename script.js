@@ -115,7 +115,7 @@ const CHARACTERS = [
     links: [L("GPTs", "https://chatgpt.com/g/g-6864ea2f77e0819191b5ab62d6a2325b-a-tu-luo"), L("WHIF", "https://whif.io/characters/be216c73-7527-4ebd-9090-bea8ec3082a6"), L("Heartbeat")],
     sum: "前「阿茲特克之盾」重裝破門手，堅持不主動傷害非戰鬥員。",
     intro: "現從事護衛與救援工作。前線沉著果斷，私下安靜笨拙，被真誠稱讚時容易害羞。\n#沉默熊系 #害羞反差 #移動盾牌 #極端忠誠" },
-  { name: "加布里埃爾・巴爾加斯", full: "Gabriel Vargas", code: "鐵鋸／Sierra", role: "精確射手", age: "32", work: "aztec", avatar: null,
+  { name: "加布里埃爾・巴爾加斯", full: "Gabriel Vargas", code: "鐵鋸／Sierra", role: "精確射手", age: "32", work: "aztec", avatar: A+"gabriel.jpg",
     links: [L("Heartbeat")],
     sum: "嘴賤、散漫卻可靠的側翼精確射手。",
     intro: "任務時冷靜精準，私下以玩笑與喧鬧迴避沉重情緒。" },
@@ -156,7 +156,7 @@ const CHARACTERS = [
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/1ea0c1d9-72e3-4ef0-8f49-eceaef6e882c")],
     sum: "帶著戰功重返煙雨江南，心儀多年的妳卻已成了父親名義上的續絃。",
     intro: "黑髮長身、文人氣質濃厚，能提筆論策，也能披甲上陣。白日沉穩守禮，夜裡喜歡在庭中飲酒閒談。\n#江南儒將 #少將軍 #暗戀 #禁忌戀 #隱忍 #熠光不渡卿" },
-  { name: "《殿下》", role: "暗黑古風宮廷奇幻", work: "gufeng", avatar: null, group: true,
+  { name: "《殿下》", role: "暗黑古風宮廷奇幻", work: "gufeng", avatar: A+"dianxia.jpg", group: true,
     links: [L("鴨答", "https://zh-hant.cvdk.io/c/UftFfRGwQdGylKhJOpLGYA?rc=gZ2QckNAlD", { label: "多人模擬" }),
       L("Whif", "https://whif.io/universes/8beaa1de-10fd-45e3-8ca7-dd6c9cc23686", { label: "李琋單人線" })],
     sum: "永夜「桓國」的金瞳暴君李琋，與他唯一的解藥——失憶的「比翼者」。",
@@ -174,7 +174,7 @@ const CHARACTERS = [
     sum: "天界極限社畜，優雅的瘋批潔癖官。", intro: "#雙面潔癖官 #神聖躁鬱症 #禁慾系暴徒 #人形消毒水 #反差萌" },
 
   // ── 👿狂獸
-  { name: "洛倫．桑．吉爾伯特", work: "kuangshou", avatar: null, links: [], sum: "簡介待補。", intro: "" },
+  { name: "洛倫．桑．吉爾伯特", work: "kuangshou", avatar: A+"lorenz.jpg", links: [], sum: "簡介待補。", intro: "" },
   { name: "伊恩．卡特", full: "Ien Carter", code: "黑暗哨兵 XXALPHAXX", work: "kuangshou", avatar: A+"iancarter.jpg", links: [],
     sum: "ABO＋哨嚮世界觀中的『黑暗哨兵』。", intro: "" },
 
@@ -247,7 +247,7 @@ const CHARACTERS = [
   { name: "白虎部隊 404 內務室", full: "White Tiger Unit - Room 404", role: "韓國陸軍・10 名士兵（多人）", work: "merc", adult: true, avatar: A+"baihu.jpg", group: true,
     links: [L("Gemini Gem", "https://gemini.google.com/gem/16dh1wSAdyp5M-LKUpu2LLe7qCbn4P_MZ?usp=sharing")],
     sum: "妳是高傲的女中士，走進軍事禁區裡的 404 內務室。", intro: "#軍事禁區 #階級壓制 #高度壓抑" },
-  { name: "盧卡．沃恩", full: "Luca Vohn", role: "私人傭兵／「阿爾曼德莊園」門衛兼安保", age: "28", work: "merc", avatar: null,
+  { name: "盧卡．沃恩", full: "Luca Vohn", role: "私人傭兵／「阿爾曼德莊園」門衛兼安保", age: "28", work: "merc", avatar: A+"lucavohn.jpg",
     links: [L("DokiChat", "https://www.dokichat.club/chat/e41fa981-5841-44a6-a354-1f10709797ce?isShare=true"),
       L("Discord", "https://discord.com/channels/523687282662703127/1460284214376267826", { label: "阿爾曼德莊園（多人）" })],
     sum: "義大利 × 烏克蘭混血的私人傭兵，米蘭郊區莊園的門衛。", intro: "" },
@@ -273,7 +273,7 @@ const CHARACTERS = [
       L("Tingle", "https://tingle.chat/chat/characters/49623"), L("Whif", "https://whif.io/characters/27fa47cb-cb7b-426d-8407-e0d27e523609")],
     sum: "身為家中的老二，被兄弟雙倍溺愛——無法逃離的共生。",
     intro: "大哥｜權道均（28 歲・188cm）建築設計師，居家辦公。\n三弟｜權道鎮（20 歲・192cm）體育系大學生，籃球王牌。" },
-  { name: "權道鎮", full: "Kwon Do-jin", role: "大學籃球隊王牌前鋒", age: "20｜192cm", work: "wuyan", avatar: null,
+  { name: "權道鎮", full: "Kwon Do-jin", role: "大學籃球隊王牌前鋒", age: "20｜192cm", work: "wuyan", avatar: A+"quandaozhen.jpg",
     links: [L("Whif", "https://whif.io/characters/98394a3f-6c3c-4a5f-aa18-82497f809a2a", { label: "披著陽光外衣…" })],
     sum: "「哥，你身上……只能有我的味道。」", intro: "《沉溺於向陽處》的三弟。年下・陽光綠茶・BL。" },
   { name: "靳炤", full: "靳炤 Rex", role: "跨國科技業中階總監（吸血鬼）", age: "320（外觀 32）", work: "wuyan", adult: true, avatar: A+"jinzhao.jpg",
@@ -316,7 +316,7 @@ const CHARACTERS = [
 
   // ── 其他作品（作者提供之已知資訊）
   { name: "特勤一隊 HBFD-SO", work: "others", adult: true, avatar: null, links: [L("灰骨")], sum: "灰骨 Ashbone 成人向角色。", intro: "" },
-  { name: "但丁．莫雷蒂", work: "others", avatar: null, links: [L("Storyaichat")], sum: "Storyaichat 角色。", intro: "" },
+  { name: "但丁．莫雷蒂", work: "others", avatar: A+"dante.jpg", links: [L("Storyaichat")], sum: "Storyaichat 角色。", intro: "" },
 ];
 
 /* 作品：Discord 論壇頻道＋既有作品。world 為作品頁頂端介紹，僅整理自來源。 */
