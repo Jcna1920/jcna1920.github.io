@@ -420,10 +420,14 @@ function avatarHTML(c) {
   return `<div class="avatar ph" aria-hidden="true">${esc([...c.name][0])}</div>`;
 }
 const plabel = p => PLAT_LABEL[p] || p;
+/* GPTs、Gemini Gem 連結目前失效：保留資料，按鈕標示「暫停」且不可點擊 */
+const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 function linksHTML(c) {
   if (!c.links.length) return `<p class="lempty">平台連結待補</p>`;
   const pname = p => p === "Caveduck" ? "Caveduck" : plabel(p);
-  return `<div class="lrow">${c.links.map(l => l.url
+  return `<div class="lrow">${c.links.map(l => PAUSED.has(l.platform)
+    ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname">${esc(pname(l.platform))}${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
+    : l.url
     ? `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname">${esc(pname(l.platform))}${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`
     : `<span class="lbtn off" aria-disabled="true" title="尚無連結">${esc(pname(l.platform))}</span>`).join("")}</div>`;
 }
