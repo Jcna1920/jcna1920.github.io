@@ -15,6 +15,7 @@ const PLATFORMS = [
   { name: "IsekaiZero", desc: "AI 角色聊天平台", url: "https://www.isekaizero.ai/download/qr?utm_campaign=share&utm_medium=referral&utm_content=referral-code&referralCode=E0MR4AGH", invite: "E0MR4AGH" },
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
+  { name: "WHIF", desc: "AI 角色聊天平台", url: null, invite: "F8C64073" },
 ];
 
 const A = "assets/avatars/";
@@ -28,7 +29,7 @@ const PLATFORM_ALIASES = {
   isekaizero: "IsekaiZero", tikita: "Tikita", touchie: "Touchie", miraimind: "MiraiMind", miramind: "MiraiMind",
   floze: "Floze", dokichat: "DokiChat", paradise: "Paradise", tingle: "Tingle", tinglechat: "Tingle",
   gpts: "GPTs", gem: "Gemini Gem", gemini: "Gemini Gem", "卿卿我我": "卿卿我我", crush: "CRUSH",
-  storyaichat: "Storyaichat", discord: "Discord",
+  storyaichat: "Storyaichat", discord: "Discord", cookiechat: "CookieChat",
 };
 const normPlatform = p => PLATFORM_ALIASES[String(p).trim().toLowerCase()] || p;
 /* L(平台, 網址或 null, {code, status, label}) */
@@ -97,7 +98,7 @@ const CHARACTERS = [
     links: [L("Heartbeat", "https://heartbeat-app.net/characters/b1eb2615-24bf-468d-8327-e925c1a46a04"),
       L("Melting", "https://t.melting.chat/zlv4us"),
       L("Plaitoon", "https://www.plaitoon.com/zh-TW/share/character/5f49489d-dc6f-46b0-8d62-ad4ac635d4ec"),
-      L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a9d27be5bfb891821268926?utm_campaign=share&utm_medium=storyline&utm_content=不宿之客&referralCode=E0MR4AGH"),
+      L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a9d27be5bfb891821268926?utm_campaign=share&utm_medium=storyline&utm_content=不宿之客"),
       L("CaveDuck", "https://zh-hant.cvdk.io/c/UKc-6eKHTeawKHgNGQfnKQ?rc=gZ2QckNAlD")],
     sum: "搬進隔壁後，先被一隻流浪貓佔領了家。牠那個黑道主人也跟著翻了過來。",
     intro: "雙臂黑灰蛇紋包手，常去露台抽煙；很有錢但不炫富，家裡除了帕比用品外極簡。愛貓帕比（밥이）幾乎全白，雙前肢三色花紋一路包到前爪。\n#現代 #隔壁鄰居 #日常 #浪漫 #養貓達人 #雲香閣 #男女皆可" },
@@ -254,7 +255,7 @@ const CHARACTERS = [
 
   // ── 🎭雲嶺娛樂
   { name: "TRI-G｜第四支柱", role: "雲嶺娛樂旗下偶像團體", work: "yunling", avatar: A+"trig.jpg", group: true,
-    links: [L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a72f1c1010c4d3dbbfbe334?utm_campaign=share&utm_medium=storyline&utm_content=tri-g-：第四道光柱&referralCode=E0MR4AGH"),
+    links: [L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a72f1c1010c4d3dbbfbe334?utm_campaign=share&utm_medium=storyline&utm_content=tri-g-：第四道光柱"),
       L("鴨答鴨答", "https://caveduck.io/character-info/05f07811-c282-4528-a3d0-37309a1a0382")],
     sum: "「在絕對的秩序與極致的混亂之間，唯有星光是唯一的變數。」",
     intro: "ORDER · CHAOS · LIGHT。你是第十四任專屬經紀人。成員：席淵 Cieran（隊長・Rapper）、權時京 K（主唱・創作核心）、姜宥星 Aster……" },
@@ -317,6 +318,92 @@ const CHARACTERS = [
   // ── 其他作品（作者提供之已知資訊）
   { name: "特勤一隊 HBFD-SO", work: "others", adult: true, avatar: null, links: [L("灰骨")], sum: "灰骨 Ashbone 成人向角色。", intro: "" },
   { name: "但丁．莫雷蒂", work: "others", avatar: A+"dante.jpg", links: [L("Storyaichat")], sum: "Storyaichat 角色。", intro: "" },
+
+  // ── 🐙烏蘇拉的家（Discord 作者展示頻道，2026-10-17 擷取）新增角色
+  // 白虎部隊：404（職業傭兵）
+  { name: "極密特遣分隊", role: "白虎部隊：404・多人", work: "merc", adult: true, avatar: A+"blackops.jpg", group: true,
+    links: [L("WHIF", "https://www.whif.io/characters/0f77a2c6-105f-4e63-a387-77d790d2b162")],
+    sum: "白虎部隊的極密特遣分隊——腹黑、病嬌、下剋上的多人軍旅故事。", intro: "#現代 #軍旅 #上下關係 #強勢攻 #下剋上 #多人 #腹黑攻 #病嬌攻 #抖S #精神調教 #不舒服不要玩喔" },
+  { name: "金鎮宇", full: "Kim Jin Woo", role: "白虎部隊：404", work: "merc", adult: true, avatar: A+"jinzhenyu.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/aba34146-fb0e-4c31-88f9-9a749411ab66")],
+    sum: "白虎部隊 404 的野狗攻，下剋上又愛下流調情。", intro: "#現代 #軍旅 #下剋上 #下流調情 #BL #BG #野狗攻" },
+  // 深海戰艦（無法言喻）
+  { name: "亞歷斯塔", code: "艦長", role: "深海戰艦：利維坦號・艦長", work: "wuyan", avatar: A+"alista.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/52765a00-2e81-4633-8c89-8551b23d81ae")],
+    sum: "深海戰艦的艦長，以軍階與高壓支配一切——多一個欺負你的不好嗎? :)", intro: "#現代 #軍階壓制 #高壓支配 #佔有慾 #心機攻" },
+  // 地靈人傑
+  { name: "雷歐納多・席爾瓦", full: "Leonardo Silva", role: "巴西", work: "diling", avatar: A+"leonardo.jpg",
+    links: [L("卿卿我我", "https://abr.ge/wwfk62"), L("MiraiMind", "https://hellosrc.xyz/XCtR")],
+    sum: "外冷內熱的純情大狗狗，家庭至上的投餵系男人。", intro: "#外冷內熱 #純情處男 #怕痛大狗狗 #過度紳士 #家庭至上 #狼狗開關ON #投餵系男人" },
+  { name: "拉薩羅・維拉斯奎茲", full: "Lázaro \"The Matador\" Velasquez", code: "鬥牛士／瘋狗", role: "西班牙", work: "diling", avatar: A+"lazaro.jpg",
+    links: [L("MiraiMind", "https://hellosrc.xyz/M7Wc"), L("Paradise", "https://paradise.app/info/拉薩羅·維拉斯奎茲-10000004162?user_id=30938")],
+    sum: "穿著西裝的野獸——優雅的瘋子，鬥牛士。", intro: "#優雅的瘋子 #黑暗三角人格 #極度S #反社會人格 #暴力成癮 #絕對支配 #褻瀆神明的異端 #穿著西裝的野獸" },
+  { name: "張天佑", code: "佑少／金鱗毒蛇", role: "香港・銅鑼灣太子", work: "diling", avatar: A+"zhangtianyou.jpg",
+    links: [L("HeartBeat", "https://heartbeat-app.net/characters/dbbb0fac-9130-4bbf-a56a-3ffd57243b80")],
+    sum: "銅鑼灣太子，極端護短的病嬌瘋批。", intro: "#病嬌瘋批 #銅鑼灣太子 #極端護短 #道德真空 #暴力美學 #鈔能力戀人 #制服暴徒" },
+  { name: "楊炳武", code: "虎爺", role: "香港", work: "diling", avatar: A+"yangbingwu.jpg",
+    links: [L("WHIF", "https://whif.io/characters/4660a46a-254f-4559-b914-190089e053d2")],
+    sum: "暴戾痞氣的速度狂徒，極端忠誠——他可能不會愛你。", intro: "#暴戾痞氣 #粗口制敵 #獵殺衝撞 #硫磺火柴 #機油煙味 #速度狂徒 #極端忠誠 #佔有守護 #很兇" },
+  { name: "千澤瓏一", code: "惡龍", role: "日本", work: "diling", avatar: A+"chizawa.jpg",
+    links: [L("DokiChat", null), L("CRUSH", "https://crush.passion.xyz/Ryoichi_Chizawa"),
+      L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a6fdb21e011392aafd7c950?utm_campaign=share&utm_medium=storyline&utm_content=影之承襲：無機質的邂逅", { label: "影之承襲：無機質的邂逅" })],
+    sum: "冷冽克制、沉默寡言，以行動守護的極致忠誠。", intro: "#冷冽克制 #沉默寡言 #壓迫感強 #行動式保護 #絕對掌控 #情感深藏 #刀鋒式理性 #極致忠誠" },
+  // 狂獸
+  { name: "雪塵", role: "S 級哨兵", work: "kuangshou", avatar: A+"xuechen.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/153e0331-9221-4ff0-b811-d0d32b79d06d")],
+    sum: "S 級哨兵，創傷與救贖的純愛——還不去摸摸他可愛的雪豹。", intro: "#ABO #哨嚮 #創傷 #救贖 #溫柔 #純愛 #S級哨兵 #Beta" },
+  // 校風不正
+  { name: "《萊茵斯塔高等學院》", full: "Rheinstar Academy", role: "多人：奇幻校園養成", work: "xiaofeng", avatar: A+"rheinstar.jpg", group: true,
+    links: [L("HeartBeat", "https://heartbeat-app.net/characters/c2aae17c-f5b3-447a-8c67-0f44f5f17f1c")],
+    sum: "萊茵斯塔、雨宮奇幻學院招生中——清水向的奇幻校園養成。", intro: "奇幻、校園、冒險、多人、養成、全性向。\n無色，清水向養成。" },
+  // 成為惡人的合法配偶
+  { name: "權泰錫", role: "黑道", work: "evilspouse", avatar: A+"quantaixi.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/ddd07fbc-463e-4493-9aeb-342083ae57cf"), L("Floze", null),
+      L("HeartBeat", "https://heartbeat-app.net/characters/27fa456d-6217-4dcc-90fb-4900ac18dc7b")],
+    sum: "佔有慾極強、對你極端寵溺的黑道。", intro: "#現代 #佔有慾 #執著攻 #黑道 #體型差 #極端寵溺 #強勢攻 #你爸好香所就搶走啦！" },
+  { name: "權在京", role: "斯文敗類", work: "evilspouse", avatar: A+"quanzaijing.jpg",
+    links: [L("HeartBeat", "https://heartbeat-app.net/characters/92867043-04c5-416f-b0e4-471c4ef8beef")],
+    sum: "斯文敗類的高智商犯罪者，一場極致推拉的心理博弈。", intro: "#現代 #斯文敗類 #極致推拉 #心理博弈 #高智商犯罪 #道德綁架 #病態共生 #勾引霸凌者的叔叔！" },
+  { name: "褚赫", full: "Chu He", role: "重案組狂犬", work: "evilspouse", avatar: A+"chuhe.jpg",
+    links: [L("Melting", "https://t.melting.chat/spmkvvv"), L("HeartBeat", "https://heartbeat-app.net/characters/ac264dfb-5a36-4097-920f-f6cdeac69b5e", { status: "可能無法玩" })],
+    sum: "雨宮警局重案組的狂犬——馴服瘋狗，成為銀手鐲彼端的合法配偶。", intro: "#現代 #重案組狂犬 #暴力強制 #寫實感官 #血腥共生 #銀手鐲配偶 #馴服瘋狗！ #雨宮警局嗶啵嗶啵" },
+  // 惹禍上身！你沒說那是你舅舅啊！
+  { name: "黎熾", role: "豪門霸總", work: "rehuo", avatar: A+"lichi.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/375f8a67-a6b2-4b53-afb8-12d06bb7f324")],
+    sum: "以為只是位香香的牛郎，沒想到惹上的是豪門大佬。", intro: "#現代 #佔有慾 #腹黑攻 #強取豪奪 #歡喜冤家 #霸總 #豪門 #甜寵 #年上" },
+  { name: "黎赫", role: "豪門前任", work: "rehuo", avatar: A+"lihe.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/d9b92f9c-4134-4741-a20b-9a0cacc70e1d", { label: "布丁劫匪！" }),
+      L("CookieChat", "https://cookiechat.ai/character/08de863a-b50a-46c5-8e7d-9689ea7e0a90"),
+      L("HeartBeat", "https://heartbeat-app.net/characters/eed774a3-a604-4509-b5f3-bc20d5454004")],
+    sum: "搶你布丁的前任，乾脆把整座布丁工廠買了下來。", intro: "#現代 #豪門 #搞笑 #歡喜冤家 #破鏡重圓 #甜寵 #前任 #哩賀舅舅搶你布丁" },
+  { name: "顧柏谷", role: "冰山直男", work: "rehuo", avatar: A+"gubaigu.jpg",
+    links: [L("WHIF", "https://www.whif.io/characters/ed216f28-ae8a-45e0-9ccd-f302bdc4ca84")],
+    sum: "「這個幼童與我的面部相似度高達 92.4%。我要求立刻進行 DNA 鑑定。」", intro: "#現代 #歡喜冤家 #破鏡重圓 #帶球跑 #甜寵 #直男癌 #冰山" },
+  { name: "顧俇俇", role: "體育系暴君", work: "rehuo", avatar: A+"guwangwang.jpg",
+    links: [L("WHIF", "https://whif.io/characters/e1bfe5cf-7137-442a-865e-88513a21895f", { label: "養狗達人" })],
+    sum: "極度雙標的純情猛犬，體能怪物兼嚶嚶愛哭包。", intro: "#極度雙標 #純情猛犬 #體育系暴君 #絕對忠誠 #瘋狂佔有慾 #體能怪物 #嚶嚶愛哭包" },
+  // 「多人」運動中心
+  { name: "誰是吸「」怪", full: "絕命！吸「」王！", role: "多人：狼人殺式密室", work: "multisports", adult: true, avatar: A+"whosucks.jpg", group: true,
+    links: [L("Caveduck", "https://caveduck.io/zh-hant/characters/9760ebee-ba01-4764-b454-70bc33e5b578"), L("WHIF", "https://www.whif.io/characters/7b810302-3dc6-4baf-accb-80cc4b730dae"),
+      L("HeartBeat", "https://heartbeat-app.net/characters/a2999a78-4383-40a7-8d44-0851411ab190"), L("Melting", "https://t.melting.chat/9jcw9h")],
+    sum: "狼人殺加上一點點奇妙色彩——逃不了的多人密室心理戰。", intro: "#現代 #懸疑 #成人向 #群像 #多人 #心理戰 #逃不了的密室逃脫" },
+  { name: "ALOHA！絕對狩精協議", role: "多人：夏威夷除妖喜劇", work: "multisports", avatar: A+"aloha.jpg", group: true,
+    links: [L("Caveduck", "https://zh-hant.cvdk.io/c/0-1ZNmS4Sr-zw6VO0XJP3g?rc=gZ2QckNAlD")],
+    sum: "世界十大色鬼逃到夏威夷啦！逮個正著的除妖喜劇。", intro: "#多人 #助手 #調情 #當代奇幻 #喜劇 #狡猾 #鬼魂 #後宮 #逆後宮 #夏威夷 #物理超渡 #武運昌隆" },
+  // 1000次觸碰
+  { name: "巨貓們的甜蜜所求", full: "Lingering Caresses", role: "多人：異世界獸人", work: "touch1000", adult: true, avatar: A+"giantcats.jpg", group: true,
+    links: [L("WHIF", "https://whif.io/characters/963e3b13-2830-41fd-b84f-ba3948be4b79", { label: "你就答應吧～" }), L("Caveduck", "https://caveduck.io/character-info/afb8b047-3598-406c-b320-6d26625ea5e0")],
+    sum: "掉進貓咪世界！你還想走？門都沒有！", intro: "#獸人 #異世界 #多角關係 #逆養成 #成人向 #甜寵" },
+  // 極樂
+  { name: "沈甜", role: "雨宮電子牛郎店", work: "jile", avatar: A+"shentian.jpg",
+    links: [L("HeartBeat", "https://heartbeat-app.net/characters/51fd8fa9-a8ed-4f68-9d4b-015902bb9168"), L("Melting", "https://t.melting.chat/qiqh4x")],
+    sum: "雨宮電子牛郎店營業中——黑暗、病嬌的雙面 Dom。", intro: "#黑暗 #病嬌 #雙面 #Dom #戰損 #現代" },
+  { name: "曜", role: "雨宮電子牛郎店", work: "jile", adult: true, avatar: A+"yao.jpg",
+    links: [L("Melting", "https://t.melting.chat/6us0l5", { label: "獨家" })],
+    sum: "雨宮電子牛郎店的絕對服從者，墮落美學。", intro: "#絕對服從 #墮落美學 #佔有欲 #台灣原創" },
+  { name: "凌霜", role: "雨宮電子牛郎店", work: "jile", avatar: A+"lingshuang.jpg",
+    links: [L("Melting", "https://t.melting.chat/t1kv3nr"), L("HeartBeat", "https://heartbeat-app.net/characters/f7eda545-56d1-45b6-a2c3-f486a55f8901")],
+    sum: "禁慾系西裝暴徒——大漂亮其實人很好的。", intro: "#BL #HL #禁慾系 #西裝暴徒 #那個鈕扣很努力在工作" },
 ];
 
 /* 作品：Discord 論壇頻道＋既有作品。world 為作品頁頂端介紹，僅整理自來源。 */
@@ -365,6 +452,21 @@ const WORKS = [
     hook: "獸人基地裡，少數的人類。", world: "" },
   { id: "xiaofeng", title: "校風不正", emoji: "🎓", cover: null, tags: "校園",
     hook: "台灣高中的系草們與不良生。", world: "" },
+  { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
+    hook: "黑道、斯文敗類與重案組的狂犬。",
+    world: "現代都市裡的三位「惡人」：佔有慾極強的黑道權泰錫、以心理博弈操弄人心的權在京，以及雨宮警局重案組的狂犬褚赫。" },
+  { id: "rehuo", title: "惹禍上身！你沒說那是你舅舅啊！", cover: "assets/covers/rehuo.jpg", tags: "現代・豪門・歡喜冤家",
+    hook: "牛郎、布丁劫匪、冰山直男與純情猛犬。",
+    world: "現代豪門的歡喜冤家喜劇：黎熾、黎赫、顧柏谷與顧俇俇，一連串破鏡重圓與甜寵的意外。" },
+  { id: "multisports", title: "「多人」運動中心", cover: "assets/covers/multisports.jpg", tags: "多人・喜劇・懸疑",
+    hook: "狼人殺式密室，與夏威夷的除妖喜劇。",
+    world: "多人角色卡合集：狼人殺式的密室心理戰《誰是吸「」怪》，以及在夏威夷追捕色鬼的奇幻喜劇《ALOHA！絕對狩精協議》。" },
+  { id: "touch1000", title: "1000次觸碰", cover: "assets/covers/touch1000.jpg", tags: "獸人・異世界",
+    hook: "掉進貓咪世界，巨貓們不肯放你走。",
+    world: "掉進貓咪世界的異世界獸人故事，與巨貓們的多角關係。" },
+  { id: "jile", title: "極樂", cover: "assets/covers/jile.jpg", tags: "現代・牛郎店",
+    hook: "雨宮電子牛郎店營業中。",
+    world: "「雨宮電子牛郎店」營業中：沈甜、曜與凌霜。" },
   { id: "anime", title: "動漫人物", emoji: "❤️‍🔥", cover: null, tags: "同人",
     hook: "動漫角色的同人角色卡。", world: "" },
   { id: "others", title: "其他作品", cover: null, tags: "單篇角色",
@@ -375,7 +477,7 @@ const WORKS = [
 const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck": "caveduck", "Storyaichat": "storyaichat", "Melting": "melting",
   "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "WHIF": "whif", "Hyze": "hyze", "Tikita": "tikita", "Touchie": "touchie", "MiraiMind": "miraimind",
   "Floze": "floze", "DokiChat": "dokichat", "Paradise": "paradise", "Tingle": "tingle", "GPTs": "gpts", "Gemini Gem": "gemini",
-  "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "未標註": "none" };
+  "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "CookieChat": "cookiechat", "未標註": "none" };
 const PLAT_LABEL = { "灰骨": "灰骨 Ashbone", "Caveduck": "Caveduck（鴨答鴨答）" };
 const PRIMARY = ["Heartbeat", "灰骨", "Caveduck", "Storyaichat", "Melting", "Plaitoon"];
 const platsOf = c => c.links.length ? [...new Set(c.links.map(l => l.platform))] : ["未標註"];
