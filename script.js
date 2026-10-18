@@ -551,7 +551,7 @@ function cardHTML(c, showWork) {
     <div class="ctop">${avatarHTML(c)}
       <div><div class="cname">${esc(c.name)}${c.adult ? '<span class="badge-18">18+</span>' : ""}${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
       ${c.code ? `<div class="ccode">${esc(c.code)}</div>` : ""}
-      ${showWork && w ? `<a class="cwork" href="#work/${w.id}">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
+      ${showWork && w ? `<a class="cwork" href="#work/${w.id}${showWork === true ? "" : "?from=" + encodeURIComponent(showWork)}" data-work="${w.id}">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
     <div class="cbody"><p class="csum">${esc(c.sum)}</p><div class="tags">${tags}</div></div>
     <div class="cmore"><div class="cmore-inner">${meta ? `<dl class="cmeta">${meta}</dl>` : ""}<p class="cintro">${esc(c.intro || "詳細介紹待補。")}</p>
       <p class="lhead">遊玩平台</p>${linksHTML(c)}</div></div>
@@ -582,18 +582,27 @@ pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}
 function viewWorks() {
   return `<div class="work-grid">${WORKS.map(w => {
     const n = charsOfWork(w).length;
-    return `<a class="wkcard reveal" href="#work/${w.id}">
+    return `<a class="wkcard reveal" href="#work/${w.id}?from=works" data-work="${w.id}">
       <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(WORKS.indexOf(w) + 1).padStart(2, "0")}</span></div>
       <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3>${esc(w.title)}</h3>
       <p class="wkhook">${esc(w.hook)}</p>
       <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
   }).join("")}</div>`;
 }
-function viewWork(w) {
-  const list = charsOfWork(w);
+/* 返回連結：依來源（世界觀／作品列表／平台篩選）決定 */
+function backOf(from) {
+  if (from === "world") return { href: "#worlds", label: "← 返回世界觀" };
+  if (from && from.startsWith("platform:")) {
+    const p = PLATFORM_FILTERS.find(x => x.id === from.slice(9));
+    if (p) return { href: `#platform/${p.id}`, label: `← 返回 ${plabel(p.key)} 角色列表` };
+  }
+  return { href: "#characters", label: "← 返回作品列表" };
+}
+function viewWork(w, from) {
+  const list = charsOfWork(w), back = backOf(from);
   const platSet = [...new Set(list.flatMap(platsOf))].filter(p => p !== "未標註").map(plabel).join("・");
   return `<div class="panel-view">
-    <a class="back" href="#characters">← 返回作品列表</a>
+    <a class="back" href="${back.href}" data-back="1">${esc(back.label)}</a>
     <header class="work-hero">
       <div class="work-hero-cover">${coverHTML(w)}</div>
       <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title">${esc(workTitle(w))}</h3>
@@ -607,29 +616,101 @@ function viewWork(w) {
 function viewPlatform(p) {
   const list = CHARACTERS.filter(c => platsOf(c).includes(p.key));
   return `<div class="panel-view">
-    <a class="back" href="#characters">← 返回作品列表</a>
+    <a class="back" href="#characters" data-back="1">← 返回作品列表</a>
     <header class="plat-head"><p class="eyebrow">Platform</p><h3 class="work-title">${esc(plabel(p.key))}</h3>
     <p class="work-meta">${list.length} 位角色</p></header>
-    <div class="char-grid">${list.length ? list.map(c => cardHTML(c, true)).join("")
+    <div class="char-grid">${list.length ? list.map(c => cardHTML(c, "platform:" + p.id)).join("")
       : `<p class="empty">目前沒有標註於此平台的角色。</p>`}</div>
   </div>`;
 }
 
-/* ---------- hash routing ---------- */
+/* ---------- hash routing ----------
+   作品頁 hash 帶來源：#work/<id>?from=world|works|platform:<id>；返回時捲回原本點擊的卡片 */
+const parseHash = (hash = location.hash) => {
+  const raw = decodeURIComponent(hash.replace(/^#/, ""));
+  const [path, q = ""] = raw.split("?");
+  const from = new URLSearchParams(q).get("from") || "";
+  const [kind, id] = path.split("/");
+  return { path, kind, id, from };
+};
+/* 來源位置的正規化 key：works／worlds／platform/<id>／其他區塊 */
+const originKey = hash => {
+  const { path, kind } = parseHash(hash);
+  if (!path || path === "characters" || path === "work" || path === "work/all" || (kind === "work" && !WORKS.find(w => w.id === parseHash(hash).id))) return "works";
+  if (path === "worlds") return "worlds";
+  return path;
+};
+const fromKey = from => from === "world" ? "worlds" : from && from.startsWith("platform:") ? "platform/" + from.slice(9) : "works";
+let lastHash = location.hash, prevOfDetail = null;
 function route(scroll) {
-  const h = decodeURIComponent(location.hash.slice(1));
+  const { kind, id, from } = parseHash();
   let html, active = "";
-  const [kind, id] = h.split("/");
-  if (kind === "work" && WORKS.find(w => w.id === id)) { active = null; html = viewWork(WORKS.find(w => w.id === id)); }
+  const work = kind === "work" && WORKS.find(w => w.id === id);
+  if (work) { active = null; html = viewWork(work, from); }
   else if (kind === "platform" && PLATFORM_FILTERS.find(p => p.id === id)) { active = id; html = viewPlatform(PLATFORM_FILTERS.find(p => p.id === id)); }
-  else if (kind === "work" || kind === "platform") html = viewWorks();
-  if (html === undefined) { if (!view.innerHTML) html = viewWorks(); else return; }
-  view.innerHTML = html;
-  pf.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.p === active));
-  observe(view.querySelectorAll(".reveal"));
-  if (scroll && (kind === "work" || kind === "platform")) $("#characters").scrollIntoView({ behavior: "smooth" });
+  else if (!view.querySelector(".work-grid")) html = viewWorks();   /* 離開詳細頁（或首次載入）時回到作品列表 */
+  if (html !== undefined) {
+    view.innerHTML = html;
+    pf.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.p === active));
+    observe(view.querySelectorAll(".reveal"));
+  }
+  if (scroll && (work || kind === "platform")) { if (!restoreScroll()) $("#characters").scrollIntoView({ behavior: "smooth" }); }
+  else if (scroll && !restoreScroll()) {
+    const { path } = parseHash(), t = path && document.getElementById(path);
+    if (t) settleScroll(t); else if (originKey(location.hash) === "works" && path) settleScroll($("#characters"));
+  }
 }
-window.addEventListener("hashchange", () => route(true));
+/* 記住點擊的卡片，返回時捲回該卡片 */
+const RET_KEY = "jc-ret";
+function rememberClick(a) {
+  const { from } = parseHash(a.getAttribute("href"));
+  const card = a.closest(".ccard");
+  try { sessionStorage.setItem(RET_KEY, JSON.stringify({ target: fromKey(from), work: a.dataset.work || "", char: card ? card.dataset.name : "" })); } catch {}
+}
+function restoreScroll() {
+  let r; try { r = JSON.parse(sessionStorage.getItem(RET_KEY) || "null"); } catch {}
+  if (!r || r.target !== originKey(location.hash)) return false;
+  let el = null;
+  if (r.target === "worlds") el = $(`#worldIndex a[data-work="${CSS.escape(r.work)}"]`);
+  else if (r.char) el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === r.char);
+  else el = $(`#charView .wkcard[data-work="${CSS.escape(r.work)}"]`);
+  if (!el) return false;
+  try { sessionStorage.removeItem(RET_KEY); } catch {}
+  el.closest(".reveal") && el.closest(".reveal").classList.add("in"); el.classList.add("in");
+  settleScroll(el, "center"); el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600);
+  return true;
+}
+/* 捲動到元素並在版面因圖片載入而位移時持續校正（使用者自行捲動即停止） */
+let settleCancel = null;
+function settleScroll(el, block = "start") {
+  if (settleCancel) settleCancel();
+  let stopped = false;
+  const stop = () => { stopped = true; ["wheel", "touchstart", "keydown", "mousedown"].forEach(t => removeEventListener(t, stop, true)); if (ro) ro.disconnect(); };
+  settleCancel = stop;
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(t => addEventListener(t, stop, { capture: true, passive: true }));
+  const fix = () => { if (!stopped) el.scrollIntoView({ block, behavior: "instant" }); };
+  const ro = "ResizeObserver" in window ? new ResizeObserver(fix) : null;
+  if (ro) ro.observe(document.body);
+  requestAnimationFrame(() => requestAnimationFrame(fix));
+  [150, 450, 900, 1500].forEach(t => setTimeout(fix, t));
+  setTimeout(stop, 2000);
+}
+window.addEventListener("hashchange", () => {
+  const { kind } = parseHash();
+  if (kind === "work" && parseHash(lastHash).kind !== "work") prevOfDetail = lastHash;
+  else if (kind !== "work") prevOfDetail = null;
+  lastHash = location.hash;
+  route(true);
+});
+document.addEventListener("click", e => {
+  const a = e.target.closest && e.target.closest('a[href^="#work/"]');
+  if (a && !a.dataset.back) rememberClick(a);
+  /* 返回連結：若上一頁正是來源，直接 history.back()，讓瀏覽器返回鍵行為一致 */
+  const b = e.target.closest && e.target.closest("a.back[data-back]");
+  if (b && prevOfDetail !== null && originKey(prevOfDetail) === originKey(b.getAttribute("href")) && parseHash().kind === "work") {
+    e.preventDefault(); history.back();
+  }
+});
 
 view.addEventListener("click", e => {
   if (e.target.closest("a")) return;
@@ -644,7 +725,7 @@ view.addEventListener("keydown", e => {
 
 /* ---------- world index ---------- */
 $("#worldIndex").innerHTML = WORKS.filter(w => w.id !== "others").map((w, i) => `<li class="reveal">
-  <a href="#work/${w.id}"><span class="wi-no">${String(i + 1).padStart(2, "0")}</span>
+  <a href="#work/${w.id}?from=world" data-work="${w.id}"><span class="wi-no">${String(i + 1).padStart(2, "0")}</span>
   <span class="wi-title">${esc(workTitle(w))}</span><span class="wi-tags">${esc(w.tags)}</span><span class="wi-go">→</span></a></li>`).join("");
 
 /* ---------- nav + reveal ---------- */
@@ -659,6 +740,7 @@ function observe(nodes) { nodes.forEach(n => io ? io.observe(n) : n.classList.ad
 observe(document.querySelectorAll(".reveal"));
 route(false);
 if (/^#(work|platform)\//.test(location.hash)) setTimeout(() => $("#characters").scrollIntoView(), 0);
+if (history.scrollRestoration) history.scrollRestoration = "manual";
 
 /* ---------- starfield（多層星空、緩慢視差；尊重 prefers-reduced-motion） ---------- */
 (() => {

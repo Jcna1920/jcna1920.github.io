@@ -562,3 +562,8 @@ body{background:transparent}
 img,video,.aslides,.aslide .abg{-webkit-touch-callout:none;-webkit-user-drag:none;user-drag:none}
 img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
 .invite code{-webkit-user-select:text;user-select:text}
+
+/* 返回時標示原本點擊的卡片 */
+@keyframes retflash{0%{box-shadow:0 0 0 1px rgba(217,191,140,.9),0 0 28px rgba(176,108,255,.7)}100%{box-shadow:0 0 0 1px rgba(217,191,140,0),0 0 0 rgba(176,108,255,0)}}
+.ret-flash{animation:retflash 1.6s ease-out}
+@media (prefers-reduced-motion:reduce){.ret-flash{animation:none}}
