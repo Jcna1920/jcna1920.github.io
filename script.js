@@ -253,7 +253,7 @@ const CHARACTERS = [
     links: [L("Gemini Gem", "https://gemini.google.com/gem/16dh1wSAdyp5M-LKUpu2LLe7qCbn4P_MZ?usp=sharing")],
     sum: "你是剛報到的新進中士，走進軍事禁區裡的 404 內務室。", intro: "#軍事禁區 #階級壓制 #高度壓抑" },
   { name: "盧卡．沃恩", full: "Luca Vohn", role: "私人傭兵／「阿爾曼德莊園」門衛兼安保", age: "28", work: "merc", avatar: A+"lucavohn.jpg",
-    links: [L("Discord", "https://discord.com/channels/523687282662703127/1460284214376267826", { label: "阿爾曼德莊園（多人）" })],
+    links: [],
     sum: "義大利 × 烏克蘭混血的私人傭兵，米蘭郊區莊園的門衛。", intro: "" },
 
   // ── 🎭雲嶺娛樂
@@ -490,7 +490,7 @@ const PLATFORM_FILTERS = (() => {
   PRIMARY.forEach(p => { if (!(p in count)) { count[p] = 0; keys.push(p); } });
   const rank = p => p === "未標註" ? 999 : (PRIMARY.includes(p) ? PRIMARY.indexOf(p) : 100 - count[p] / 100);
   return keys.sort((a, b) => rank(a) - rank(b) || count[b] - count[a])
-    .map(k => ({ id: PLATFORM_IDS[k] || encodeURIComponent(k), key: k, label: k === "灰骨" ? "灰骨" : k === "卿卿我我" ? "卿卿我我（7755）" : k, count: count[k] }));
+    .map(k => ({ id: PLATFORM_IDS[k] || encodeURIComponent(k), key: k, label: k === "灰骨" ? "灰骨" : k === "卿卿我我" ? "卿卿我我（7755）" : k === "未標註" ? "準備中" : k, count: count[k] }));
 })();
 
 /* ---------- helpers ---------- */
@@ -537,7 +537,11 @@ function avatarHTML(c) {
 const plabel = p => PLAT_LABEL[p] || p;
 /* GPTs、Gemini Gem 連結目前失效：保留資料，按鈕標示「暫停」且不可點擊 */
 function linksHTML(c) {
-  if (!c.links.length) return `<p class="lempty">平台連結待補</p>`;
+  /* 無平台連結（或資料標示 linkStatus）→ 顯示不可點擊的「準備中」 */
+  if (!c.links.length || c.linkStatus) {
+    const st = c.linkStatus || "準備中";
+    return `<div class="lrow"><span class="lbtn off paused prep" aria-disabled="true" title="平台連結${esc(st)}"><span class="lname">${esc(st)}</span></span></div>`;
+  }
   const pname = p => p === "Caveduck" ? "Caveduck" : plabel(p);
   return `<div class="lrow">${c.links.map(l => PAUSED.has(l.platform)
     ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname">${esc(pname(l.platform))}${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
@@ -546,7 +550,7 @@ function linksHTML(c) {
     : `<span class="lbtn off" aria-disabled="true" title="尚無連結">${esc(pname(l.platform))}</span>`).join("")}</div>`;
 }
 function cardHTML(c, showWork) {
-  const tags = platsOf(c).map(p => {
+  const tags = (!c.links.length || c.linkStatus) ? `<span class="tag prep" title="平台連結準備中">${esc(c.linkStatus || "準備中")}</span>` : platsOf(c).map(p => {
     const retired = c.links.some(l => l.platform === p && l.status === "已退");
     return `<span class="tag${retired ? " retired" : ""}">${esc(plabel(p))}</span>`;
   }).join("");
