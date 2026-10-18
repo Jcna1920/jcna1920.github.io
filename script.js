@@ -14,7 +14,7 @@ const PLATFORMS = [
   { name: "IsekaiZero", desc: "AI 角色聊天平台", url: "https://www.isekaizero.ai/download/qr?utm_campaign=share&utm_medium=referral&utm_content=referral-code&referralCode=E0MR4AGH", invite: "E0MR4AGH" },
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
-  { name: "WHIF", desc: "AI 角色聊天平台", url: null, invite: "F8C64073" },
+  { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073" },
 ];
 
 const A = "assets/avatars/";
