@@ -15,6 +15,15 @@ const PLATFORMS = [
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
   { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073" },
+  /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼 */
+  { name: "FuWa", url: "https://link.fuwachat.com/creators/019fbe62-bd6e-78e2-b427-63c1eae558ae" },
+  { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw" },
+  { name: "MiraiMind", url: "https://web-miraimind.hellogroupjapan.com/app/share/preview/creator/G14168777/zh-Hant-TW" },
+  { name: "Touchie", url: "https://h5.touchieai.com/author?code=d3f5107b-416c-4621-80b9-5dee58bd98b1" },
+  { name: "CRUSH", url: "https://creators.passion.xyz/j_cna" },
+  { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters" },
+  { name: "Paradise", url: "https://www.paradise.app/creator/30938?user_id=30938" },
+  { name: "LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f" },
 ];
 
 const A = "assets/avatars/";
@@ -503,14 +512,13 @@ const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 const PICON_DIR = "assets/platforms/";
 const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": "heartbeat", "Caveduck": "caveduck", "Storyaichat": "storyaichat",
   "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
-  "Touchie": "touchie", "MiraiMind": "miraimind", "Floze": "floze", "Paradise": "paradise", "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa" };
+  "Touchie": "touchie", "MiraiMind": "miraimind", "Floze": "floze", "Paradise": "paradise", "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.name)} 邀請碼">複製</button></div>` : "";
 $("#platformGrid").innerHTML = PLATFORMS.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.name)}"></a>` : ""}
-  ${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}
-  <span class="pname">${esc(p.name)}</span><span class="pdesc">${esc(p.desc)}</span>
+  <div class="phead"><span class="pname">${esc(p.name)}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
