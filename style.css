@@ -532,3 +532,28 @@ body{background:transparent}
   .intro .sfig .slab{font-size:.68rem;letter-spacing:.03em}
 }
 .intro .sfig{max-width:none;min-width:56px}
+
+/* ===== 作者資訊：作品幻燈片 ===== */
+.aslides{position:relative;margin:4px 0 22px;border-radius:10px;padding:6px;
+  background:linear-gradient(160deg,rgba(217,191,140,.35),rgba(120,70,170,.25) 40%,rgba(217,191,140,.22));
+  box-shadow:0 18px 40px -18px rgba(120,60,200,.55)}
+.aslides .aview{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px;background:#1a0d26;isolation:isolate}
+.aslide{position:absolute;inset:0;margin:0;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s linear .9s}
+.aslide.is-active{opacity:1;visibility:visible;transition:opacity .9s ease,visibility 0s}
+.aslide .abg{position:absolute;inset:-24px;background:center/cover no-repeat;filter:blur(22px) saturate(1.1) brightness(.7);transform:scale(1.08)}
+.aslide .abg::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(60,24,96,.15),rgba(26,10,40,.6))}
+.aslide .aimg{position:relative;z-index:1;display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(10,4,20,.55))}
+.aslides .aview::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(217,191,140,.28),inset 0 0 40px rgba(20,8,34,.35)}
+.anav{position:absolute;top:calc(50% - 22px);z-index:3;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(217,191,140,.45);background:rgba(20,10,32,.55);color:var(--gold);font:400 1.5rem/1 var(--serif);padding:0 0 3px;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:.75;transition:opacity .3s,background .3s,box-shadow .3s}
+.anav.prev{left:14px}.anav.next{right:14px}
+.aslides:hover .anav,.anav:focus-visible{opacity:1}
+.anav:hover,.anav:focus-visible{background:rgba(60,28,90,.75);box-shadow:0 0 16px rgba(176,108,255,.55);outline:none}
+.adots{display:flex;justify-content:center;gap:8px;padding:10px 0 4px}
+.adot{width:8px;height:8px;padding:0;border-radius:50%;border:1px solid rgba(217,191,140,.55);background:transparent;cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s}
+.adot.on{background:var(--gold);transform:scale(1.25);box-shadow:0 0 8px rgba(217,191,140,.6)}
+.adot:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+@media (max-width:640px){.anav{width:32px;height:32px;font-size:1.3rem}.anav.prev{left:10px}.anav.next{right:10px}}
+@media (prefers-reduced-motion:reduce){.aslide,.aslide.is-active{transition:none}.adot{transition:none}}
+.adot{position:relative}.adot::before{content:"";position:absolute;inset:-9px}

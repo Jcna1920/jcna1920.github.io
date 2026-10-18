@@ -739,3 +739,46 @@ if (/^#(work|platform)\//.test(location.hash)) setTimeout(() => $("#characters")
   document.addEventListener("visibilitychange", () => { if (document.hidden) cancelAnimationFrame(raf); else start(); });
   (reduce.addEventListener ? reduce.addEventListener("change", start) : reduce.addListener(start));
 })();
+
+/* ---------- 作者資訊：作品幻燈片 ---------- */
+(() => {
+  const root = document.getElementById("authorSlides"); if (!root) return;
+  const slides = [...root.querySelectorAll(".aslide")], dots = [...root.querySelectorAll(".adot")];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const DELAY = 4000; let cur = 0, timer = null, hover = false, visible = true;
+  const load = i => {
+    const s = slides[(i + slides.length) % slides.length]; if (s.dataset.loaded) return; s.dataset.loaded = "1";
+    const bg = s.querySelector(".abg[data-bg]"); if (bg) bg.style.backgroundImage = `url('${bg.dataset.bg}')`;
+    const img = s.querySelector("img[data-src]"); if (img) img.src = img.dataset.src;
+    const v = s.querySelector("video");
+    if (v) { v.poster = v.dataset.poster; v.querySelectorAll("source[data-src]").forEach(x => x.src = x.dataset.src); v.preload = "auto"; v.load(); if (reduce) v.controls = true; }
+  };
+  slides[0].dataset.loaded = "1";
+  const syncVideo = () => slides.forEach((s, i) => { const v = s.querySelector("video"); if (!v) return;
+    if (i === cur && !reduce && visible) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } else v.pause(); });
+  const go = i => {
+    cur = (i + slides.length) % slides.length; load(cur); load(cur + 1);
+    slides.forEach((s, k) => { s.classList.toggle("is-active", k === cur); s.setAttribute("aria-hidden", k === cur ? "false" : "true"); });
+    dots.forEach((d, k) => { d.classList.toggle("on", k === cur); k === cur ? d.setAttribute("aria-current", "true") : d.removeAttribute("aria-current"); });
+    syncVideo(); restart();
+  };
+  const stop = () => { clearTimeout(timer); timer = null; };
+  const restart = () => { stop(); if (!reduce && !hover && visible && !document.hidden) timer = setTimeout(() => go(cur + 1), DELAY); };
+  root.querySelector(".prev").addEventListener("click", () => go(cur - 1));
+  root.querySelector(".next").addEventListener("click", () => go(cur + 1));
+  dots.forEach((d, k) => d.addEventListener("click", () => go(k)));
+  root.addEventListener("mouseenter", () => { hover = true; stop(); });
+  root.addEventListener("mouseleave", () => { hover = false; restart(); });
+  root.addEventListener("focusin", () => { hover = true; stop(); });
+  root.addEventListener("focusout", e => { if (!root.contains(e.relatedTarget)) { hover = false; restart(); } });
+  root.addEventListener("keydown", e => { if (e.key === "ArrowLeft") go(cur - 1); else if (e.key === "ArrowRight") go(cur + 1); });
+  let sx = null, sy = null;
+  root.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; stop(); }, { passive: true });
+  root.addEventListener("touchend", e => {
+    if (sx === null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1)); else restart();
+  }, { passive: true });
+  document.addEventListener("visibilitychange", () => { syncVideo(); restart(); });
+  if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; syncVideo(); restart(); }, { threshold: .25 }).observe(root);
+  load(1); restart();
+})();
