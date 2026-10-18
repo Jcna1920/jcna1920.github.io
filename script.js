@@ -14,16 +14,16 @@ const PLATFORMS = [
   { name: "IsekaiZero", desc: "AI 角色聊天平台", url: "https://www.isekaizero.ai/download/qr?utm_campaign=share&utm_medium=referral&utm_content=referral-code&referralCode=E0MR4AGH", invite: "E0MR4AGH" },
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
-  { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073" },
+  { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073", status: "暫停更新" },
   /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼 */
   { name: "FuWa", url: "https://link.fuwachat.com/creators/019fbe62-bd6e-78e2-b427-63c1eae558ae" },
-  { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw" },
-  { name: "MiraiMind", url: "https://web-miraimind.hellogroupjapan.com/app/share/preview/creator/G14168777/zh-Hant-TW" },
-  { name: "Touchie", url: "https://h5.touchieai.com/author?code=d3f5107b-416c-4621-80b9-5dee58bd98b1" },
-  { name: "CRUSH", url: "https://creators.passion.xyz/j_cna" },
-  { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters" },
-  { name: "Paradise", url: "https://www.paradise.app/creator/30938?user_id=30938" },
-  { name: "LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f" },
+  { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw", status: "不再更新" },
+  { name: "MiraiMind", url: "https://web-miraimind.hellogroupjapan.com/app/share/preview/creator/G14168777/zh-Hant-TW", status: "不再更新" },
+  { name: "Touchie", url: "https://h5.touchieai.com/author?code=d3f5107b-416c-4621-80b9-5dee58bd98b1", status: "不再更新" },
+  { name: "CRUSH", url: "https://creators.passion.xyz/j_cna", status: "暫停更新" },
+  { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters", status: "暫停更新" },
+  { name: "Paradise", url: "https://www.paradise.app/creator/30938?user_id=30938", status: "不再更新" },
+  { name: "LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
 ];
 
 const A = "assets/avatars/";
@@ -516,9 +516,13 @@ const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": 
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.name)} 邀請碼">複製</button></div>` : "";
-$("#platformGrid").innerHTML = PLATFORMS.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}">
+/* 狀態（依作者 lit.link 分類）：使用中 → 暫停更新 → 不再更新，組內維持原順序 */
+const PSTAT_RANK = { "暫停更新": 1, "不再更新": 2 };
+const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
+const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_RANK[a[0].status] || 0) - (PSTAT_RANK[b[0].status] || 0) || a[1] - b[1]).map(x => x[0]);
+$("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}${p.status ? " st-" + PSTAT_CLS[p.status] : ""}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.name)}"></a>` : ""}
-  <div class="phead"><span class="pname">${esc(p.name)}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
+  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.name)}</span>${p.status ? `<span class="pstat ${PSTAT_CLS[p.status]}">${esc(p.status)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {

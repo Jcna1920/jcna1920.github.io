@@ -589,3 +589,18 @@ img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
   .pcard .plink{padding-top:10px}
 }
 .platform-grid{grid-auto-rows:1fr}
+
+/* ===== 進駐平台：狀態徽章 ===== */
+.pcard .ptitle{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.pcard .ptitle .pname{max-width:100%;line-height:1.25;overflow-wrap:break-word}
+.pstat{display:inline-block;padding:2px 9px 3px;border-radius:999px;font-family:var(--serif-tc);font-size:.66rem;line-height:1.4;letter-spacing:.16em;white-space:nowrap}
+.pstat.paused{color:#e3cf9f;border:1px solid rgba(217,191,140,.55);background:rgba(217,191,140,.07)}
+.pstat.retired{color:#b7a8c8;border:1px solid rgba(183,168,200,.32);background:rgba(120,100,150,.16)}
+.pcard.st-retired .pico img{opacity:.6;filter:grayscale(.45) drop-shadow(0 0 6px rgba(170,90,255,.3))}
+.pcard.st-paused .pico img{opacity:.85}
+.pcard.st-retired .pname{color:#d4c8de}
+.pcard.st-retired:hover .pico img,.pcard.st-paused:hover .pico img{opacity:1}
+@media (max-width:640px){
+  .pcard .ptitle{gap:5px}
+  .pstat{font-size:.6rem;letter-spacing:.08em;padding:1px 7px 2px}
+}
