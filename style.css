@@ -557,3 +557,8 @@ body{background:transparent}
 @media (max-width:640px){.anav{width:32px;height:32px;font-size:1.3rem}.anav.prev{left:10px}.anav.next{right:10px}}
 @media (prefers-reduced-motion:reduce){.aslide,.aslide.is-active{transition:none}.adot{transition:none}}
 .adot{position:relative}.adot::before{content:"";position:absolute;inset:-9px}
+
+/* ===== 圖像保護（輕度） ===== */
+img,video,.aslides,.aslide .abg{-webkit-touch-callout:none;-webkit-user-drag:none;user-drag:none}
+img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
+.invite code{-webkit-user-select:text;user-select:text}

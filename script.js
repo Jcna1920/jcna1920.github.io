@@ -782,3 +782,16 @@ if (/^#(work|platform)\//.test(location.hash)) setTimeout(() => $("#characters")
   if ("IntersectionObserver" in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; syncVideo(); restart(); }, { threshold: .25 }).observe(root);
   load(1); restart();
 })();
+
+/* ---------- 圖像保護（輕度）：停用右鍵選單、拖曳圖片／影片 ---------- */
+(() => {
+  const editable = el => el && el.closest && el.closest("input, textarea, select, [contenteditable='true']");
+  document.addEventListener("contextmenu", e => { if (!editable(e.target)) e.preventDefault(); });
+  document.addEventListener("dragstart", e => { if (e.target && e.target.closest && e.target.closest("img, video, .aslides, .abg")) e.preventDefault(); });
+  document.querySelectorAll("img, video").forEach(el => el.setAttribute("draggable", "false"));
+  new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => {
+    if (n.nodeType !== 1) return;
+    if (n.matches("img, video")) n.setAttribute("draggable", "false");
+    n.querySelectorAll && n.querySelectorAll("img, video").forEach(el => el.setAttribute("draggable", "false"));
+  }))).observe(document.body, { childList: true, subtree: true });
+})();
