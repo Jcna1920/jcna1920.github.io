@@ -604,3 +604,37 @@ img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
   .pcard .ptitle{gap:5px}
   .pstat{font-size:.6rem;letter-spacing:.08em;padding:1px 7px 2px}
 }
+.pcard .psub{margin-top:-3px;font-family:ui-monospace,Menlo,monospace;font-size:.7rem;letter-spacing:.06em;color:var(--mist);white-space:nowrap}
+@media (max-width:640px){.pcard .psub{font-size:.62rem;letter-spacing:0}}
+
+/* ===== 進駐平台：精簡卡片（v3） ===== */
+.platform-grid{grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:14px;grid-auto-rows:1fr}
+.pcard,.pcard.has-icon{padding:14px 14px 12px;min-height:0}
+.pcard .phead{gap:10px;min-height:52px;align-items:center}
+.pcard .ptitle{gap:4px}
+.pcard .ptitle .pname,.pcard .pname{font-size:1.12rem;letter-spacing:.03em;line-height:1.2}
+.pcard .pico{width:52px;height:52px}
+.pcard .pico::after{inset:-3px}
+.pcard .pico img{width:36px;height:36px}
+.pcard .pico img[src$="hyze.png"],.pcard .pico img[src$="crush.png"]{width:42px;height:42px}
+.pcard .psub{margin-top:-1px;font-size:.62rem}
+.pstat{font-size:.6rem;letter-spacing:.1em;padding:1px 7px 2px}
+.pcard .invite{margin-top:10px;gap:5px;padding:4px 4px 4px 7px;flex-wrap:nowrap}
+.pcard .invite .ilabel{font-size:.6rem;letter-spacing:.06em}
+.pcard .invite code{font-size:.72rem;letter-spacing:.02em}
+.pcard .invite .copy{font-size:.6rem;letter-spacing:.06em;padding:2px 6px}
+.pcard .plink{padding-top:8px;font-size:.78rem;letter-spacing:.12em}
+@media (max-width:640px){
+  .platform-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .pcard,.pcard.has-icon{padding:11px 10px 10px}
+  .pcard .phead{gap:6px;min-height:44px}
+  .pcard .ptitle .pname,.pcard .pname{font-size:.98rem;letter-spacing:.01em}
+  .pcard .pico{width:44px;height:44px}
+  .pcard .pico img{width:31px;height:31px}
+  .pcard .pico img[src$="hyze.png"],.pcard .pico img[src$="crush.png"]{width:36px;height:36px}
+  .pcard .invite{margin-top:8px;gap:4px;padding:3px 3px 3px 6px;flex-wrap:nowrap}
+  .pcard .invite .ilabel{font-size:.54rem;letter-spacing:0}
+  .pcard .invite code{font-size:.64rem;letter-spacing:0;min-width:0;overflow-wrap:normal}
+  .pcard .invite .copy{font-size:.56rem;padding:2px 5px;letter-spacing:0}
+  .pcard .plink{padding-top:6px;font-size:.74rem}
+}

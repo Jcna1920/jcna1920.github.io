@@ -14,16 +14,12 @@ const PLATFORMS = [
   { name: "IsekaiZero", desc: "AI 角色聊天平台", url: "https://www.isekaizero.ai/download/qr?utm_campaign=share&utm_medium=referral&utm_content=referral-code&referralCode=E0MR4AGH", invite: "E0MR4AGH" },
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
-  { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073", status: "暫停更新" },
-  /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼 */
+  { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073" },
+  /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼。Floze／MiraiMind／Touchie／Paradise／DokiChat 已退出，不再列出 */
   { name: "FuWa", url: "https://link.fuwachat.com/creators/019fbe62-bd6e-78e2-b427-63c1eae558ae" },
-  { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw", status: "不再更新" },
-  { name: "MiraiMind", url: "https://web-miraimind.hellogroupjapan.com/app/share/preview/creator/G14168777/zh-Hant-TW", status: "不再更新" },
-  { name: "Touchie", url: "https://h5.touchieai.com/author?code=d3f5107b-416c-4621-80b9-5dee58bd98b1", status: "不再更新" },
   { name: "CRUSH", url: "https://creators.passion.xyz/j_cna", status: "暫停更新" },
   { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters", status: "暫停更新" },
-  { name: "Paradise", url: "https://www.paradise.app/creator/30938?user_id=30938", status: "不再更新" },
-  { name: "LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
+  { name: "卿卿我我", sub: "7755 · LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
 ];
 
 const A = "assets/avatars/";
@@ -72,7 +68,7 @@ const CHARACTERS = [
     sum: "言行優雅、沉穩寡語，永晝會無聲的帝王與決策中樞。",
     intro: "為組織構築制度、布局全局者。表面從容親切，實則擅長操縱局勢與人心。面對信任之人則沉默守護、以結果保全。\n#極端克制 #溫文儒雅 #笑裡藏刀 #深謀遠慮" },
   { name: "秦夜燼", code: "冥蛇", role: "永晝會隱祕副當家，統轄「暗域」", age: "44（外觀約 30）", work: "yongzhou", avatar: A+"qinyejin.jpg",
-    links: [L("DokiChat", "https://www.dokichat.club/chat/234821b4-668b-4bd9-a92b-c69171a90c5e?isShare=true"), L("GPTs", "https://chatgpt.com/g/g-6969c51c9a988191ab587a4c4e5b1231-qin-ye-jin")],
+    links: [L("GPTs", "https://chatgpt.com/g/g-6969c51c9a988191ab587a4c4e5b1231-qin-ye-jin")],
     sum: "帝蛇光芒下的暗影，以燃香壓抑殺意的裁決者。",
     intro: "他是帝蛇光芒下的暗影，裁決者與清理人。言語稀少，行動絕對；以燃香壓抑殺意，以冷靜守護秩序。外表潔白似光，象徵「在黑暗中維持平衡的毒」。" },
   { name: "秦揚", code: "少主", role: "永晝會現任少主、指定繼承人", age: "26（外觀約 23～25）", work: "yongzhou", avatar: A+"qinyang.jpg",
@@ -179,7 +175,7 @@ const CHARACTERS = [
       L("鴨答鴨答", null, { status: "建立中" })],
     sum: "披著狼皮的羊，偽裝成獵人的頂級獵物。", intro: "#傲嬌純情奶狗 #虛張聲勢 #實戰經驗零 #易碎玻璃心 #反差萌 #嘴硬體正直" },
   { name: "卡希爾", full: "卡希爾（Cassiel）", code: "首席潔癖官", role: "天界靈魂審計部・首席審計官", age: "與星辰同壽／外觀 27", work: "ezhi", avatar: A+"cassiel.jpg",
-    links: [L("Floze", "https://s.floze.ai/r/L4HIqxYktP6ufP07zOcuD2qvK?locale=tw"), L("HYZE", "https://hyze.me/character/08dec5c4-4922-4298-8c19-f205cc192c11")],
+    links: [L("HYZE", "https://hyze.me/character/08dec5c4-4922-4298-8c19-f205cc192c11")],
     sum: "天界極限社畜，優雅的瘋批潔癖官。", intro: "#雙面潔癖官 #神聖躁鬱症 #禁慾系暴徒 #人形消毒水 #反差萌" },
 
   // ── 👿狂獸
@@ -189,7 +185,7 @@ const CHARACTERS = [
 
   // ── 🌊霧潮
   { name: "卡濯·赫瓦納斯", full: "Kazhuo H'varnas", role: "霧潮基地・戰鬥一隊隊長（虎鯨獸人）", age: "28｜198cm", work: "wuchao", avatar: A+"kazhuo.jpg",
-    links: [L("Floze", "https://s.floze.ai/r/sXC9xUJOI7veXd6nn71MYehFf?locale=tw"), L("DokiChat", "https://www.dokichat.club/chat/456798f2-8b2b-49dd-8650-e1e4cae59a62?isShare=true")],
+    links: [],
     sum: "虎鯨獸人隊長；你是霧潮基地少數的人類，負責被他欺負。", intro: "" },
 
   // ── 🗡️地靈人傑
@@ -208,17 +204,17 @@ const CHARACTERS = [
     links: [L("Whif", "https://whif.io/characters/a08b0cbe-67df-48cf-85ee-1d525ef219ac"), L("HeartBeat", "https://heartbeat-app.net/characters/31f81b8f-67f7-4873-b774-e7839fe0a9e3"), L("Melting", "https://t.melting.chat/au3zpj")],
     sum: "外表像黑手黨暴徒，卻是專精重症與罕見疾病的小兒科醫師。", intro: "" },
   { name: "雷擎", role: "台灣基層消防員", age: "32", work: "diling", avatar: A+"leiqing.jpg",
-    links: [L("Paradise", "https://www.paradise.app/info/10000004802?from=chat&chatId=149905")],
+    links: [],
     sum: "曾受特種搜救訓練的消防員，對隔壁被冷落的你有強烈的保護慾。", intro: "#冷酷護短 #領地意識 #沉默寡言 #粗獷強勢" },
   { name: "阮廷風", full: "阮廷風（Arthur）", role: "鼎誠國際年輕總裁／跨國黑幫洗錢總管", work: "diling", avatar: null,
-    links: [L("HYZE", "https://hyze.me/character/08deaafa-3e39-4284-8567-b60e4e85ed7e"), L("Touchie", "https://h5.touchieai.com/character?code=2d7d948a-69cd-42d0-ac78-91246d2070b4")],
+    links: [L("HYZE", "https://hyze.me/character/08deaafa-3e39-4284-8567-b60e4e85ed7e")],
     sum: "霸總式撩人，實際上是愛操心的男媽媽。", intro: "#斯文敗類 #西裝暴徒 #爹系男媽媽 #理論派純情戰神 #過勞" },
   { name: "里昂·艾弗哈特", full: "Rion Everhart", role: "艾弗哈特公爵", work: "diling", avatar: A+"leonheart.jpg",
-    links: [L("MiraMind", "https://web.miraimind.ai/#/chat/C12771401?source=message")],
+    links: [],
     sum: "你重生了——回到欺負公爵之妹莉奈、最終慘死之前。", intro: "#現代 #英倫 #重生 #復仇 #貴族" },
   { name: "江濤", role: "跨國集團霸道總裁", age: "45｜188cm", work: "diling", adult: true, avatar: null,
-    links: [L("Touchie", null), L("Hearbeat", "https://heartbeat-app.net/characters/996d8381-5a00-4e78-9999-52ec7f125d2a"),
-      L("鴨答鴨答", "https://zh-hant.cvdk.io/c/bkt-jqb2SjKQNelkCWluLA?rc=gZ2QckNAlD"), L("Floze", "https://s.floze.ai/r/IosL2jEPgm4KN2a8kyaF6YASg?locale=tw"),
+    links: [L("Hearbeat", "https://heartbeat-app.net/characters/996d8381-5a00-4e78-9999-52ec7f125d2a"),
+      L("鴨答鴨答", "https://zh-hant.cvdk.io/c/bkt-jqb2SjKQNelkCWluLA?rc=gZ2QckNAlD"),
       L("Whif", "https://whif.io/characters/66e8afc2-4fd6-4e62-bda9-7194377dcc05"), L("TIKITA", "https://tikita.ai/story/ZKN2BGJK")],
     sum: "跨國集團的霸道總裁，也是妳那無能丈夫的父親。", intro: "NTR 題材，感情潔癖者請勿遊玩。" },
 
@@ -257,8 +253,7 @@ const CHARACTERS = [
     links: [L("Gemini Gem", "https://gemini.google.com/gem/16dh1wSAdyp5M-LKUpu2LLe7qCbn4P_MZ?usp=sharing")],
     sum: "你是剛報到的新進中士，走進軍事禁區裡的 404 內務室。", intro: "#軍事禁區 #階級壓制 #高度壓抑" },
   { name: "盧卡．沃恩", full: "Luca Vohn", role: "私人傭兵／「阿爾曼德莊園」門衛兼安保", age: "28", work: "merc", avatar: A+"lucavohn.jpg",
-    links: [L("DokiChat", "https://www.dokichat.club/chat/e41fa981-5841-44a6-a354-1f10709797ce?isShare=true"),
-      L("Discord", "https://discord.com/channels/523687282662703127/1460284214376267826", { label: "阿爾曼德莊園（多人）" })],
+    links: [L("Discord", "https://discord.com/channels/523687282662703127/1460284214376267826", { label: "阿爾曼德莊園（多人）" })],
     sum: "義大利 × 烏克蘭混血的私人傭兵，米蘭郊區莊園的門衛。", intro: "" },
 
   // ── 🎭雲嶺娛樂
@@ -304,11 +299,10 @@ const CHARACTERS = [
     links: [L("Whif", "https://whif.io/characters/4fd95279-f2ae-41b0-90b7-b411064b1a4f")],
     sum: "冷酷、潔癖、支配慾強的 CEO；你是剛入職的總裁助理。", intro: "" },
   { name: "野性公館", full: "Wild Mansion／荒野大宅", role: "多人：六種獸人", work: "wuyan", avatar: A+"wildmansion.jpg", group: true,
-    links: [L("Floze", "https://s.floze.ai/r/y4QphVgwoF7ackQkyER5npPLz?locale=tw"), L("MiraiMind", null),
-      L("Melting", "https://t.melting.chat/jk58gt"), L("Touchie", "https://h5.touchieai.com/?code=f32fa45a-28d5-4fe1-9cb5-e3ebbdf4413b")],
+    links: [L("Melting", "https://t.melting.chat/jk58gt")],
     sum: "因為欠錢，你把自己賣給宅院主人，成了小管家。", intro: "" },
   { name: "阿爾曼德莊園", full: "Villa Armand", role: "多人：六名傭兵安保小隊", work: "wuyan", avatar: null, group: true,
-    links: [L("Floze", "https://s.floze.ai/r/E1OKTaNB6bBjska6wqX4YEHRl?locale=tw")],
+    links: [],
     sum: "米蘭郊外的莊園，由門衛 Luca 引領。", intro: "" },
 
   // ── ❤️‍🔥動漫人物
@@ -341,10 +335,10 @@ const CHARACTERS = [
     sum: "深海戰艦的艦長，以軍階與高壓支配一切——多一個欺負你的不好嗎? :)", intro: "#現代 #軍階壓制 #高壓支配 #佔有慾 #心機攻" },
   // 地靈人傑
   { name: "雷歐納多・席爾瓦", full: "Leonardo Silva", role: "巴西", work: "diling", avatar: A+"leonardo.jpg",
-    links: [L("卿卿我我", "https://abr.ge/wwfk62"), L("MiraiMind", "https://hellosrc.xyz/XCtR")],
+    links: [L("卿卿我我", "https://abr.ge/wwfk62")],
     sum: "外冷內熱的純情大狗狗，家庭至上的投餵系男人。", intro: "#外冷內熱 #純情處男 #怕痛大狗狗 #過度紳士 #家庭至上 #狼狗開關ON #投餵系男人" },
   { name: "拉薩羅・維拉斯奎茲", full: "Lázaro \"The Matador\" Velasquez", code: "鬥牛士／瘋狗", role: "西班牙", work: "diling", avatar: A+"lazaro.jpg",
-    links: [L("MiraiMind", "https://hellosrc.xyz/M7Wc"), L("Paradise", "https://paradise.app/info/拉薩羅·維拉斯奎茲-10000004162?user_id=30938")],
+    links: [],
     sum: "穿著西裝的野獸——優雅的瘋子，鬥牛士。", intro: "#優雅的瘋子 #黑暗三角人格 #極度S #反社會人格 #暴力成癮 #絕對支配 #褻瀆神明的異端 #穿著西裝的野獸" },
   { name: "張天佑", code: "佑少／金鱗毒蛇", role: "香港・銅鑼灣太子", work: "diling", avatar: A+"zhangtianyou.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/dbbb0fac-9130-4bbf-a56a-3ffd57243b80")],
@@ -353,7 +347,7 @@ const CHARACTERS = [
     links: [L("WHIF", "https://whif.io/characters/4660a46a-254f-4559-b914-190089e053d2")],
     sum: "暴戾痞氣的速度狂徒，極端忠誠——他可能不會愛你。", intro: "#暴戾痞氣 #粗口制敵 #獵殺衝撞 #硫磺火柴 #機油煙味 #速度狂徒 #極端忠誠 #佔有守護 #很兇" },
   { name: "千澤瓏一", code: "惡龍", role: "日本", work: "diling", avatar: A+"chizawa.jpg",
-    links: [L("DokiChat", null), L("CRUSH", "https://crush.passion.xyz/Ryoichi_Chizawa"),
+    links: [L("CRUSH", "https://crush.passion.xyz/Ryoichi_Chizawa"),
       L("IsekaiZero", "https://www.isekaizero.ai/storylines/6a6fdb21e011392aafd7c950?utm_campaign=share&utm_medium=storyline&utm_content=影之承襲：無機質的邂逅", { label: "影之承襲：無機質的邂逅" })],
     sum: "冷冽克制、沉默寡言，以行動守護的極致忠誠。", intro: "#冷冽克制 #沉默寡言 #壓迫感強 #行動式保護 #絕對掌控 #情感深藏 #刀鋒式理性 #極致忠誠" },
   // 狂獸
@@ -366,7 +360,7 @@ const CHARACTERS = [
     sum: "萊茵斯塔、雨宮奇幻學院招生中——清水向的奇幻校園養成。", intro: "奇幻、校園、冒險、多人、養成、全性向。\n無色，清水向養成。" },
   // 成為惡人的合法配偶
   { name: "權泰錫", role: "黑道", work: "evilspouse", avatar: A+"quantaixi.jpg",
-    links: [L("WHIF", "https://www.whif.io/characters/ddd07fbc-463e-4493-9aeb-342083ae57cf"), L("Floze", null),
+    links: [L("WHIF", "https://www.whif.io/characters/ddd07fbc-463e-4493-9aeb-342083ae57cf"),
       L("HeartBeat", "https://heartbeat-app.net/characters/27fa456d-6217-4dcc-90fb-4900ac18dc7b")],
     sum: "佔有慾極強、對你極端寵溺的黑道。", intro: "#現代 #佔有慾 #執著攻 #黑道 #體型差 #極端寵溺 #強勢攻 #你爸好香所就搶走啦！" },
   { name: "權在京", role: "斯文敗類", work: "evilspouse", avatar: A+"quanzaijing.jpg",
@@ -486,7 +480,7 @@ const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck"
   "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "WHIF": "whif", "Hyze": "hyze", "Tikita": "tikita", "Touchie": "touchie", "MiraiMind": "miraimind",
   "Floze": "floze", "DokiChat": "dokichat", "Paradise": "paradise", "Tingle": "tingle", "GPTs": "gpts", "Gemini Gem": "gemini",
   "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "CookieChat": "cookiechat", "未標註": "none" };
-const PLAT_LABEL = { "灰骨": "灰骨 Ashbone", "Caveduck": "Caveduck（鴨答鴨答）" };
+const PLAT_LABEL = { "灰骨": "灰骨 Ashbone", "Caveduck": "Caveduck（鴨答鴨答）", "卿卿我我": "卿卿我我（7755）" };
 const PRIMARY = ["Heartbeat", "灰骨", "Caveduck", "Storyaichat", "Melting", "Plaitoon"];
 const platsOf = c => c.links.length ? [...new Set(c.links.map(l => l.platform))] : ["未標註"];
 const PLATFORM_FILTERS = (() => {
@@ -496,7 +490,7 @@ const PLATFORM_FILTERS = (() => {
   PRIMARY.forEach(p => { if (!(p in count)) { count[p] = 0; keys.push(p); } });
   const rank = p => p === "未標註" ? 999 : (PRIMARY.includes(p) ? PRIMARY.indexOf(p) : 100 - count[p] / 100);
   return keys.sort((a, b) => rank(a) - rank(b) || count[b] - count[a])
-    .map(k => ({ id: PLATFORM_IDS[k] || encodeURIComponent(k), key: k, label: k === "灰骨" ? "灰骨" : k, count: count[k] }));
+    .map(k => ({ id: PLATFORM_IDS[k] || encodeURIComponent(k), key: k, label: k === "灰骨" ? "灰骨" : k === "卿卿我我" ? "卿卿我我（7755）" : k, count: count[k] }));
 })();
 
 /* ---------- helpers ---------- */
@@ -512,17 +506,17 @@ const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 const PICON_DIR = "assets/platforms/";
 const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": "heartbeat", "Caveduck": "caveduck", "Storyaichat": "storyaichat",
   "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
-  "Touchie": "touchie", "MiraiMind": "miraimind", "Floze": "floze", "Paradise": "paradise", "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "LoveyDovey": "loveydovey" };
+  "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.name)} 邀請碼">複製</button></div>` : "";
-/* 狀態（依作者 lit.link 分類）：使用中 → 暫停更新 → 不再更新，組內維持原順序 */
-const PSTAT_RANK = { "暫停更新": 1, "不再更新": 2 };
+/* 狀態：使用中 → 暫停更新，組內維持原順序 */
+const PSTAT_RANK = { "暫停更新": 1 };
 const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
 const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_RANK[a[0].status] || 0) - (PSTAT_RANK[b[0].status] || 0) || a[1] - b[1]).map(x => x[0]);
 $("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}${p.status ? " st-" + PSTAT_CLS[p.status] : ""}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.name)}"></a>` : ""}
-  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.name)}</span>${p.status ? `<span class="pstat ${PSTAT_CLS[p.status]}">${esc(p.status)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
+  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.name)}</span>${p.sub ? `<span class="psub">${esc(p.sub)}</span>` : ""}${p.status ? `<span class="pstat ${PSTAT_CLS[p.status]}">${esc(p.status)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
