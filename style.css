@@ -717,3 +717,16 @@ html.search-open body{overscroll-behavior:none}
 }
 @media (hover:none){.search-hint{display:none}}
 .invite + .invite.sponsor{margin-top:4px}
+/* 進駐平台分組 */
+.platform-groups{display:flex;flex-direction:column;gap:30px}
+.pgroup-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;font-weight:400}
+.pgroup-head::after{content:"";flex:1 1 auto;height:1px;align-self:center;background:linear-gradient(90deg,var(--gold-dim),transparent);opacity:.6}
+.pgroup-head .pg-eyebrow{font-family:var(--serif);font-style:italic;font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);opacity:.8}
+.pgroup-head .pg-label{font-family:var(--serif-tc);font-size:1.05rem;letter-spacing:.2em;color:#efe6f5}
+.pgroup-head .pg-count{font-family:var(--serif);font-size:.78rem;color:var(--mist);letter-spacing:.1em}
+@media (max-width:640px){
+  .platform-groups{gap:22px}
+  .pgroup-head{gap:9px;margin-bottom:10px}
+  .pgroup-head .pg-eyebrow{font-size:.66rem;letter-spacing:.16em}
+  .pgroup-head .pg-label{font-size:.95rem;letter-spacing:.14em}
+}

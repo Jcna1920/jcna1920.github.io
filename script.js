@@ -15,12 +15,20 @@ const PLATFORMS = [
   { name: "Hyze", desc: "AI 角色聊天平台", url: "https://hyze.me/creator/QWN0b3I6LIbeCKaZUECHSTZQbmmxiw==", invite: "0lWmuSy" },
   { name: "Tikita", desc: "AI 角色聊天平台", url: "https://tikita.ai/?referrer=GE0O2I", invite: "GE0O2I" },
   { name: "WHIF", desc: "AI 角色聊天平台", url: "https://www.whif.io/profile/J_CNa", invite: "F8C64073" },
-  /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼。Floze／MiraiMind／Touchie／Paradise／DokiChat 已退出，不再列出 */
+  /* 以下連結取自作者 lit.link（2026-10-18）；lit.link 上均未附邀請碼。MiraiMind／Touchie／Paradise／DokiChat 已退出，不再列出；Floze 重新列出（作者頁取自 lit.link 的 FLOZE 連結） */
   { name: "FuWa", url: "https://link.fuwachat.com/creators/019fbe62-bd6e-78e2-b427-63c1eae558ae" },
-  { name: "CRUSH", url: "https://creators.passion.xyz/j_cna", status: "暫停更新" },
-  { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters", status: "暫停更新" },
-  { name: "卿卿我我", title: "LoveyDovey", sub: "卿卿我我 · 7755", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
+  { name: "CRUSH", url: "https://creators.passion.xyz/j_cna" },
+  { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters" },
+  { name: "卿卿我我", title: "LoveyDovey", sub: "卿卿我我 · 7755", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f" },
+  { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw" },
 ];
+/* 進駐平台分組（依作者指定順序；lit.link 為總入口，不屬任何分組） */
+const PLATFORM_GROUPS = [
+  { id: "active", label: "活躍", eyebrow: "Active", names: ["灰骨 Ashbone", "Heartbeat", "Caveduck", "Melting", "Hyze"] },
+  { id: "mood", label: "看心情上架", eyebrow: "Now & Then", names: ["Storyaichat", "Plaitoon", "IsekaiZero", "Tikita", "WHIF", "FuWa", "卿卿我我"] },
+  { id: "rest", label: "休假看情況", eyebrow: "On Leave", names: ["CRUSH", "Tingle", "Floze"] },
+];
+const PLATFORM_HUB = "lit.link";
 
 const A = "assets/avatars/";
 
@@ -496,21 +504,28 @@ const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 const PICON_DIR = "assets/platforms/";
 const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": "heartbeat", "Caveduck": "caveduck", "Storyaichat": "storyaichat",
   "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
-  "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
+  "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "Floze": "floze", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code class="notranslate" translate="no">${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.title || p.name)} 邀請碼">複製</button></div>` : "";
 const sponsorHTML = p => p.sponsor ? `<div class="invite sponsor"><span class="ilabel">贊助碼</span><code class="notranslate" translate="no">${esc(p.sponsor)}</code>
   <button type="button" class="copy" data-copy="${esc(p.sponsor)}" aria-label="複製 ${esc(p.title || p.name)} 贊助碼">複製</button></div>` : "";
-/* 狀態：使用中 → 暫停更新，組內維持原順序 */
-const PSTAT_RANK = { "暫停更新": 1 };
-const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
-const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_RANK[a[0].status] || 0) - (PSTAT_RANK[b[0].status] || 0) || a[1] - b[1]).map(x => x[0]);
-$("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
+const pcardHTML = p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.title || p.name)}${p.sub ? "（" + esc(p.sub) + "）" : ""}"></a>` : ""}
   <div class="phead"><span class="ptitle"><span class="pname notranslate" translate="no">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub notranslate" translate="no">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}${sponsorHTML(p)}
-  <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
+  <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; };
+const PBYNAME = Object.fromEntries(PLATFORMS.map(p => [p.name, p]));
+const PGROUPED = new Set(PLATFORM_GROUPS.flatMap(g => g.names));
+const PLATFORM_EXTRA = PLATFORMS.filter(p => p.name !== PLATFORM_HUB && !PGROUPED.has(p.name));   /* 未分組者（理論上無）附於最後一組 */
+$("#platformGrid").innerHTML =
+  (PBYNAME[PLATFORM_HUB] ? `<div class="platform-grid pgroup-hub">${pcardHTML(PBYNAME[PLATFORM_HUB])}</div>` : "") +
+  PLATFORM_GROUPS.map((g, gi) => {
+    const list = g.names.map(n => PBYNAME[n]).filter(Boolean).concat(gi === PLATFORM_GROUPS.length - 1 ? PLATFORM_EXTRA : []);
+    return `<section class="pgroup" id="pgroup-${g.id}" aria-labelledby="pgh-${g.id}">
+  <h3 class="pgroup-head" id="pgh-${g.id}"><span class="pg-eyebrow notranslate" translate="no">${esc(g.eyebrow)}</span><span class="pg-label">${esc(g.label)}</span><span class="pg-count">${list.length}</span></h3>
+  <div class="platform-grid">${list.map(pcardHTML).join("")}</div></section>`;
+  }).join("");
 $("#platformGrid").addEventListener("click", async e => {
   const btn = e.target.closest(".copy"); if (!btn) return;
   e.preventDefault(); e.stopPropagation();
