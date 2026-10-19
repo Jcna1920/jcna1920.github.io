@@ -1142,3 +1142,68 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && dlg.hidden) { e.preventDefault(); open(); }
   });
 })();
+
+/* ---------- 首頁天頂座標：訪客當地天頂的 RA（地方恆星時）／DEC（緯度） ----------
+   位置：不跳出定位權限；以免金鑰 HTTPS IP 定位（get.geojs.io → ipwho.is 備援，短逾時），存於 sessionStorage；
+   皆失敗時依 Intl 時區估算。只使用經緯度，不顯示城市或 IP。失敗時保留原本的靜態文字。 */
+(() => {
+  const el = document.getElementById("heroCoord");
+  if (!el) return;
+  const GEO_KEY = "jc-zenith-geo";
+  const TZ = {   /* 時區 → 約略經緯度 */
+    "Asia/Taipei": [25.03, 121.56], "Asia/Tokyo": [35.68, 139.69], "Asia/Seoul": [37.57, 126.98], "Asia/Bangkok": [13.75, 100.5],
+    "Asia/Hong_Kong": [22.32, 114.17], "Asia/Macau": [22.2, 113.55], "Asia/Shanghai": [31.23, 121.47], "Asia/Singapore": [1.35, 103.82],
+    "Asia/Kuala_Lumpur": [3.14, 101.69], "Asia/Manila": [14.6, 120.98], "Asia/Jakarta": [-6.2, 106.85], "Asia/Ho_Chi_Minh": [10.82, 106.63],
+    "Asia/Saigon": [10.82, 106.63], "Asia/Kolkata": [22.57, 88.36], "Asia/Calcutta": [22.57, 88.36], "Asia/Dubai": [25.2, 55.27],
+    "Australia/Sydney": [-33.87, 151.21], "Australia/Melbourne": [-37.81, 144.96], "Pacific/Auckland": [-36.85, 174.76],
+    "Europe/London": [51.51, -0.13], "Europe/Paris": [48.86, 2.35], "Europe/Berlin": [52.52, 13.4], "Europe/Madrid": [40.42, -3.7],
+    "Europe/Rome": [41.9, 12.5], "Europe/Amsterdam": [52.37, 4.9], "Europe/Moscow": [55.76, 37.62], "Europe/Istanbul": [41.01, 28.98],
+    "America/New_York": [40.71, -74.01], "America/Toronto": [43.65, -79.38], "America/Chicago": [41.88, -87.63], "America/Denver": [39.74, -104.99],
+    "America/Phoenix": [33.45, -112.07], "America/Los_Angeles": [34.05, -118.24], "America/Vancouver": [49.28, -123.12],
+    "America/Anchorage": [61.22, -149.9], "America/Mexico_City": [19.43, -99.13], "America/Sao_Paulo": [-23.55, -46.63],
+    "America/Argentina/Buenos_Aires": [-34.6, -58.38], "Pacific/Honolulu": [21.31, -157.86],
+  };
+  const fromTimezone = () => {
+    let tz = ""; try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch {}
+    if (TZ[tz]) return { lat: TZ[tz][0], lon: TZ[tz][1], src: "tz" };
+    return { lat: 0, lon: -new Date().getTimezoneOffset() / 60 * 15, src: "offset" };
+  };
+  const valid = g => g && isFinite(g.lat) && isFinite(g.lon) && Math.abs(g.lat) <= 90 && Math.abs(g.lon) <= 180;
+  const fetchJSON = (url, ms = 2500) => {
+    const ctl = typeof AbortController === "function" ? new AbortController() : null;
+    const t = setTimeout(() => ctl && ctl.abort(), ms);
+    return fetch(url, { signal: ctl && ctl.signal, credentials: "omit", referrerPolicy: "no-referrer", cache: "no-store" })
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).finally(() => clearTimeout(t));
+  };
+  const SOURCES = [
+    ["https://get.geojs.io/v1/ip/geo.json", j => ({ lat: parseFloat(j.latitude), lon: parseFloat(j.longitude) })],
+    ["https://ipwho.is/?fields=success,latitude,longitude", j => j.success === false ? null : ({ lat: +j.latitude, lon: +j.longitude })],
+  ];
+  async function locate() {
+    try { const c = JSON.parse(sessionStorage.getItem(GEO_KEY) || "null"); if (valid(c)) return c; } catch {}
+    for (const [url, pick] of SOURCES) {
+      try { const g = pick(await fetchJSON(url)); if (valid(g)) { const v = { lat: g.lat, lon: g.lon, src: "ip" };
+        try { sessionStorage.setItem(GEO_KEY, JSON.stringify(v)); } catch {} return v; } } catch {}
+    }
+    return fromTimezone();
+  }
+  /* GMST（IAU 1982 簡式，度）：280.46061837 + 360.98564736629·d + 0.000387933·T² − T³/38710000 */
+  const lstHours = (date, lon) => {
+    const d = date.getTime() / 86400000 + 2440587.5 - 2451545.0, T = d / 36525;
+    const gmst = 280.46061837 + 360.98564736629 * d + 0.000387933 * T * T - T * T * T / 38710000;
+    return (((gmst + lon) % 360 + 360) % 360) / 15;
+  };
+  const pad = n => String(n).padStart(2, "0");
+  const fmt = (lat, lon, date = new Date()) => {
+    let m = Math.floor(lstHours(date, lon) * 60) % 1440;
+    const am = Math.round(Math.abs(lat) * 60);
+    return `RA ${pad(Math.floor(m / 60))}h ${pad(m % 60)}m · DEC ${lat < 0 && am ? "−" : "+"}${pad(Math.floor(am / 60))}° ${pad(am % 60)}′`;
+  };
+  window.__zenith = { lstHours, fmt };   /* 供檢查用 */
+  const start = g => {
+    const tick = () => { el.textContent = fmt(g.lat, g.lon); el.dataset.src = g.src; };
+    tick(); setInterval(tick, 30000);
+  };
+  const run = () => locate().then(start, () => start(fromTimezone()));
+  if ("requestIdleCallback" in window) requestIdleCallback(run, { timeout: 1500 }); else setTimeout(run, 300);
+})();
