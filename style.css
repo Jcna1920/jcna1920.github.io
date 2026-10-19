@@ -673,3 +673,46 @@ body{position:static!important}
 .goog-text-highlight,.VIpgJd-yAWNEb-VIpgJd-fmcmS-sn54Q{background:none!important;box-shadow:none!important}
 /* 翻譯後，保留原文的名稱與譯文之間補上間距 */
 html.translated-ltr p .notranslate,html.translated-ltr h4 .notranslate{margin:0 .28em}
+
+/* ===== 站內搜尋 ===== */
+.search-btn{display:inline-grid;place-items:center;width:30px;height:30px;margin-left:clamp(16px,2.4vw,30px);border:1px solid var(--line);border-radius:50%;background:rgba(26,13,43,.55);color:var(--gold);cursor:pointer;transition:border-color .25s,box-shadow .25s}
+.search-btn:hover,.search-btn:focus-visible,.search-btn[aria-expanded="true"]{border-color:var(--gold-dim);box-shadow:0 0 14px rgba(185,140,220,.25);outline:none}
+.search-btn + .lang{margin-left:10px}
+html.search-open body{overscroll-behavior:none}
+.search-ov{position:fixed;inset:0;z-index:60;display:flex;justify-content:center;align-items:flex-start;padding:clamp(56px,10vh,110px) 16px 16px;background:rgba(6,3,10,.62);backdrop-filter:blur(6px)}
+.search-ov[hidden]{display:none}
+.search-panel{width:min(640px,100%);max-height:min(76vh,720px);display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:rgba(18,10,26,.97);box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 40px rgba(150,100,210,.18);overflow:hidden}
+.search-bar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line-soft);color:var(--gold)}
+.search-bar svg{flex:none}
+.search-bar input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--parchment);font-family:var(--serif-tc);font-size:1.02rem;letter-spacing:.04em;padding:4px 0}
+.search-bar input::placeholder{color:var(--mist);opacity:.8}
+.search-bar input::-webkit-search-cancel-button{-webkit-appearance:none}
+.search-close{flex:none;border:1px solid var(--line);border-radius:6px;background:none;color:var(--mist);font-size:.66rem;letter-spacing:.08em;padding:3px 7px;cursor:pointer}
+.search-close:hover,.search-close:focus-visible{color:var(--gold);border-color:var(--gold-dim);outline:none}
+.search-results{overflow-y:auto;overscroll-behavior:contain;padding:6px 8px 10px}
+.sr-group h4{display:flex;align-items:center;gap:8px;margin:10px 8px 4px;font-family:var(--serif-tc);font-size:.74rem;letter-spacing:.24em;color:var(--gold)}
+.sr-n{font-family:var(--serif);font-size:.72rem;letter-spacing:0;color:var(--mist)}
+.sr-item{display:flex;align-items:center;gap:12px;padding:8px;border-radius:10px;color:var(--lavender);text-decoration:none}
+.sr-item.on,.sr-item:focus-visible{background:rgba(217,191,140,.08);outline:none}
+.sr-item.on .sr-title{color:var(--gold)}
+.sr-thumb{flex:none;width:42px;height:42px;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#0b0611;display:grid;place-items:center}
+.sr-thumb.round{border-radius:50%}
+.sr-thumb img{width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none}
+.sr-ph{font-family:var(--serif-tc);color:var(--gold);font-size:1rem}
+.sr-ph.planet{width:60%;height:60%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b89be0,#4a2a72 60%,#1a0d2b);box-shadow:0 0 12px rgba(185,140,220,.35)}
+.sr-main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.sr-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--serif-tc);font-size:.96rem;color:var(--parchment);letter-spacing:.03em}
+.sr-title mark{background:none;color:var(--gold);text-decoration:underline;text-decoration-color:rgba(217,191,140,.5);text-underline-offset:3px}
+.sr-tag{font-size:.6rem;letter-spacing:.06em;padding:0 6px;border:1px solid var(--line);border-radius:999px;color:var(--mist)}
+.sr-sub{font-size:.76rem;color:var(--mist);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-more,.sr-empty{margin:8px;font-size:.8rem;color:var(--mist)}
+.sr-empty{padding:18px 4px;text-align:center}
+.search-hint{margin:0;padding:8px 14px;border-top:1px solid var(--line-soft);font-size:.66rem;letter-spacing:.04em;color:var(--mist);opacity:.8}
+@media (max-width:680px){
+  .search-btn{order:2;margin-left:auto;width:28px;height:28px}
+  .search-btn + .lang{margin-left:8px}
+  .search-ov{padding:10px 8px 8px}
+  .search-panel{max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px);border-radius:14px}
+  .search-hint{display:none}
+}
+@media (hover:none){.search-hint{display:none}}

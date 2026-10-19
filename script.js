@@ -590,8 +590,12 @@ function viewWorks() {
   }).join("")}</div>`;
 }
 /* 返回連結：依來源（世界觀／作品列表／平台篩選）決定 */
+const SECTION_LABEL = { about: "作者資訊", platforms: "進駐平台", characters: "角色列表", worlds: "世界觀", top: "首頁" };
 function backOf(from) {
   if (from === "world") return { href: "#worlds", label: "← 返回世界觀" };
+  if (from && from.startsWith("sec:") && SECTION_LABEL[from.slice(4)]) {
+    const k = from.slice(4); return { href: k === "top" ? "#top" : "#" + k, label: `← 返回${SECTION_LABEL[k]}` };
+  }
   if (from && from.startsWith("platform:")) {
     const p = PLATFORM_FILTERS.find(x => x.id === from.slice(9));
     if (p) return { href: `#platform/${p.id}`, label: `← 返回 ${plabel(p.key)} 角色列表` };
@@ -640,7 +644,8 @@ const originKey = hash => {
   if (path === "worlds") return "worlds";
   return path;
 };
-const fromKey = from => from === "world" ? "worlds" : from && from.startsWith("platform:") ? "platform/" + from.slice(9) : "works";
+const fromKey = from => from === "world" ? "worlds" : from && from.startsWith("platform:") ? "platform/" + from.slice(9)
+  : from && from.startsWith("sec:") && SECTION_LABEL[from.slice(4)] ? from.slice(4) : "works";
 let lastHash = location.hash, prevOfDetail = null;
 function route(scroll) {
   const { kind, id, from } = parseHash();
@@ -670,6 +675,13 @@ function rememberClick(a) {
 function restoreScroll() {
   let r; try { r = JSON.parse(sessionStorage.getItem(RET_KEY) || "null"); } catch {}
   if (!r || r.target !== originKey(location.hash)) return false;
+  /* 從搜尋開啟時記錄的是原本的捲動位置 */
+  if (typeof r.y === "number") {
+    try { sessionStorage.removeItem(RET_KEY); } catch {}
+    const y = r.y; requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "instant" })));
+    [200, 600].forEach(t => setTimeout(() => window.scrollTo({ top: y, behavior: "instant" }), t));
+    return true;
+  }
   let el = null;
   if (r.target === "worlds") el = $(`#worldIndex a[data-work="${CSS.escape(r.work)}"]`);
   else if (r.char) el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === r.char);
@@ -949,4 +961,167 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
   paint();
   if (cur !== "zh-TW") { setCookie(`/zh-TW/${cur}`); load(); }
   else if (fromCookie()) setCookie("");
+})();
+
+
+/* ---------- 站內搜尋：角色／作品／平台（比對原始中文資料，與翻譯無關） ---------- */
+(() => {
+  const btn = $("#searchBtn"), dlg = $("#searchDlg"), input = $("#searchInput"), out = $("#searchResults");
+  if (!btn || !dlg) return;
+  const norm = s => String(s || "").normalize("NFKC").toLowerCase().replace(/[\s・·．.\-_／/「」《》『』（）()【】,，、:：!！?？~～'"“”]+/g, "");
+  const shownWorkIds = new Set(SHOWN_WORKS.map(w => w.id));
+  /* 角色 */
+  const CIDX = CHARACTERS.filter(c => shownWorkIds.has(c.work)).map(c => {
+    const w = workOf(c), plats = platsOf(c).filter(p => p !== "未標註");
+    const tags = [c.adult && "18+", c.group && "多人", c.status, c.linkStatus || (!c.links.length && "準備中")].filter(Boolean);
+    return { c, w, plats, tags,
+      f: { name: norm(c.name), full: norm(c.full), code: norm(c.code), tags: norm(tags.join(" ")),
+           meta: norm([c.role, c.collab, w && w.title, w && w.fullTitle, plats.map(plabel).join(" "), plats.join(" ")].join(" ")),
+           text: norm([c.sum, c.intro, c.age].join(" ")) } };
+  });
+  /* 作品（隱藏的空作品不列入） */
+  const WIDX = SHOWN_WORKS.map(w => ({ w, n: charsOfWork(w).length,
+    f: { name: norm(w.title + " " + (w.fullTitle || "")), meta: norm(w.tags), text: norm([w.hook, w.world].join(" ")) } }));
+  /* 平台：篩選按鈕（有角色）＋進駐平台卡片；不含邀請碼 */
+  const aliasOf = key => Object.keys(PLATFORM_ALIASES).filter(a => PLATFORM_ALIASES[a] === key);
+  const cardKey = p => normPlatform(p.name);
+  const PIDX = [];
+  PLATFORM_FILTERS.filter(p => p.key !== "未標註").forEach(p => {
+    const card = PLATFORMS.find(x => cardKey(x) === p.key || x.name === p.key);
+    PIDX.push({ key: p.key, label: plabel(p.key), sub: card && card.title ? card.name : (card && card.sub) || "", href: `#platform/${p.id}`, count: p.count,
+      f: { name: norm([p.key, plabel(p.key), card && card.title, card && card.sub, card && card.name].join(" ")), meta: norm(aliasOf(p.key).join(" ")) } });
+  });
+  PLATFORMS.forEach(x => {
+    const k = cardKey(x);
+    if (PIDX.some(p => p.key === k || p.key === x.name)) return;
+    PIDX.push({ key: x.name, label: x.title || x.name, sub: x.sub || "", href: "#platforms", card: x.name, count: 0,
+      f: { name: norm([x.name, x.title, x.sub].join(" ")), meta: norm(aliasOf(k).join(" ")) } });
+  });
+  const score = (f, q) => {
+    if (!q) return 0;
+    if (f.name === q) return 100;
+    if (f.name && f.name.startsWith(q)) return 85;
+    if (f.name && f.name.includes(q)) return 70;
+    if (f.full && f.full.includes(q)) return 60;
+    if (f.code && f.code.includes(q)) return 55;
+    if (f.tags && f.tags.includes(q)) return 45;
+    if (f.meta && f.meta.includes(q)) return 35;
+    if (f.text && f.text.includes(q)) return 15;
+    return 0;
+  };
+  const hl = (s, raw) => {   /* 標示名稱中的相符片段（原文比對） */
+    s = String(s || ""); const q = raw.trim(); if (!q) return esc(s);
+    const i = s.toLowerCase().indexOf(q.toLowerCase());
+    return i < 0 ? esc(s) : esc(s.slice(0, i)) + "<mark>" + esc(s.slice(i, i + q.length)) + "</mark>" + esc(s.slice(i + q.length));
+  };
+  const NT = 'class="notranslate" translate="no"';
+  let items = [], sel = -1, lastFocus = null;
+  const thumbC = c => c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy">` : `<span class="sr-ph" aria-hidden="true">${esc([...c.name][0])}</span>`;
+  const thumbW = w => w.cover ? `<img src="${esc(w.cover)}" alt="" loading="lazy"${w.coverPos ? ` style="object-position:${esc(w.coverPos)}"` : ""}>` : `<span class="sr-ph planet" aria-hidden="true"></span>`;
+  const thumbP = k => piconOf(k) ? `<img src="${piconOf(k)}" alt="" loading="lazy">` : `<span class="sr-ph" aria-hidden="true">◎</span>`;
+  function render() {
+    const raw = input.value, q = norm(raw);
+    if (!q) { items = []; sel = -1; out.innerHTML = `<p class="sr-empty">開始輸入以搜尋。</p>`; return; }
+    const cs = CIDX.map(x => ({ x, s: score(x.f, q) })).filter(r => r.s).sort((a, b) => b.s - a.s);
+    const ws = WIDX.map(x => ({ x, s: score(x.f, q) })).filter(r => r.s).sort((a, b) => b.s - a.s);
+    const ps = PIDX.map(x => ({ x, s: score(x.f, q) })).filter(r => r.s).sort((a, b) => b.s - a.s);
+    items = []; let html = "";
+    const group = (title, list, max, row) => {
+      if (!list.length) return;
+      html += `<section class="sr-group"><h4>${title}<span class="sr-n">${list.length}</span></h4>`;
+      list.slice(0, max).forEach(r => { const i = items.length; items.push(r.x); html += row(r.x, i); });
+      if (list.length > max) html += `<p class="sr-more">還有 ${list.length - max} 筆，請輸入更完整的關鍵字</p>`;
+      html += `</section>`;
+    };
+    group("角色", cs, 12, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
+      <span class="sr-thumb round">${thumbC(x.c)}</span>
+      <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(x.c.name, raw)}</span>${x.tags.filter(t => t === "18+" || t === "多人").map(t => `<span class="sr-tag">${t}</span>`).join("")}</span>
+      <span class="sr-sub">${x.c.full ? `<span ${NT}>${esc(x.c.full)}</span>・` : ""}<span ${NT}>${esc(workTitle(x.w))}</span>${x.c.role ? `・${esc(x.c.role)}` : ""}</span></span></a>`);
+    group("作品", ws, 6, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
+      <span class="sr-thumb">${thumbW(x.w)}</span>
+      <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(workTitle(x.w), raw)}</span></span>
+      <span class="sr-sub">${x.w.tags ? esc(x.w.tags) + "・" : ""}${x.n} 位角色</span></span></a>`);
+    group("平台", ps, 6, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="${x.href}">
+      <span class="sr-thumb round">${thumbP(x.key)}</span>
+      <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(x.label, raw)}</span></span>
+      <span class="sr-sub">${x.sub ? `<span ${NT}>${esc(x.sub)}</span>・` : ""}${x.count ? `${x.count} 位角色` : "進駐平台"}</span></span></a>`);
+    out.innerHTML = html || `<p class="sr-empty">找不到相關角色、作品或平台。</p>`;
+    sel = items.length ? 0 : -1; mark();
+  }
+  const mark = () => {
+    out.querySelectorAll(".sr-item").forEach(a => a.classList.toggle("on", +a.dataset.i === sel));
+    const a = out.querySelector(`.sr-item[data-i="${sel}"]`);
+    input.setAttribute("aria-activedescendant", a ? a.id : "");
+    if (a) a.scrollIntoView({ block: "nearest" });
+  };
+  /* 目前所在位置 → 作品頁返回目標 */
+  const currentFrom = () => {
+    const h = parseHash();
+    if (h.kind === "work") return h.from || "";
+    if (h.kind === "platform") return "platform:" + h.id;
+    const secs = ["worlds", "characters", "platforms", "about"];
+    const y = window.scrollY + innerHeight * 0.35;
+    for (const id of secs) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top + window.scrollY <= y) return id === "worlds" ? "world" : id === "characters" ? "" : "sec:" + id; }
+    return "sec:top";
+  };
+  function openItem(x) {
+    if (!x) return;
+    const from = openFrom != null ? openFrom : currentFrom(), h = parseHash(), y0 = openFrom != null ? openY : window.scrollY;
+    const remember = target => { try { sessionStorage.setItem(RET_KEY, JSON.stringify({ target, y: y0 })); } catch {} };
+    close(false);
+    if (x.w) {
+      const w = x.w, char = x.c;
+      const focusChar = () => {
+        if (!char) return;
+        const el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === char.name);
+        if (!el) return;
+        el.classList.add("in", "open"); el.setAttribute("aria-expanded", "true");
+        settleScroll(el, "center"); el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600);
+        el.focus({ preventScroll: true });
+      };
+      if (h.kind === "work" && h.id === w.id) { char ? focusChar() : settleScroll($("#characters")); return; }
+      if (h.kind !== "work") remember(fromKey(from));
+      const target = `#work/${w.id}${from ? "?from=" + encodeURIComponent(from) : ""}`;
+      if (char) window.addEventListener("hashchange", () => setTimeout(focusChar, 60), { once: true });
+      location.hash = target;
+      return;
+    }
+    if (x.card) {   /* 沒有角色的平台：捲到進駐平台的卡片 */
+      const el = [...document.querySelectorAll("#platformGrid .pcard")].find(c => (c.querySelector(".pname") || {}).textContent === x.label);
+      if (el) { settleScroll(el, "center"); el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600); }
+      else settleScroll($("#platforms"));
+      return;
+    }
+    location.hash = x.href;
+  }
+  let openFrom = null, openY = 0;
+  function open() {
+    lastFocus = document.activeElement;
+    openY = window.scrollY; openFrom = currentFrom();
+    dlg.hidden = false; document.documentElement.classList.add("search-open");
+    btn.setAttribute("aria-expanded", "true");
+    render(); setTimeout(() => { input.focus({ preventScroll: true }); input.select(); if (Math.abs(window.scrollY - openY) > 2) window.scrollTo({ top: openY, behavior: "instant" }); }, 0);
+  }
+  function close(restoreFocus = true) {
+    if (dlg.hidden) return;
+    dlg.hidden = true; document.documentElement.classList.remove("search-open");
+    btn.setAttribute("aria-expanded", "false");
+    if (restoreFocus && lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  }
+  btn.addEventListener("click", () => dlg.hidden ? open() : close());
+  dlg.querySelector(".search-close").addEventListener("click", () => close());
+  dlg.addEventListener("mousedown", e => { if (e.target === dlg) close(); });
+  input.addEventListener("input", render);
+  input.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" && items.length) { e.preventDefault(); sel = (sel + 1) % items.length; mark(); }
+    else if (e.key === "ArrowUp" && items.length) { e.preventDefault(); sel = (sel - 1 + items.length) % items.length; mark(); }
+    else if (e.key === "Enter") { e.preventDefault(); openItem(items[sel]); }
+  });
+  out.addEventListener("click", e => { const a = e.target.closest(".sr-item"); if (!a) return; e.preventDefault(); openItem(items[+a.dataset.i]); });
+  out.addEventListener("mousemove", e => { const a = e.target.closest(".sr-item"); if (a && +a.dataset.i !== sel) { sel = +a.dataset.i; mark(); } });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && !dlg.hidden) { e.preventDefault(); close(); return; }
+    const t = e.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
+    if (e.key === "/" && !typing && !e.ctrlKey && !e.metaKey && !e.altKey && dlg.hidden) { e.preventDefault(); open(); }
+  });
 })();
