@@ -287,7 +287,7 @@ const CHARACTERS = [
   { name: "深海戰艦：利維坦號", role: "多人：十名重刑犯", work: "wuyan", avatar: A+"leviathan.jpg", group: true,
     links: [L("Whif", "https://whif.io/characters/af0b5f2c-cfaa-40b9-b196-3ed63ccb742b", { label: "先行" }), L("HeartBeat", "https://heartbeat-app.net/characters/16b6396b-ff9d-4860-b2a8-da93a858479f")],
     sum: "你是最高看守長，掌控深海戰艦上的十名重刑犯。", intro: "" },
-  { name: "J.C. 聖雨大學", role: "多人模擬（虛構首爾特區）", work: "wuyan", avatar: A+"shengyu.jpg", group: true,
+  { name: "J.C. 聖雨大學", role: "多人模擬（虛構首爾特區）", work: "xiaofeng", avatar: A+"shengyu.jpg", group: true,
     links: [L("WHIF", "https://www.whif.io/characters/564db8a3-ec2b-4b99-acbd-78e7fb93b8d2", { label: "聖雨" }),
       L("WHIF", "https://www.whif.io/characters/9cf206a1-02ea-45ec-9ae3-9591208f0073", { label: "姜鎮赫" }),
       L("WHIF", "https://www.whif.io/characters/84df8bcb-e24d-4c2e-91b2-a2067328cd3f", { label: "崔雪雅" }),
