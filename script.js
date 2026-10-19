@@ -6,7 +6,7 @@
 const PLATFORMS = [
   { name: "lit.link", desc: "所有連結的總入口", url: "https://lit.link/zh-tw/Jcna19200101" },
   { name: "灰骨 Ashbone", title: "Ashbone", sub: "灰骨", desc: "角色與提示詞販售", url: "https://ashbone.app/u/8b060440-2f3f-41d2-a526-b1ecf1ddcf50?ref=0DEBEDF3", invite: "0DEBEDF3" },
-  { name: "Heartbeat", desc: "AI 角色聊天平台", url: "https://heartbeat-app.net/creators/J_CNa", invite: "5EUVH33H" },
+  { name: "Heartbeat", desc: "AI 角色聊天平台", url: "https://heartbeat-app.net/creators/J_CNa", invite: "5EUVH33H", sponsor: "DY9KQ3TTXG" },
   { name: "Caveduck", desc: "AI 角色聊天平台（鴨答鴨答）", url: "https://caveduck.io/zh-hant/user/J_CNa", invite: "gZ2QckNAlD" },
   { name: "Storyaichat", desc: "AI 角色聊天平台", url: "https://storyaichat.com/author.html?id=6a867e13fb4bcb4faf2cbbbe" },
   { name: "Melting", desc: "AI 角色聊天平台", url: "https://t.melting.chat/ai9ah6", invite: "BGxTDZfdP2" },
@@ -500,6 +500,8 @@ const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": 
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code class="notranslate" translate="no">${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.title || p.name)} 邀請碼">複製</button></div>` : "";
+const sponsorHTML = p => p.sponsor ? `<div class="invite sponsor"><span class="ilabel">贊助碼</span><code class="notranslate" translate="no">${esc(p.sponsor)}</code>
+  <button type="button" class="copy" data-copy="${esc(p.sponsor)}" aria-label="複製 ${esc(p.title || p.name)} 贊助碼">複製</button></div>` : "";
 /* 狀態：使用中 → 暫停更新，組內維持原順序 */
 const PSTAT_RANK = { "暫停更新": 1 };
 const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
@@ -507,7 +509,7 @@ const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_R
 $("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.title || p.name)}${p.sub ? "（" + esc(p.sub) + "）" : ""}"></a>` : ""}
   <div class="phead"><span class="ptitle"><span class="pname notranslate" translate="no">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub notranslate" translate="no">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
-  ${inviteHTML(p)}
+  ${inviteHTML(p)}${sponsorHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
   const btn = e.target.closest(".copy"); if (!btn) return;

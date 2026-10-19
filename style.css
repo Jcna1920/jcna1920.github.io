@@ -716,3 +716,4 @@ html.search-open body{overscroll-behavior:none}
   .search-hint{display:none}
 }
 @media (hover:none){.search-hint{display:none}}
+.invite + .invite.sponsor{margin-top:4px}
