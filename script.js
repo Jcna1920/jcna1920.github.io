@@ -401,7 +401,7 @@ const WORKS = [
     hook: "指揮家與影武者，只在你面前放下鋒芒。",
     world: "前任會長瓦倫提諾（指揮家）與現任會長 Roi（影武者）領導的組織。左、右副手伊利亞（斷尾犬）與米卡耶爾（夜鴞）分別負責外部危機處理與情報滲透。" },
   { id: "yeshou", title: "野獸集結", cover: A+"wildmansion.jpg", tags: "", hook: "", world: "" },
-  { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center 44%", tags: "", hook: "", world: "" },
+  { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center", tags: "", hook: "", world: "" },
   { id: "shenhai", title: "深海戰艦", cover: A+"leviathan.jpg", tags: "", hook: "", world: "" },
   { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
     hook: "黑道、斯文敗類與重案組的狂犬。",
