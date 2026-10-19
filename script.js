@@ -5,7 +5,7 @@
 /* 邀請碼 invite：作者本人於各平台的個人邀請／推薦碼（Discord 貼文與 lit.link 交叉比對一致） */
 const PLATFORMS = [
   { name: "lit.link", desc: "所有連結的總入口", url: "https://lit.link/zh-tw/Jcna19200101" },
-  { name: "灰骨 Ashbone", desc: "角色與提示詞販售", url: "https://ashbone.app/u/8b060440-2f3f-41d2-a526-b1ecf1ddcf50?ref=0DEBEDF3", invite: "0DEBEDF3" },
+  { name: "灰骨 Ashbone", title: "Ashbone", sub: "灰骨", desc: "角色與提示詞販售", url: "https://ashbone.app/u/8b060440-2f3f-41d2-a526-b1ecf1ddcf50?ref=0DEBEDF3", invite: "0DEBEDF3" },
   { name: "Heartbeat", desc: "AI 角色聊天平台", url: "https://heartbeat-app.net/creators/J_CNa", invite: "5EUVH33H" },
   { name: "Caveduck", desc: "AI 角色聊天平台（鴨答鴨答）", url: "https://caveduck.io/zh-hant/user/J_CNa", invite: "gZ2QckNAlD" },
   { name: "Storyaichat", desc: "AI 角色聊天平台", url: "https://storyaichat.com/author.html?id=6a867e13fb4bcb4faf2cbbbe" },
@@ -19,7 +19,7 @@ const PLATFORMS = [
   { name: "FuWa", url: "https://link.fuwachat.com/creators/019fbe62-bd6e-78e2-b427-63c1eae558ae" },
   { name: "CRUSH", url: "https://creators.passion.xyz/j_cna", status: "暫停更新" },
   { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters", status: "暫停更新" },
-  { name: "卿卿我我", sub: "7755 · LoveyDovey", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
+  { name: "卿卿我我", title: "LoveyDovey", sub: "卿卿我我 · 7755", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f", status: "暫停更新" },
 ];
 
 const A = "assets/avatars/";
@@ -509,14 +509,14 @@ const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": 
   "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
-  <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.name)} 邀請碼">複製</button></div>` : "";
+  <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.title || p.name)} 邀請碼">複製</button></div>` : "";
 /* 狀態：使用中 → 暫停更新，組內維持原順序 */
 const PSTAT_RANK = { "暫停更新": 1 };
 const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
 const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_RANK[a[0].status] || 0) - (PSTAT_RANK[b[0].status] || 0) || a[1] - b[1]).map(x => x[0]);
-$("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}${p.status ? " st-" + PSTAT_CLS[p.status] : ""}">
-  ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.name)}"></a>` : ""}
-  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.name)}</span>${p.sub ? `<span class="psub">${esc(p.sub)}</span>` : ""}${p.status ? `<span class="pstat ${PSTAT_CLS[p.status]}">${esc(p.status)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
+$("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
+  ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.title || p.name)}${p.sub ? "（" + esc(p.sub) + "）" : ""}"></a>` : ""}
+  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
