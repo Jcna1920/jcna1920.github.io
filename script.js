@@ -33,7 +33,7 @@ const PLATFORM_ALIASES = {
   isekaizero: "IsekaiZero", tikita: "Tikita", touchie: "Touchie", miraimind: "MiraiMind", miramind: "MiraiMind",
   floze: "Floze", dokichat: "DokiChat", paradise: "Paradise", tingle: "Tingle", tinglechat: "Tingle",
   gpts: "GPTs", gem: "Gemini Gem", gemini: "Gemini Gem", "卿卿我我": "卿卿我我", crush: "CRUSH",
-  storyaichat: "Storyaichat", discord: "Discord", cookiechat: "CookieChat",
+  storyaichat: "Storyaichat", discord: "Discord", cookiechat: "Hyze",  /* CookieChat 已更名為 HYZE */
 };
 const normPlatform = p => PLATFORM_ALIASES[String(p).trim().toLowerCase()] || p;
 /* L(平台, 網址或 null, {code, status, label}) */
@@ -147,7 +147,7 @@ const CHARACTERS = [
     sum: "以為只是位香香的牛郎，沒想到惹上的是豪門大佬。", intro: "#現代 #佔有慾 #腹黑攻 #強取豪奪 #歡喜冤家 #霸總 #豪門 #甜寵 #年上" },
   { name: "黎赫", role: "豪門前任", work: "rehuo", avatar: A+"lihe.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/d9b92f9c-4134-4741-a20b-9a0cacc70e1d", { label: "布丁劫匪！" }),
-      L("CookieChat", "https://cookiechat.ai/character/08de863a-b50a-46c5-8e7d-9689ea7e0a90"),
+      L("Hyze", "https://hyze.me/character/08de863a-b50a-46c5-8e7d-9689ea7e0a90"),
       L("HeartBeat", "https://heartbeat-app.net/characters/eed774a3-a604-4509-b5f3-bc20d5454004")],
     sum: "搶你布丁的前任，乾脆把整座布丁工廠買了下來。", intro: "#現代 #豪門 #搞笑 #歡喜冤家 #破鏡重圓 #甜寵 #前任 #哩賀舅舅搶你布丁" },
   { name: "顧柏谷", role: "冰山直男", work: "rehuo", avatar: A+"gubaigu.jpg",
@@ -460,7 +460,7 @@ const WORKS = [
 const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck": "caveduck", "Storyaichat": "storyaichat", "Melting": "melting",
   "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "WHIF": "whif", "Hyze": "hyze", "Tikita": "tikita", "Touchie": "touchie", "MiraiMind": "miraimind",
   "Floze": "floze", "DokiChat": "dokichat", "Paradise": "paradise", "Tingle": "tingle", "GPTs": "gpts", "Gemini Gem": "gemini",
-  "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "CookieChat": "cookiechat", "未標註": "none" };
+  "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "未標註": "none" };
 const PLAT_LABEL = { "灰骨": "灰骨 Ashbone", "Caveduck": "Caveduck（鴨答鴨答）", "卿卿我我": "卿卿我我（7755）" };
 const PRIMARY = ["Heartbeat", "灰骨", "Caveduck", "Storyaichat", "Melting", "Plaitoon"];
 const platsOf = c => c.links.length ? [...new Set(c.links.map(l => l.platform))] : ["未標註"];
