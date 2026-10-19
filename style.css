@@ -730,3 +730,21 @@ html.search-open body{overscroll-behavior:none}
   .pgroup-head .pg-eyebrow{font-size:.66rem;letter-spacing:.16em}
   .pgroup-head .pg-label{font-size:.95rem;letter-spacing:.14em}
 }
+/* 小章魚游標（僅限滑鼠等精準指標；觸控裝置不受影響）。熱點 (6,6) 位於頭部左上緣 */
+@media (hover:hover) and (pointer:fine){
+  html{
+    cursor:url("assets/cursor/octopus.png") 6 6,auto;
+    cursor:-webkit-image-set(url("assets/cursor/octopus.png") 1x,url("assets/cursor/octopus@2x.png") 2x) 6 6,auto;
+    cursor:image-set(url("assets/cursor/octopus.png") 1x,url("assets/cursor/octopus@2x.png") 2x) 6 6,auto;
+  }
+  a[href],button:not(:disabled),[role="button"],[role="tab"],[role="option"],summary,label[for],select,
+  .ccard,.anav,.adot,.nav-toggle,.lang-btn,.lang-menu button,.search-btn,.search-close,.copy,.invite .copy,.filters select{
+    cursor:url("assets/cursor/octopus-hover.png") 6 6,pointer;
+    cursor:-webkit-image-set(url("assets/cursor/octopus-hover.png") 1x,url("assets/cursor/octopus-hover@2x.png") 2x) 6 6,pointer;
+    cursor:image-set(url("assets/cursor/octopus-hover.png") 1x,url("assets/cursor/octopus-hover@2x.png") 2x) 6 6,pointer;
+  }
+  .pcard.pending,.lbtn.prep{cursor:inherit}
+  .lbtn.off:not(.prep){cursor:not-allowed}
+  input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+  textarea,[contenteditable="true"]{cursor:text}
+}
