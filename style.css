@@ -640,3 +640,8 @@ img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
 }
 .lbtn.prep{cursor:default;letter-spacing:.12em}
 .tag.prep{color:var(--mist);border-style:dashed;border-color:var(--line-soft);background:rgba(185,166,204,.05);letter-spacing:.14em}
+/* 使用規範：版權聲明 */
+.rules .copyright{margin-top:26px;padding:16px 20px 18px;border:1px solid rgba(217,191,140,.32);border-radius:10px;background:linear-gradient(160deg,rgba(217,191,140,.07),rgba(120,80,170,.06))}
+.rules .copyright h4{margin:0 0 8px;color:var(--gold);font-family:var(--serif-tc);font-size:1.02rem;letter-spacing:.16em;text-shadow:0 0 12px rgba(217,191,140,.25)}
+.rules .copyright p{font-size:.93rem;line-height:1.85;color:var(--lavender)}
+@media (max-width:640px){.rules .copyright{padding:14px 16px 16px}}
