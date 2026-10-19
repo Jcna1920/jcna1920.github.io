@@ -645,3 +645,31 @@ img,video,.aslides .aview{-webkit-user-select:none;user-select:none}
 .rules .copyright h4{margin:0 0 8px;color:var(--gold);font-family:var(--serif-tc);font-size:1.02rem;letter-spacing:.16em;text-shadow:0 0 12px rgba(217,191,140,.25)}
 .rules .copyright p{font-size:.93rem;line-height:1.85;color:var(--lavender)}
 @media (max-width:640px){.rules .copyright{padding:14px 16px 16px}}
+
+/* ===== 語言切換 ===== */
+.nav{margin-left:auto}
+.lang{position:relative;margin-left:clamp(16px,2.4vw,30px)}
+.lang-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px 0 9px;border:1px solid var(--line);border-radius:999px;background:rgba(26,13,43,.55);color:var(--lavender);font-family:var(--serif-tc);font-size:.78rem;letter-spacing:.06em;cursor:pointer;transition:color .25s,border-color .25s,box-shadow .25s}
+.lang-btn svg{color:var(--gold);flex:none}
+.lang-btn:hover,.lang-btn:focus-visible,.lang.open .lang-btn{color:var(--gold);border-color:var(--gold-dim);box-shadow:0 0 14px rgba(185,140,220,.25);outline:none}
+.lang-caret{font-size:.6rem;opacity:.7}
+.lang-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:150px;list-style:none;margin:0;padding:6px;border:1px solid var(--line);border-radius:12px;background:rgba(18,10,26,.97);box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 24px rgba(150,100,210,.15);z-index:40}
+.lang-menu button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:8px 12px;border:0;border-radius:8px;background:none;color:var(--lavender);font-size:.86rem;letter-spacing:.04em;text-align:left;cursor:pointer}
+.lang-menu button:hover,.lang-menu button:focus-visible{background:rgba(217,191,140,.08);color:var(--gold);outline:none}
+.lang-menu button[aria-checked="true"]{color:var(--gold)}
+.lang-menu button[aria-checked="true"]::after{content:"✓";font-size:.75rem}
+.lang-note{position:absolute;right:0;top:calc(100% + 4px);white-space:nowrap;font-size:.6rem;letter-spacing:.06em;color:var(--mist);opacity:.75;pointer-events:none}
+.lang.open .lang-note{display:none}
+@media (max-width:680px){
+  .lang{order:2;margin-left:auto;margin-right:14px}
+  .nav-toggle{order:3}
+  .lang-btn{height:28px;padding:0 9px 0 8px}
+  .lang-note{display:none}
+}
+/* 隱藏 Google 翻譯預設橫幅、工具列與 body 位移 */
+#google_translate_element,.skiptranslate>iframe,iframe.skiptranslate,.goog-te-banner-frame,#goog-gt-tt,.goog-te-balloon-frame,.goog-tooltip,.VIpgJd-ZVi9od-ORHb-OEVmcd,.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,.VIpgJd-ZVi9od-aZ2wEe-OiiCO,.VIpgJd-yAWNEb-L7lbkb{display:none!important}
+html,body{top:0!important}
+body{position:static!important}
+.goog-text-highlight,.VIpgJd-yAWNEb-VIpgJd-fmcmS-sn54Q{background:none!important;box-shadow:none!important}
+/* 翻譯後，保留原文的名稱與譯文之間補上間距 */
+html.translated-ltr p .notranslate,html.translated-ltr h4 .notranslate{margin:0 .28em}

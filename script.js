@@ -498,7 +498,7 @@ const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": 
   "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
   "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
-const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code>${esc(p.invite)}</code>
+const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code class="notranslate" translate="no">${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.title || p.name)} 邀請碼">複製</button></div>` : "";
 /* 狀態：使用中 → 暫停更新，組內維持原順序 */
 const PSTAT_RANK = { "暫停更新": 1 };
@@ -506,7 +506,7 @@ const PSTAT_CLS = { "暫停更新": "paused", "不再更新": "retired" };
 const PLATFORMS_SORTED = PLATFORMS.map((p, i) => [p, i]).sort((a, b) => (PSTAT_RANK[a[0].status] || 0) - (PSTAT_RANK[b[0].status] || 0) || a[1] - b[1]).map(x => x[0]);
 $("#platformGrid").innerHTML = PLATFORMS_SORTED.map(p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.title || p.name)}${p.sub ? "（" + esc(p.sub) + "）" : ""}"></a>` : ""}
-  <div class="phead"><span class="ptitle"><span class="pname">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
+  <div class="phead"><span class="ptitle"><span class="pname notranslate" translate="no">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub notranslate" translate="no">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
   ${inviteHTML(p)}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; }).join("");
 $("#platformGrid").addEventListener("click", async e => {
@@ -534,24 +534,24 @@ function linksHTML(c) {
   }
   const pname = p => p === "Caveduck" ? "Caveduck" : plabel(p);
   return `<div class="lrow">${c.links.map(l => PAUSED.has(l.platform)
-    ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname">${esc(pname(l.platform))}${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
+    ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
     : l.url
-    ? `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname">${esc(pname(l.platform))}${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`
-    : `<span class="lbtn off" aria-disabled="true" title="尚無連結">${esc(pname(l.platform))}</span>`).join("")}</div>`;
+    ? `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`
+    : `<span class="lbtn off" aria-disabled="true" title="尚無連結"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span></span>`).join("")}</div>`;
 }
 function cardHTML(c, showWork) {
   const tags = (!c.links.length || c.linkStatus) ? `<span class="tag prep" title="平台連結準備中">${esc(c.linkStatus || "準備中")}</span>` : platsOf(c).map(p => {
     const retired = c.links.some(l => l.platform === p && l.status === "已退");
-    return `<span class="tag${retired ? " retired" : ""}">${esc(plabel(p))}</span>`;
+    return `<span class="tag notranslate${retired ? " retired" : ""}" translate="no">${esc(plabel(p))}</span>`;
   }).join("");
   const meta = [["全名", c.full], ["代號", c.code], ["身分", c.role], ["年齡", c.age], ["聯名", c.collab]]
-    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd${k === "全名" ? ' class="notranslate" translate="no"' : ""}>${esc(v)}</dd>`).join("");
   const w = workOf(c);
   return `<article class="ccard reveal" tabindex="0" role="button" aria-expanded="false" data-name="${esc(c.name)}">
     <div class="ctop">${avatarHTML(c)}
-      <div><div class="cname">${esc(c.name)}${c.adult ? '<span class="badge-18">18+</span>' : ""}${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
+      <div><div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span>${c.adult ? '<span class="badge-18">18+</span>' : ""}${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
       ${c.code ? `<div class="ccode">${esc(c.code)}</div>` : ""}
-      ${showWork && w ? `<a class="cwork" href="#work/${w.id}${showWork === true ? "" : "?from=" + encodeURIComponent(showWork)}" data-work="${w.id}">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
+      ${showWork && w ? `<a class="cwork" href="#work/${w.id}${showWork === true ? "" : "?from=" + encodeURIComponent(showWork)}" data-work="${w.id}" translate="no">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
     <div class="cbody"><p class="csum">${esc(c.sum)}</p><div class="tags">${tags}</div></div>
     <div class="cmore"><div class="cmore-inner">${meta ? `<dl class="cmeta">${meta}</dl>` : ""}<p class="cintro">${esc(c.intro || "詳細介紹待補。")}</p>
       <p class="lhead">遊玩平台</p>${linksHTML(c)}</div></div>
@@ -577,14 +577,14 @@ function coverHTML(w) {
 /* ---------- views ---------- */
 const view = $("#charView"), pf = $("#platformFilter");
 pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}</span></a>` + PLATFORM_FILTERS.map(p =>
-  `<a href="#platform/${p.id}" data-p="${p.id}">${piconOf(p.key) ? `<img class="fico" src="${piconOf(p.key)}" alt="" width="18" height="18" loading="lazy">` : ""}${esc(p.label)}<span>${p.count}</span></a>`).join("");
+  `<a href="#platform/${p.id}" data-p="${p.id}">${piconOf(p.key) ? `<img class="fico" src="${piconOf(p.key)}" alt="" width="18" height="18" loading="lazy">` : ""}${p.key === "未標註" ? esc(p.label) : `<span class="notranslate" translate="no">${esc(p.label)}</span>`}<span>${p.count}</span></a>`).join("");
 
 function viewWorks() {
   return `<div class="work-grid">${SHOWN_WORKS.map(w => {
     const n = charsOfWork(w).length;
     return `<a class="wkcard reveal" href="#work/${w.id}?from=works" data-work="${w.id}">
       <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(SHOWN_WORKS.indexOf(w) + 1).padStart(2, "0")}</span></div>
-      <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3>${esc(w.title)}</h3>
+      <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3 translate="no" class="notranslate">${esc(w.title)}</h3>
       <p class="wkhook">${esc(w.hook)}</p>
       <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
   }).join("")}</div>`;
@@ -605,10 +605,10 @@ function viewWork(w, from) {
     <a class="back" href="${back.href}" data-back="1">${esc(back.label)}</a>
     <header class="work-hero">
       <div class="work-hero-cover">${coverHTML(w)}</div>
-      <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title">${esc(workTitle(w))}</h3>
+      <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
-      <p class="work-meta">${list.length} 位角色${platSet ? `｜${esc(platSet)}` : ""}</p></div>
+      <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
     </header>
     <div class="char-grid">${list.map(c => cardHTML(c, false)).join("")}</div>
   </div>`;
@@ -617,7 +617,7 @@ function viewPlatform(p) {
   const list = CHARACTERS.filter(c => platsOf(c).includes(p.key));
   return `<div class="panel-view">
     <a class="back" href="#characters" data-back="1">← 返回作品列表</a>
-    <header class="plat-head"><p class="eyebrow">Platform</p><h3 class="work-title">${esc(plabel(p.key))}</h3>
+    <header class="plat-head"><p class="eyebrow">Platform</p><h3 class="work-title notranslate" translate="no">${esc(plabel(p.key))}</h3>
     <p class="work-meta">${list.length} 位角色</p></header>
     <div class="char-grid">${list.length ? list.map(c => cardHTML(c, "platform:" + p.id)).join("")
       : `<p class="empty">目前沒有標註於此平台的角色。</p>`}</div>
@@ -726,7 +726,7 @@ view.addEventListener("keydown", e => {
 /* ---------- world index ---------- */
 $("#worldIndex").innerHTML = SHOWN_WORKS.filter(w => w.id !== "others").map((w, i) => `<li class="reveal">
   <a href="#work/${w.id}?from=world" data-work="${w.id}"><span class="wi-no">${String(i + 1).padStart(2, "0")}</span>
-  <span class="wi-title">${esc(workTitle(w))}</span><span class="wi-tags">${esc(w.tags)}</span><span class="wi-go">→</span></a></li>`).join("");
+  <span class="wi-title notranslate" translate="no">${esc(workTitle(w))}</span><span class="wi-tags">${esc(w.tags)}</span><span class="wi-go">→</span></a></li>`).join("");
 
 /* ---------- nav + reveal ---------- */
 const bar = $(".topbar"), tog = $(".nav-toggle");
@@ -876,4 +876,77 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     if (n.matches("img, video")) n.setAttribute("draggable", "false");
     n.querySelectorAll && n.querySelectorAll("img, video").forEach(el => el.setAttribute("draggable", "false"));
   }))).observe(document.body, { childList: true, subtree: true });
+})();
+
+
+/* ---------- 語言切換：Google 網站翻譯（機器翻譯），自訂下拉選單 ----------
+   原文為繁體中文；選擇其他語言時寫入 googtrans cookie 並載入 Google 翻譯元件（會一併翻譯之後動態產生的內容）。
+   切回繁體中文時清除 cookie 並重新載入頁面，確保完整還原原文。人名、作品名、平台名、邀請碼等標記為 notranslate。 */
+(() => {
+  const box = document.getElementById("langSwitch");
+  if (!box) return;
+  const LANGS = { "zh-TW": "中", en: "EN", ko: "한", ja: "日", th: "ไทย" };
+  const btn = box.querySelector(".lang-btn"), menu = box.querySelector(".lang-menu"), note = box.querySelector(".lang-note");
+  const KEY = "jcna-lang";
+  const host = location.hostname, parts = host.split(".");
+  const domains = ["", host, "." + host];
+  if (parts.length > 2) domains.push("." + parts.slice(-2).join("."));
+  const setCookie = v => domains.forEach(d => { document.cookie = `googtrans=${v}; path=/${d ? "; domain=" + d : ""}${v ? "; max-age=31536000" : "; expires=Thu, 01 Jan 1970 00:00:00 GMT"}`; });
+  const fromCookie = () => { const m = document.cookie.match(/(?:^|;\s*)googtrans=\/[^/]*\/([^;]+)/); return m && LANGS[m[1]] ? m[1] : null; };
+  let saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
+  let cur = (saved && LANGS[saved]) ? saved : (fromCookie() || "zh-TW");
+  const paint = () => {
+    btn.querySelector(".lang-cur").textContent = LANGS[cur];
+    menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", String(b.dataset.lang === cur)));
+    note.hidden = cur === "zh-TW";
+    /* 暱稱等少數字串使用人工譯文（機器翻譯容易誤譯），保留原文於 data-zh */
+    document.querySelectorAll(".nick").forEach(el => {
+      if (!el.dataset.zh) el.dataset.zh = el.innerHTML;
+      const t = cur !== "zh-TW" && el.dataset[cur];
+      if (!t) el.innerHTML = el.dataset.zh;
+      else if (el.dataset.html) el.innerHTML = t; else el.textContent = t;
+    });
+  };
+  let loading = false;
+  const load = () => {
+    if (window.google && google.translate && google.translate.TranslateElement) return apply();
+    if (loading) return; loading = true;
+    window.__gtInit = () => {
+      new google.translate.TranslateElement({ pageLanguage: "zh-TW", includedLanguages: "en,ko,ja,th", autoDisplay: false }, "google_translate_element");
+      apply();
+    };
+    const sc = document.createElement("script");
+    sc.src = "https://translate.google.com/translate_a/element.js?cb=__gtInit";
+    sc.async = true;
+    document.head.appendChild(sc);
+  };
+  /* 透過 Google 隱藏的下拉選單切換語言（元件初始化後可能稍晚才出現） */
+  const apply = (tries = 0) => {
+    const combo = document.querySelector("#google_translate_element select.goog-te-combo");
+    if (!combo || !combo.options.length) { if (tries < 60) setTimeout(() => apply(tries + 1), 150); return; }
+    if (combo.value !== cur) { combo.value = cur; combo.dispatchEvent(new Event("change")); }
+  };
+  const choose = lang => {
+    if (!LANGS[lang]) return;
+    try { localStorage.setItem(KEY, lang); } catch (e) {}
+    if (lang === "zh-TW") {
+      const was = cur; cur = lang; paint(); setCookie("");
+      if (was !== "zh-TW" || document.documentElement.classList.contains("translated-ltr")) location.reload();
+      return;
+    }
+    cur = lang; paint(); setCookie(`/zh-TW/${lang}`); load();
+  };
+  const open = v => { menu.hidden = !v; btn.setAttribute("aria-expanded", String(v)); box.classList.toggle("open", v); if (v) (menu.querySelector('[aria-checked="true"]') || menu.querySelector("button")).focus(); };
+  btn.addEventListener("click", e => { e.stopPropagation(); open(menu.hidden); });
+  menu.addEventListener("click", e => { const b = e.target.closest("button[data-lang]"); if (!b) return; open(false); btn.focus(); choose(b.dataset.lang); });
+  menu.addEventListener("keydown", e => {
+    const items = [...menu.querySelectorAll("button")], i = items.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); items[(i + 1) % items.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); items[(i - 1 + items.length) % items.length].focus(); }
+  });
+  document.addEventListener("click", e => { if (!box.contains(e.target)) open(false); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && !menu.hidden) { open(false); btn.focus(); } });
+  paint();
+  if (cur !== "zh-TW") { setCookie(`/zh-TW/${cur}`); load(); }
+  else if (fromCookie()) setCookie("");
 })();
