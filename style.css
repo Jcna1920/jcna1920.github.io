@@ -748,3 +748,4 @@ html.search-open body{overscroll-behavior:none}
   input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
   textarea,[contenteditable="true"]{cursor:text}
 }
+.pnote{margin:22px 0 0;text-align:center;font-size:.8rem;letter-spacing:.12em;color:var(--mist);opacity:.85}

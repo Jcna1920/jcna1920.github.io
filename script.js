@@ -576,7 +576,7 @@ function cardHTML(c, showWork) {
   const w = workOf(c);
   return `<article class="ccard reveal" tabindex="0" role="button" aria-expanded="false" data-name="${esc(c.name)}">
     <div class="ctop">${avatarHTML(c)}
-      <div><div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span>${c.adult ? '<span class="badge-18">18+</span>' : ""}${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
+      <div><div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span>${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
       ${c.code ? `<div class="ccode">${esc(c.code)}</div>` : ""}
       ${showWork && w ? `<a class="cwork" href="#work/${w.id}${showWork === true ? "" : "?from=" + encodeURIComponent(showWork)}" data-work="${w.id}" translate="no">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
     <div class="cbody"><p class="csum">${esc(c.sum)}</p><div class="tags">${tags}</div></div>
@@ -1000,7 +1000,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
   /* 角色 */
   const CIDX = CHARACTERS.filter(c => shownWorkIds.has(c.work)).map(c => {
     const w = workOf(c), plats = platsOf(c).filter(p => p !== "未標註");
-    const tags = [c.adult && "18+", c.group && "多人", c.status, c.linkStatus || (!c.links.length && "準備中")].filter(Boolean);
+    const tags = [c.group && "多人", c.status, c.linkStatus || (!c.links.length && "準備中")].filter(Boolean);
     return { c, w, plats, tags,
       f: { name: norm(c.name), full: norm(c.full), code: norm(c.code), tags: norm(tags.join(" ")),
            meta: norm([c.role, c.collab, w && w.title, w && w.fullTitle, plats.map(plabel).join(" "), plats.join(" ")].join(" ")),
@@ -1062,7 +1062,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     };
     group("角色", cs, 12, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
       <span class="sr-thumb round">${thumbC(x.c)}</span>
-      <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(x.c.name, raw)}</span>${x.tags.filter(t => t === "18+" || t === "多人").map(t => `<span class="sr-tag">${t}</span>`).join("")}</span>
+      <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(x.c.name, raw)}</span>${x.tags.filter(t => t === "多人").map(t => `<span class="sr-tag">${t}</span>`).join("")}</span>
       <span class="sr-sub">${x.c.full ? `<span ${NT}>${esc(x.c.full)}</span>・` : ""}<span ${NT}>${esc(workTitle(x.w))}</span>${x.c.role ? `・${esc(x.c.role)}` : ""}</span></span></a>`);
     group("作品", ws, 6, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
       <span class="sr-thumb">${thumbW(x.w)}</span>
