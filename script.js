@@ -138,6 +138,15 @@ const CHARACTERS = [
   { name: "金鎮宇", full: "Kim Jin Woo", role: "白虎部隊：404", work: "baihu", adult: true, avatar: A+"jinzhenyu.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/aba34146-fb0e-4c31-88f9-9a749411ab66")],
     sum: "白虎部隊 404 的野狗攻，下剋上又愛下流調情。", intro: "#現代 #軍旅 #下剋上 #下流調情 #BL #BG #野狗攻" },
+  // ── I💗U
+  { name: "尼古萊．伊凡諾夫", full: "Nikolai Ivanov", role: "地下黑拳手；遊走灰色地帶的打手", age: "24", work: "iloveu", adult: true, avatar: A+"nikolai.jpg",
+    links: [L("Storyaichat", "https://storyaichat.com/profile/6ad0f28196c72e01b6c2b018")],
+    sum: "隨時會咬人的西伯利亞孤狼。",
+    intro: "患有人格障礙（BPD）與重度憂鬱症。在被拋棄的底層環境中長大，他會先用惡毒的話推開你，可一旦你轉身，又會崩潰地跪下哭求。他沒有明天，死死攀附著你這根唯一的救命稻草，願為你毫無保留地奉獻一切，包括生命。\n開場：下著大雪的俄羅斯暗巷裡，他渾身是血倒在垃圾桶旁，像條野狗一樣等待死亡。而你，在此刻發現了他，並朝他走了過去。\n#BG #人格障礙 #病態依戀 #救贖 #虐戀 #地下黑拳手" },
+  { name: "但丁．莫雷蒂", full: "Dante Moretti", role: "義大利人；莫雷蒂家族集團總裁／黑手黨首領 Don", age: "33", work: "iloveu", adult: true, avatar: A+"dante.jpg",
+    links: [L("Storyaichat", "https://storyaichat.com/profile/6aae5c20953a0679e296993f")],
+    sum: "患有病態嫉妒的黑手黨首領。",
+    intro: "在外界眼中，他是冷血無情、獨裁且極具威嚴的惡魔。但在你面前，他只是一個被恐懼與佔有慾驅使的偏執狂。\n開場：他剛結束地下賭場的談判，回到防彈莊園。保鏢立刻回報——你今天出門時，和一名陌生男人說了幾句話。他的「奧賽羅症候群」瞬間爆發，理智徹底歸零……\n#BG #黑手黨 #總裁 #體型差 #佔有慾 #強制愛" },
   // ── 深海戰艦
   { name: "深海戰艦：利維坦號", role: "多人：十名重刑犯", work: "shenhai", avatar: A+"leviathan.jpg", group: true,
     links: [L("Whif", "https://whif.io/characters/af0b5f2c-cfaa-40b9-b196-3ed63ccb742b", { label: "先行" }), L("HeartBeat", "https://heartbeat-app.net/characters/16b6396b-ff9d-4860-b2a8-da93a858479f")],
@@ -397,7 +406,6 @@ const CHARACTERS = [
     sum: "《咒術迴戰》同人角色。", intro: "" },
   // ── 其他作品
   { name: "特勤一隊 HBFD-SO", work: "others", adult: true, avatar: null, links: [L("灰骨")], sum: "灰骨 Ashbone 成人向角色。", intro: "" },
-  { name: "但丁．莫雷蒂", work: "others", avatar: A+"dante.jpg", links: [L("Storyaichat")], sum: "Storyaichat 角色。", intro: "" },
 ];
 
 /* 作品：Discord 論壇頻道＋既有作品。world 為作品頁頂端介紹，僅整理自來源。 */
@@ -410,6 +418,8 @@ const WORKS = [
     world: "前任會長瓦倫提諾（指揮家）與現任會長 Roi（影武者）領導的組織。左、右副手伊利亞（斷尾犬）與米卡耶爾（夜鴞）分別負責外部危機處理與情報滲透。" },
   { id: "yeshou", title: "野獸集結", cover: A+"wildmansion.jpg", tags: "", hook: "", world: "" },
   { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center", tags: "", hook: "", world: "" },
+  { id: "iloveu", title: "I💗U", cover: "assets/works/iloveu.webp", coverPos: "center", tags: "BG・病態依戀",
+    hook: "病態的愛，也是唯一的救贖。", world: "" },
   { id: "shenhai", title: "深海戰艦", cover: A+"leviathan.jpg", tags: "", hook: "", world: "" },
   { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
     hook: "黑道、斯文敗類與重案組的狂犬。",
