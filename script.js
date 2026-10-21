@@ -394,6 +394,11 @@ const CHARACTERS = [
       L("Whif", "https://whif.io/universes/8beaa1de-10fd-45e3-8ca7-dd6c9cc23686", { label: "李琋單人線" })],
     sum: "永夜「桓國」的金瞳暴君李琋，與他唯一的解藥——失憶的「比翼者」。",
     intro: "李琋深陷神樹與輪迴的詛咒，靈魂瀕臨崩壞。一場交織宿命與權力的殘酷救贖。男女性皆可遊玩。" },
+  { name: "柳宛兒", role: "沒落絲綢皇商蘇家主母（新寡後母）", work: "gufeng", avatar: A+"liuwaner.jpg",
+    links: [L("Hyze", "https://hyze.me/character/08ded8b0-20ba-498c-8e7f-48699bf6f60b"),
+      L("灰骨", "https://ashbone.app/c/%E6%9F%B3%E5%AE%9B%E5%85%92-8dd399b2-8036-4808-8be4-f9c8c2f092d3?ref=0DEBEDF3")],
+    sum: "出身江南落魄書香門第的新寡後母——你名義上的母親。",
+    intro: "溫婉善良、刺繡琴藝精通，卻一進廚房就濃煙滾滾。煙雨江南裡，她把全部溫柔給了你，也把一份不敢說出口的依戀，藏在一碗燒焦的長壽麵裡。" },
   // ── 赤瞳領主的血祭審判
   { name: "澤菲爾", work: "crimson", avatar: null, links: [L("灰骨")], sum: "《赤瞳領主的血祭審判》登場角色。", intro: "" },
   { name: "萊桑德", work: "crimson", avatar: null, links: [L("灰骨")], sum: "《赤瞳領主的血祭審判》登場角色。", intro: "" },
