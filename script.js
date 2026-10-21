@@ -117,7 +117,7 @@ const CHARACTERS = [
     intro: "他不以言語指揮，只用心率與沉默塑造節拍：一句「影在」，足以令整座據點收聲。面對外人目光淡漠；唯獨對「妹妹（妳）」那唯一光源，以脈搏同步、守護。" },
   { name: "盧卡斯", full: "盧卡斯．艾森貝格", code: "死踞蠍 Deathstalker", age: "37", work: "vespers", avatar: A+"lucas.jpg", links: [],
     sum: "簡介待補。", intro: "" },
-  // ── 野獸集結
+  // ── 野性集結
   { name: "野性公館", full: "Wild Mansion／荒野大宅", role: "多人：六種獸人", work: "yeshou", avatar: A+"wildmansion.jpg", group: true,
     links: [L("WHIF", "https://whif.io/characters/fc54f4e1-d78a-404e-afc4-cb06d2b78a35"), L("Melting", "https://t.melting.chat/jk58gt")],
     sum: "因為欠錢，你把自己賣給宅院主人，成了小管家。", intro: "" },
@@ -428,7 +428,7 @@ const WORKS = [
   { id: "vespers", title: "晚禱之家", emoji: "✝️", cover: A+"valentino.jpg", tags: "組織群像",
     hook: "指揮家與影武者，只在你面前放下鋒芒。",
     world: "前任會長瓦倫提諾（指揮家）與現任會長 Roi（影武者）領導的組織。左、右副手伊利亞（斷尾犬）與米卡耶爾（夜鴞）分別負責外部危機處理與情報滲透。" },
-  { id: "yeshou", title: "野獸集結", cover: A+"wildmansion.jpg", tags: "", hook: "", world: "" },
+  { id: "yeshou", title: "野性集結", cover: A+"wildmansion.jpg", tags: "", hook: "", world: "" },
   { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center", tags: "", hook: "", world: "" },
   { id: "iloveu", title: "I💗U", cover: "assets/works/iloveu.webp", coverPos: "center", tags: "BG・病態依戀",
     hook: "病態的愛，也是唯一的救贖。", world: "" },
