@@ -119,8 +119,15 @@ const CHARACTERS = [
     sum: "簡介待補。", intro: "" },
   // ── 野獸集結
   { name: "野性公館", full: "Wild Mansion／荒野大宅", role: "多人：六種獸人", work: "yeshou", avatar: A+"wildmansion.jpg", group: true,
-    links: [L("Melting", "https://t.melting.chat/jk58gt")],
+    links: [L("WHIF", "https://whif.io/characters/fc54f4e1-d78a-404e-afc4-cb06d2b78a35"), L("Melting", "https://t.melting.chat/jk58gt")],
     sum: "因為欠錢，你把自己賣給宅院主人，成了小管家。", intro: "" },
+  { name: "巨貓們的甜蜜所求", story: "1000次觸碰", full: "Lingering Caresses", role: "多人：異世界獸人", work: "yeshou", adult: true, avatar: A+"giantcats.jpg", group: true,
+    links: [L("WHIF", "https://whif.io/characters/963e3b13-2830-41fd-b84f-ba3948be4b79", { label: "你就答應吧～" }), L("Caveduck", "https://caveduck.io/character-info/afb8b047-3598-406c-b320-6d26625ea5e0")],
+    sum: "掉進貓咪世界！你還想走？門都沒有！", intro: "#獸人 #異世界 #多角關係 #逆養成 #成人向 #甜寵" },
+  { name: "大鳥鳥們！（老宅爭寵中）", story: "救命！我被大鳥鳥包圍了！", role: "多人：鳥類獸人", work: "yeshou", avatar: A+"bigbirds.jpg", group: true,
+    links: [L("WHIF", "https://whif.io/characters/00b4c8c4-cbc7-4137-a909-8c503930a17a")],
+    sum: "你是經營推特帳號的推主，家裡兩隻鳥類獸人天天爭寵。",
+    intro: "過動愛擺 Pose 的凱克鸚鵡卡洛，和表面高冷、半夜偷查按讚數的紫藍金剛鸚鵡達里烏斯。" },
   // ── 白虎部隊：404
   { name: "白虎部隊 404 內務室", full: "White Tiger Unit - Room 404", role: "韓國陸軍・10 名士兵（多人）", work: "baihu", adult: true, avatar: A+"baihu.jpg", group: true,
     links: [L("卿卿我我", "https://abr.ge/2n7b1l"),
@@ -297,10 +304,10 @@ const CHARACTERS = [
   { name: "ALOHA！絕對狩精協議", role: "多人：夏威夷除妖喜劇", work: "multisports", avatar: A+"aloha.jpg", group: true,
     links: [L("Caveduck", "https://zh-hant.cvdk.io/c/0-1ZNmS4Sr-zw6VO0XJP3g?rc=gZ2QckNAlD")],
     sum: "世界十大色鬼逃到夏威夷啦！逮個正著的除妖喜劇。", intro: "#多人 #助手 #調情 #當代奇幻 #喜劇 #狡猾 #鬼魂 #後宮 #逆後宮 #夏威夷 #物理超渡 #武運昌隆" },
-  // ── 1000次觸碰
-  { name: "巨貓們的甜蜜所求", full: "Lingering Caresses", role: "多人：異世界獸人", work: "touch1000", adult: true, avatar: A+"giantcats.jpg", group: true,
-    links: [L("WHIF", "https://whif.io/characters/963e3b13-2830-41fd-b84f-ba3948be4b79", { label: "你就答應吧～" }), L("Caveduck", "https://caveduck.io/character-info/afb8b047-3598-406c-b320-6d26625ea5e0")],
-    sum: "掉進貓咪世界！你還想走？門都沒有！", intro: "#獸人 #異世界 #多角關係 #逆養成 #成人向 #甜寵" },
+  { name: "恐怖四天王", story: "萬聖島", role: "多人：萬聖節限定", work: "multisports", avatar: A+"horror4.jpg", group: true,
+    links: [L("Caveduck", "https://zh-hant.cvdk.io/c/VnWBihISS3ywxs2e5VfnEg?rc=gZ2QckNAlD")],
+    sum: "萬聖節深夜不睡覺，就會被強迫吃下「特製糖果」。十月限定。",
+    intro: "自戀裸奔的地縛靈烏嗚、女巫裝黑魔法師崔克、病態吸血鬼派爾和兩米高狼人沃弗——萬聖節深夜不睡覺的你，會被他們強迫吃下「特製糖果」。十月限定。" },
   // ── 沉溺於向陽處
   { name: "沉溺於向陽處", role: "多人：大哥權道均・三弟權道鎮", work: "xiangyang", avatar: A+"xiangyang.jpg", group: true,
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/6312d616-e917-4ac3-9a88-7763e388c3ec", { label: "無法逃離的共生" }),
