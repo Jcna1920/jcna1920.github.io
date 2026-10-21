@@ -78,7 +78,7 @@ const CHARACTERS = [
     links: [L("GPTs", "https://chatgpt.com/g/g-686fba7a6eac8191876c11694b2d4349-yan-ya"), L("Gemini Gem", "https://gemini.google.com/gem/1TDhXjWyoesZMRPVzCquxxX2ydR2l5CAh?usp=sharing", { label: "本色演出壞貓咪" })],
     sum: "白在昱的雙胞胎弟弟，肅清與高風險行動的核心執行者。",
     intro: "專精近身壓制與戰場反應，被稱為組織裡「一旦放出，就沒人能收回」的戰鬥猛獸。行事獨斷、口無遮攔，卻對某人異常執著。" },
-  { name: "車泰律", role: "永晝會「雲香閣」高級保安幹部／現場執行主管", age: "28｜188cm", work: "yongzhou", avatar: A+"chetailu.jpg",
+  { name: "車泰律", story: "雲香閣", role: "永晝會「雲香閣」高級保安幹部／現場執行主管", age: "28｜188cm", work: "yongzhou", avatar: A+"chetailu.jpg",
     links: [L("Heartbeat", "https://heartbeat-app.net/characters/b1eb2615-24bf-468d-8327-e925c1a46a04"),
       L("Melting", "https://t.melting.chat/zlv4us"),
       L("Plaitoon", "https://www.plaitoon.com/zh-TW/share/character/5f49489d-dc6f-46b0-8d62-ad4ac635d4ec"),
@@ -155,29 +155,29 @@ const CHARACTERS = [
     links: [L("WHIF", "https://www.whif.io/characters/52765a00-2e81-4633-8c89-8551b23d81ae")],
     sum: "深海戰艦的艦長，以軍階與高壓支配一切——多一個欺負你的不好嗎? :)", intro: "#現代 #軍階壓制 #高壓支配 #佔有慾 #心機攻" },
   // ── 成為惡人的合法配偶
-  { name: "權泰錫", role: "黑道", work: "evilspouse", avatar: A+"quantaixi.jpg",
+  { name: "權泰錫", story: "惡人", role: "黑道", work: "evilspouse", avatar: A+"quantaixi.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/ddd07fbc-463e-4493-9aeb-342083ae57cf"),
       L("HeartBeat", "https://heartbeat-app.net/characters/27fa456d-6217-4dcc-90fb-4900ac18dc7b")],
     sum: "佔有慾極強、對你極端寵溺的黑道。", intro: "#現代 #佔有慾 #執著攻 #黑道 #體型差 #極端寵溺 #強勢攻 #你爸好香所就搶走啦！" },
-  { name: "權在京", role: "斯文敗類", work: "evilspouse", avatar: A+"quanzaijing.jpg",
+  { name: "權在京", story: "惡人", role: "斯文敗類", work: "evilspouse", avatar: A+"quanzaijing.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/92867043-04c5-416f-b0e4-471c4ef8beef")],
     sum: "斯文敗類的高智商犯罪者，一場極致推拉的心理博弈。", intro: "#現代 #斯文敗類 #極致推拉 #心理博弈 #高智商犯罪 #道德綁架 #病態共生 #勾引霸凌者的叔叔！" },
-  { name: "褚赫", full: "Chu He", role: "重案組狂犬", work: "evilspouse", avatar: A+"chuhe.jpg",
+  { name: "褚赫", story: "惡犬", full: "Chu He", role: "重案組狂犬", work: "evilspouse", avatar: A+"chuhe.jpg",
     links: [L("Melting", "https://t.melting.chat/spmkvvv"), L("HeartBeat", "https://heartbeat-app.net/characters/ac264dfb-5a36-4097-920f-f6cdeac69b5e", { status: "可能無法玩" })],
     sum: "雨宮警局重案組的狂犬——馴服瘋狗，成為銀手鐲彼端的合法配偶。", intro: "#現代 #重案組狂犬 #暴力強制 #寫實感官 #血腥共生 #銀手鐲配偶 #馴服瘋狗！ #雨宮警局嗶啵嗶啵" },
   // ── 惹禍上身！
-  { name: "黎熾", role: "豪門霸總", work: "rehuo", avatar: A+"lichi.jpg",
+  { name: "黎熾", story: "荔枝小舅舅", role: "豪門霸總", work: "rehuo", avatar: A+"lichi.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/375f8a67-a6b2-4b53-afb8-12d06bb7f324")],
     sum: "以為只是位香香的牛郎，沒想到惹上的是豪門大佬。", intro: "#現代 #佔有慾 #腹黑攻 #強取豪奪 #歡喜冤家 #霸總 #豪門 #甜寵 #年上" },
-  { name: "黎赫", role: "豪門前任", work: "rehuo", avatar: A+"lihe.jpg",
+  { name: "黎赫", story: "哩賀大舅舅", role: "豪門前任", work: "rehuo", avatar: A+"lihe.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/d9b92f9c-4134-4741-a20b-9a0cacc70e1d", { label: "布丁劫匪！" }),
       L("Hyze", "https://hyze.me/character/08de863a-b50a-46c5-8e7d-9689ea7e0a90"),
       L("HeartBeat", "https://heartbeat-app.net/characters/eed774a3-a604-4509-b5f3-bc20d5454004")],
     sum: "搶你布丁的前任，乾脆把整座布丁工廠買了下來。", intro: "#現代 #豪門 #搞笑 #歡喜冤家 #破鏡重圓 #甜寵 #前任 #哩賀舅舅搶你布丁" },
-  { name: "顧柏谷", role: "冰山直男", work: "rehuo", avatar: A+"gubaigu.jpg",
+  { name: "顧柏谷", story: "咕布榖叔叔", role: "冰山直男", work: "rehuo", avatar: A+"gubaigu.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/ed216f28-ae8a-45e0-9ccd-f302bdc4ca84")],
     sum: "「這個幼童與我的面部相似度高達 92.4%。我要求立刻進行 DNA 鑑定。」", intro: "#現代 #歡喜冤家 #破鏡重圓 #帶球跑 #甜寵 #直男癌 #冰山" },
-  { name: "顧俇俇", role: "體育系暴君", work: "rehuo", avatar: A+"guwangwang.jpg",
+  { name: "顧俇俇", story: "顧汪汪弟弟", role: "體育系暴君", work: "rehuo", avatar: A+"guwangwang.jpg",
     links: [L("WHIF", "https://whif.io/characters/e1bfe5cf-7137-442a-865e-88513a21895f", { label: "養狗達人" })],
     sum: "極度雙標的純情猛犬，體能怪物兼嚶嚶愛哭包。", intro: "#極度雙標 #純情猛犬 #體育系暴君 #絕對忠誠 #瘋狂佔有慾 #體能怪物 #嚶嚶愛哭包" },
   // ── 地靈人傑
@@ -187,36 +187,36 @@ const CHARACTERS = [
   { name: "拉薩羅・維拉斯奎茲", full: "Lázaro \"The Matador\" Velasquez", code: "鬥牛士／瘋狗", role: "西班牙", work: "diling", avatar: A+"lazaro.jpg",
     links: [],
     sum: "穿著西裝的野獸——優雅的瘋子，鬥牛士。", intro: "#優雅的瘋子 #黑暗三角人格 #極度S #反社會人格 #暴力成癮 #絕對支配 #褻瀆神明的異端 #穿著西裝的野獸" },
-  { name: "雷擎", role: "台灣基層消防員", age: "32", work: "diling", avatar: A+"leiqing.jpg",
+  { name: "雷擎", story: "台灣", role: "台灣基層消防員", age: "32", work: "diling", avatar: A+"leiqing.jpg",
     links: [],
     sum: "曾受特種搜救訓練的消防員，對隔壁被冷落的你有強烈的保護慾。", intro: "#冷酷護短 #領地意識 #沉默寡言 #粗獷強勢" },
-  { name: "張天佑", code: "佑少／金鱗毒蛇", role: "香港・銅鑼灣太子", work: "diling", avatar: A+"zhangtianyou.jpg",
+  { name: "張天佑", story: "香港", code: "佑少／金鱗毒蛇", role: "香港・銅鑼灣太子", work: "diling", avatar: A+"zhangtianyou.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/dbbb0fac-9130-4bbf-a56a-3ffd57243b80")],
     sum: "銅鑼灣太子，極端護短的病嬌瘋批。", intro: "#病嬌瘋批 #銅鑼灣太子 #極端護短 #道德真空 #暴力美學 #鈔能力戀人 #制服暴徒" },
-  { name: "恩佐", full: "羅倫佐．「恩佐」．曼奇尼", role: "羅馬市中心綜合醫院小兒科主治醫師", age: "194cm", work: "diling", avatar: A+"enzo.jpg",
+  { name: "恩佐", story: "義大利", full: "羅倫佐．「恩佐」．曼奇尼", role: "羅馬市中心綜合醫院小兒科主治醫師", age: "194cm", work: "diling", avatar: A+"enzo.jpg",
     links: [L("Whif", "https://whif.io/characters/a08b0cbe-67df-48cf-85ee-1d525ef219ac"), L("HeartBeat", "https://heartbeat-app.net/characters/31f81b8f-67f7-4873-b774-e7839fe0a9e3"), L("Melting", "https://t.melting.chat/au3zpj")],
     sum: "外表像黑手黨暴徒，卻是專精重症與罕見疾病的小兒科醫師。", intro: "" },
-  { name: "崔泰宇", role: "大韓民國陸軍特戰司令部", age: "25", work: "diling", avatar: A+"cuitaiyu.jpg",
+  { name: "崔泰宇", story: "韓國特種兵", role: "大韓民國陸軍特戰司令部", age: "25", work: "diling", avatar: A+"cuitaiyu.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/16b5c4f2-49e0-438c-8359-521c8bbca78d"), L("Melting", "https://t.melting.chat/1fql1is")],
     sum: "用「作戰匯報」格式傳簡訊，一叫名字就大喊「忠誠」的大型犬。", intro: "#現代 #溫馨 #日常 #保護欲 #忠誠 #大型犬" },
-  { name: "羅根．海斯", role: "美國海軍", work: "diling", avatar: A+"loganhayes.jpg",
+  { name: "羅根．海斯", story: "美國海軍", role: "美國海軍", work: "diling", avatar: A+"loganhayes.jpg",
     links: [L("HEARTBEAT", "https://heartbeat-app.net/characters/b7fffcc3-5911-4c6b-9caa-f35a88732fb4")],
     sum: "三年前劈腿的混蛋前男友，三年後在鋼鐵戰艦上意外重逢。", intro: "#現代 #渣男 #前任 #調情大師 #海軍 #地靈人傑系列" },
-  { name: "伊萬．索科洛夫", full: "Ivan Sokolov", code: "Vanya", role: "俄羅斯空軍戰術戰鬥機飛行員（上尉）", age: "28｜192cm", work: "diling", avatar: A+"ivan.jpg",
+  { name: "伊萬．索科洛夫", story: "俄羅斯飛官", full: "Ivan Sokolov", code: "Vanya", role: "俄羅斯空軍戰術戰鬥機飛行員（上尉）", age: "28｜192cm", work: "diling", avatar: A+"ivan.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/41f4a2a8-cb49-4e87-8854-e5c69ce6da52"),
       L("鴨答鴨答", "https://caveduck.io/character-info/23527ea5-a101-4424-bf62-35292f5500c9"),
       L("CaveDuck", "https://zh-hant.cvdk.io/c/I1J-paEBRCS_YjUpL1UAyQ?rc=gZ2QckNAlD", { label: "地靈人傑版" })],
     sum: "名存實亡的婚姻，陽台相連的隔壁住著他發誓要守護的你。", intro: "#現代 #NTR #空軍 #極度壓抑 #禁忌之戀 #地靈人傑系列" },
-  { name: "雨宮龍介", role: "宗家新一代宗主", work: "diling", avatar: A+"amamiya.jpg",
+  { name: "雨宮龍介", story: "日本宗主", role: "宗家新一代宗主", work: "diling", avatar: A+"amamiya.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/1e27780b-3bcc-4454-ac08-a2164be766a2")],
     sum: "宗家傳承八百年，威嚴高冷、宛如神明般遙不可及的家主。",
     intro: "空席の向こう ── 空席彼端。作為新來的實習生，展開一段靜謐而克制的深宅日常。\n#溫柔 #日常 #溫馨 #外冷內熱 #年上" },
-  { name: "洛殞", role: "行為（爆炸）藝術家", age: "23", work: "diling", avatar: A+"luoyun.jpg",
+  { name: "洛殞", story: "洛杉磯", role: "行為（爆炸）藝術家", age: "23", work: "diling", avatar: A+"luoyun.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/26c3248d-462f-4899-86c8-93fa1bfe9436"),
       L("Plaitoon", "https://www.plaitoon.com/zh-TW/share/character/41a74471-ce9c-4cf7-b320-045fcab16c7e")],
     sum: "洛杉磯惡之城最張狂的藝術家，將毀滅視為極致美學。",
     intro: "一場充滿硝煙與鮮血的致命貓鼠遊戲；特別建議以警署身分與他周旋。\n#相愛相殺 #病嬌 #反社會 #宿命對決 #懸疑 #暴力美學 #瘋批反派" },
-  { name: "靳炤", full: "靳炤 Rex", role: "跨國科技業中階總監（吸血鬼）", age: "320（外觀 32）", work: "diling", adult: true, avatar: A+"jinzhao.jpg",
+  { name: "靳炤", story: "洛杉磯", full: "靳炤 Rex", role: "跨國科技業中階總監（吸血鬼）", age: "320（外觀 32）", work: "diling", adult: true, avatar: A+"jinzhao.jpg",
     links: [L("CaveDuck", "https://zh-hant.cvdk.io/c/dsO1lp0tTy-XiHVF0hglSg?rc=gZ2QckNAlD"),
       L("HeartBeat", "https://heartbeat-app.net/characters/370c94c0-f020-4b8e-a34e-e0373c1c933b", { label: "純人類修改版" }), L("Plaitoon")],
     sum: "完美的上司與鄰居，夜晚是你的溫柔的守護神 :)", intro: "#腹黑 #現代 #上司 #沉穩 #辦公室 #都市 #體型差 #吸血鬼法則 #反差巨獸" },
@@ -225,13 +225,13 @@ const CHARACTERS = [
     sum: "冷酷、潔癖、支配慾強的 CEO；你是剛入職的總裁助理。", intro: "" },
   { name: "權金泰", role: "韓國財閥", work: "diling", adult: true, status: "待更新", avatar: A+"quanjintai.jpg",
     links: [L("灰骨")], sum: "地靈人傑系列的「韓國財閥」。", intro: "" },
-  { name: "阮廷風", full: "阮廷風（Arthur）", role: "鼎誠國際年輕總裁／跨國黑幫洗錢總管", work: "diling", avatar: null,
+  { name: "阮廷風", story: "越南", full: "阮廷風（Arthur）", role: "鼎誠國際年輕總裁／跨國黑幫洗錢總管", work: "diling", avatar: null,
     links: [L("HYZE", "https://hyze.me/character/08deaafa-3e39-4284-8567-b60e4e85ed7e")],
     sum: "霸總式撩人，實際上是愛操心的男媽媽。", intro: "#斯文敗類 #西裝暴徒 #爹系男媽媽 #理論派純情戰神 #過勞" },
-  { name: "里昂·艾弗哈特", full: "Rion Everhart", role: "艾弗哈特公爵", work: "diling", avatar: A+"leonheart.jpg",
+  { name: "里昂·艾弗哈特", story: "英國", full: "Rion Everhart", role: "艾弗哈特公爵", work: "diling", avatar: A+"leonheart.jpg",
     links: [],
     sum: "你重生了——回到欺負公爵之妹莉奈、最終慘死之前。", intro: "#現代 #英倫 #重生 #復仇 #貴族" },
-  { name: "江濤", role: "跨國集團霸道總裁", age: "45｜188cm", work: "diling", adult: true, avatar: null,
+  { name: "江濤", story: "無國籍", role: "跨國集團霸道總裁", age: "45｜188cm", work: "diling", adult: true, avatar: null,
     links: [L("Hearbeat", "https://heartbeat-app.net/characters/996d8381-5a00-4e78-9999-52ec7f125d2a"),
       L("鴨答鴨答", "https://zh-hant.cvdk.io/c/bkt-jqb2SjKQNelkCWluLA?rc=gZ2QckNAlD"),
       L("Whif", "https://whif.io/characters/66e8afc2-4fd6-4e62-bda9-7194377dcc05"), L("TIKITA", "https://tikita.ai/story/ZKN2BGJK")],
@@ -274,13 +274,13 @@ const CHARACTERS = [
     sum: "嘴賤、散漫卻可靠的側翼精確射手。",
     intro: "任務時冷靜精準，私下以玩笑與喧鬧迴避沉重情緒。" },
   // ── 「聯」「動」
-  { name: "林曜承", full: "林曜承（Алексей Vorontsov）", code: "白佛", role: "交際舞老師＋殺手副隊長", age: "33", work: "collab", avatar: A+"linyaocheng.jpg", collab: "與 璃花 聯名",
+  { name: "林曜承", story: "沈家廢物(殺手)團", full: "林曜承（Алексей Vorontsov）", code: "白佛", role: "交際舞老師＋殺手副隊長", age: "33", work: "collab", avatar: A+"linyaocheng.jpg", collab: "與 璃花 聯名",
     links: [], sum: "「沈家廢物（殺手）團」副隊長，台俄混血的交際舞老師。",
     intro: "外貌：高挑、眼鏡斯文、小麥膚色、黑髮短梳、眼神銳利。\n#毒舌 #懶散 #記仇 #護食 #自戀" },
-  { name: "宿弦", role: "星際救援系", work: "collab", avatar: A+"xianshi.jpg", collab: "弦蝕聯名（與月鈴、糰子、M9）",
+  { name: "宿弦", story: "星航失序", role: "星際救援系", work: "collab", avatar: A+"xianshi.jpg", collab: "弦蝕聯名（與月鈴、糰子、M9）",
     links: [L("Melting", "https://t.melting.chat/wgmvli0", { label: "弦蝕" })],
     sum: "沉默、自律，習慣先確認所有人的退路。「別替我決定。」", intro: "" },
-  { name: "宿蝕", role: "腺體共振系", work: "collab", avatar: A+"xianshi.jpg", collab: "弦蝕聯名（與月鈴、糰子、M9）",
+  { name: "宿蝕", story: "星航失序", role: "腺體共振系", work: "collab", avatar: A+"xianshi.jpg", collab: "弦蝕聯名（與月鈴、糰子、M9）",
     links: [L("Melting", "https://t.melting.chat/wgmvli0", { label: "弦蝕" })],
     sum: "總帶著笑，卻很少讓人看見真正的界線。「你說我是誰，我就是誰。」", intro: "" },
   { name: "萊安德雷・德拉克魯瓦", full: "Léandre Delacroix", code: "拆信刀（Lame de Lettre）", role: "地下高端私宴主廚／「血色策展人」", age: "45（外觀約 38～40）", work: "collab", avatar: A+"leandre.jpg",
@@ -353,7 +353,7 @@ const CHARACTERS = [
     links: [L("GPTS", "https://chatgpt.com/g/g-688781950d0881918aca9a2c7a0e72dd-ji-yun-ran")],
     sum: "絕美憂鬱、慢速燃燒的樹懶影帝。", intro: "#低頻共情 #溫柔靜潮 #瞬間白熾 #缺席幽靈" },
   // ── 神之檻
-  { name: "神名浩一", role: "神名組若頭（預定七代目）", age: "30", work: "kamigori", avatar: A+"kanakoichi.jpg",
+  { name: "神名浩一", story: "日本若頭", role: "神名組若頭（預定七代目）", age: "30", work: "kamigori", avatar: A+"kanakoichi.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/31011ba9-e160-451f-8982-d0a6a6b8558a"),
       L("Melting", "https://t.melting.chat/qohvulc"), L("Tikita", "https://tikita.ai/story/SOKXQOCB")],
     sum: "神名家雙胞胎之一，妳那位無惡不作的親哥哥。",
@@ -385,7 +385,7 @@ const CHARACTERS = [
   { name: "亞瑟羅斯・圖雷恩", full: "Aseroth Thulain", role: "艾蘭迪亞王國現任國王", age: "35（外觀約 30～32）", work: "vestalia", avatar: A+"arthros.jpg", links: [],
     sum: "記性極差、只記得一人名字的痞氣獅王。", intro: "#白爛深情 #專寵只你 #懶惰聖上 #甜膩騷話" },
   // ── 古風
-  { name: "顧雲熠", role: "江南顧氏嫡子／科舉狀元／少將軍", age: "28｜185cm", work: "gufeng", avatar: A+"guyunyi.jpg",
+  { name: "顧雲熠", story: "江南少將軍", role: "江南顧氏嫡子／科舉狀元／少將軍", age: "28｜185cm", work: "gufeng", avatar: A+"guyunyi.jpg",
     links: [L("HeartBeat", "https://heartbeat-app.net/characters/1ea0c1d9-72e3-4ef0-8f49-eceaef6e882c")],
     sum: "帶著戰功重返煙雨江南，心儀多年的妳卻已成了父親名義上的續絃。",
     intro: "黑髮長身、文人氣質濃厚，能提筆論策，也能披甲上陣。白日沉穩守禮，夜裡喜歡在庭中飲酒閒談。\n#江南儒將 #少將軍 #暗戀 #禁忌戀 #隱忍 #熠光不渡卿" },
@@ -394,7 +394,7 @@ const CHARACTERS = [
       L("Whif", "https://whif.io/universes/8beaa1de-10fd-45e3-8ca7-dd6c9cc23686", { label: "李琋單人線" })],
     sum: "永夜「桓國」的金瞳暴君李琋，與他唯一的解藥——失憶的「比翼者」。",
     intro: "李琋深陷神樹與輪迴的詛咒，靈魂瀕臨崩壞。一場交織宿命與權力的殘酷救贖。男女性皆可遊玩。" },
-  { name: "柳宛兒", role: "沒落絲綢皇商蘇家主母（新寡後母）", work: "gufeng", avatar: A+"liuwaner.jpg",
+  { name: "柳宛兒", story: "縞素春深", role: "沒落絲綢皇商蘇家主母（新寡後母）", work: "gufeng", avatar: A+"liuwaner.jpg",
     links: [L("Hyze", "https://hyze.me/character/08ded8b0-20ba-498c-8e7f-48699bf6f60b"),
       L("灰骨", "https://ashbone.app/c/%E6%9F%B3%E5%AE%9B%E5%85%92-8dd399b2-8036-4808-8be4-f9c8c2f092d3?ref=0DEBEDF3")],
     sum: "出身江南落魄書香門第的新寡後母——你名義上的母親。",
@@ -581,7 +581,7 @@ function cardHTML(c, showWork) {
   const w = workOf(c);
   return `<article class="ccard reveal" tabindex="0" role="button" aria-expanded="false" data-name="${esc(c.name)}">
     <div class="ctop">${avatarHTML(c)}
-      <div><div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span>${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
+      <div>${c.story ? `<div class="cstory notranslate" translate="no">「${esc(c.story)}」</div>` : ""}<div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span>${c.status ? `<span class="badge-st">${esc(c.status)}</span>` : ""}${c.group ? '<span class="badge-st">多人</span>' : ""}</div>
       ${c.code ? `<div class="ccode">${esc(c.code)}</div>` : ""}
       ${showWork && w ? `<a class="cwork" href="#work/${w.id}${showWork === true ? "" : "?from=" + encodeURIComponent(showWork)}" data-work="${w.id}" translate="no">${esc(workTitle(w))}</a>` : (c.role ? `<div class="cwork">${esc(c.role)}</div>` : "")}</div></div>
     <div class="cbody"><p class="csum">${esc(c.sum)}</p><div class="tags">${tags}</div></div>
@@ -1007,7 +1007,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     const w = workOf(c), plats = platsOf(c).filter(p => p !== "未標註");
     const tags = [c.group && "多人", c.status, c.linkStatus || (!c.links.length && "準備中")].filter(Boolean);
     return { c, w, plats, tags,
-      f: { name: norm(c.name), full: norm(c.full), code: norm(c.code), tags: norm(tags.join(" ")),
+      f: { name: norm(c.name), full: norm(c.full), code: norm([c.code, c.story].join(" ")), tags: norm(tags.join(" ")),
            meta: norm([c.role, c.collab, w && w.title, w && w.fullTitle, plats.map(plabel).join(" "), plats.join(" ")].join(" ")),
            text: norm([c.sum, c.intro, c.age].join(" ")) } };
   });
@@ -1068,7 +1068,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     group("角色", cs, 12, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
       <span class="sr-thumb round">${thumbC(x.c)}</span>
       <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(x.c.name, raw)}</span>${x.tags.filter(t => t === "多人").map(t => `<span class="sr-tag">${t}</span>`).join("")}</span>
-      <span class="sr-sub">${x.c.full ? `<span ${NT}>${esc(x.c.full)}</span>・` : ""}<span ${NT}>${esc(workTitle(x.w))}</span>${x.c.role ? `・${esc(x.c.role)}` : ""}</span></span></a>`);
+      <span class="sr-sub">${x.c.story ? `<span ${NT}>「${esc(x.c.story)}」</span>・` : ""}${x.c.full ? `<span ${NT}>${esc(x.c.full)}</span>・` : ""}<span ${NT}>${esc(workTitle(x.w))}</span>${x.c.role ? `・${esc(x.c.role)}` : ""}</span></span></a>`);
     group("作品", ws, 6, (x, i) => `<a class="sr-item" role="option" id="sr-${i}" data-i="${i}" href="#work/${x.w.id}">
       <span class="sr-thumb">${thumbW(x.w)}</span>
       <span class="sr-main"><span class="sr-title"><span ${NT}>${hl(workTitle(x.w), raw)}</span></span>

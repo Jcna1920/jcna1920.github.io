@@ -749,3 +749,5 @@ html.search-open body{overscroll-behavior:none}
   textarea,[contenteditable="true"]{cursor:text}
 }
 .pnote{margin:22px 0 0;text-align:center;font-size:.8rem;letter-spacing:.12em;color:var(--mist);opacity:.85}
+/* 角色故事標題 */
+.ccard .cstory{font-family:var(--serif-tc);font-size:.7rem;letter-spacing:.14em;color:var(--gold);opacity:.82;margin:0 0 2px;line-height:1.3;overflow-wrap:anywhere}
