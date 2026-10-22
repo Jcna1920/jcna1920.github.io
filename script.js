@@ -375,7 +375,7 @@ const CHARACTERS = [
       L("Melting", "https://t.melting.chat/qohvulc"), L("Tikita", "https://tikita.ai/story/SOKXQOCB")],
     sum: "神名家雙胞胎之一，妳那位無惡不作的親哥哥。",
     intro: "不是健康戀愛，而是逐步看見一名極端聰明的惡棍，如何把愛、恨、婚姻、義理與保護都變成控制。可以反抗、逃跑、談判，甚至反過來設局。\n#骨科 #冷酷 #黑道 #控制 #慢熱" },
-  { name: "神名憐", work: "kamigori", avatar: null, links: [L("Heartbeat")], sum: "《神之檻》神名家雙胞胎之一。", intro: "" },
+  { name: "神名憐", work: "kamigori", avatar: A+"lian.jpg", links: [L("Heartbeat", "https://heartbeat-app.net/characters/ddc931ea-88ed-4569-be1f-6ede552ed8af")], sum: "神名家對外只有一位嫡男——那和他長著同一張臉的，是誰？", intro: "金髮遮眼、蝴蝶刀在指間翻轉的神名家雙子之一。他笑著叫你「小可憐」，也笑著替你處理掉每一個相親對象。當他撥開瀏海，那雙眼睛和你的一模一樣。\n#雙子 #狂犬 #禁忌 #骨科" },
   // ── 無法言喻
   { name: "阿爾曼德莊園", full: "Villa Armand", role: "多人：六名傭兵安保小隊", work: "wuyan", avatar: null, group: true,
     links: [],
@@ -522,11 +522,16 @@ const PLATFORM_FILTERS = (() => {
 })();
 
 /* ---------- helpers ---------- */
+/* ── 最新上架（作品與世界觀頂端的輪播）──
+   新角色上架時手動更新：把角色的 name（與 CHARACTERS 中的 name 完全相同）加到最前面，最多顯示 3 位。
+   找不到或屬於隱藏作品的名字會自動略過；清空陣列即隱藏整個輪播。 */
+const NEWEST = ["神名憐", "達拉斯", "赫拉分"];
+
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
 const charsOfWork = w => CHARACTERS.filter(c => c.work === w.id);
 const workOf = c => WORKS.find(w => w.id === c.work);
-/* 沒有角色的作品（例如角色已併入其他作品）不顯示於作品列表與世界觀；資料保留 */
+/* 沒有角色的作品（例如角色已併入其他作品）不顯示於作品與世界觀；資料保留 */
 const SHOWN_WORKS = WORKS.filter(w => charsOfWork(w).length);
 const workTitle = w => w.fullTitle || (w.id === "others" ? w.title : `《${w.title}》`);
 
@@ -558,8 +563,14 @@ $("#platformGrid").innerHTML =
   <h3 class="pgroup-head" id="pgh-${g.id}"><span class="pg-eyebrow notranslate" translate="no">${esc(g.eyebrow)}</span><span class="pg-label">${esc(g.label)}</span><span class="pg-count">${list.length}</span></h3>
   <div class="platform-grid">${list.map(pcardHTML).join("")}</div></section>`;
   }).join("");
-$("#platformGrid").addEventListener("click", async e => {
-  const btn = e.target.closest(".copy"); if (!btn) return;
+/* 邀請碼：角色卡上的連結後方顯示該平台的邀請碼（唯一來源：PLATFORMS 的 invite，與進駐平台卡片相同） */
+function inviteOfPlatform(k) {
+  const p = PLATFORMS.find(x => x.name === k) || PLATFORMS.find(x => normPlatform(x.name) === k || x.name.split(" ")[0] === k);
+  return p && p.invite && p.url ? p.invite : "";
+}
+/* 複製按鈕（進駐平台卡片與角色卡共用） */
+document.addEventListener("click", async e => {
+  const btn = e.target.closest && e.target.closest(".copy[data-copy]"); if (!btn) return;
   e.preventDefault(); e.stopPropagation();
   const text = btn.dataset.copy;
   try { await navigator.clipboard.writeText(text); }
@@ -582,10 +593,12 @@ function linksHTML(c) {
     return `<div class="lrow"><span class="lbtn off paused prep" aria-disabled="true" title="平台連結${esc(st)}"><span class="lname">${esc(st)}</span></span></div>`;
   }
   const pname = p => p === "Caveduck" ? "Caveduck" : plabel(p);
+  const withCode = (l, btn) => { const code = inviteOfPlatform(l.platform); if (!code) return btn;
+    return `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>`; };
   return `<div class="lrow">${c.links.map(l => PAUSED.has(l.platform)
     ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
     : l.url
-    ? `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`
+    ? withCode(l, `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`)
     : `<span class="lbtn off" aria-disabled="true" title="尚無連結"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span></span>`).join("")}</div>`;
 }
 function cardHTML(c, showWork) {
@@ -628,20 +641,30 @@ const view = $("#charView"), pf = $("#platformFilter");
 pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}</span></a>` + PLATFORM_FILTERS.map(p =>
   `<a href="#platform/${p.id}" data-p="${p.id}">${piconOf(p.key) ? `<img class="fico" src="${piconOf(p.key)}" alt="" width="18" height="18" loading="lazy">` : ""}${p.key === "未標註" ? esc(p.label) : `<span class="notranslate" translate="no">${esc(p.label)}</span>`}<span>${p.count}</span></a>`).join("");
 
-function viewWorks() {
-  return `<div class="work-grid">${SHOWN_WORKS.map(w => {
-    const n = charsOfWork(w).length;
-    return `<a class="wkcard reveal" href="#work/${w.id}?from=works" data-work="${w.id}">
-      <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(SHOWN_WORKS.indexOf(w) + 1).padStart(2, "0")}</span></div>
-      <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3 translate="no" class="notranslate">${esc(w.title)}</h3>
-      <p class="wkhook">${esc(w.hook)}</p>
+/* 作品與世界觀：每張卡片＝封面＋標題＋導語／世界觀摘要，點擊進入作品頁。
+   預留每個世界的宣傳影片：WORKS 項目加上 video（靜音循環，mp4/webm 路徑）即會疊在封面上；目前皆未設定。 */
+const clip = (t, n) => { t = String(t || ""); return t.length > n ? t.slice(0, n).replace(/[，、。；：\s]+$/, "") + "…" : t; };
+const promoHTML = w => w.video ? `<video class="wkvideo" src="${esc(w.video)}" muted loop autoplay playsinline preload="none" aria-hidden="true"${w.cover ? ` poster="${esc(w.cover)}"` : ""}></video>` : "";
+function worksGridHTML() {
+  return `<div class="work-grid">${SHOWN_WORKS.map((w, i) => {
+    const n = charsOfWork(w).length, blurb = w.world && w.world !== w.hook ? clip(w.world, 70) : "";
+    return `<a class="wkcard reveal" href="#work/${w.id}?from=world" data-work="${w.id}">
+      <div class="wkcover${w.video ? " has-video" : ""}">${coverHTML(w)}${promoHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span></div>
+      <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3>
+      ${w.hook ? `<p class="wkhook">${esc(w.hook)}</p>` : ""}${blurb ? `<p class="wkworld">${esc(blurb)}</p>` : ""}
       <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
   }).join("")}</div>`;
 }
-/* 返回連結：依來源（世界觀／作品列表／平台篩選）決定 */
-const SECTION_LABEL = { about: "作者資訊", platforms: "進駐平台", characters: "角色列表", worlds: "世界觀", top: "首頁" };
+/* 角色列表「全部」：依作品分組列出所有角色 */
+function viewAll() {
+  return `<div class="all-chars">${SHOWN_WORKS.map(w => `<section class="wgroup">
+    <h3 class="wgroup-head"><a href="#work/${w.id}?from=sec:characters" data-work="${w.id}" class="notranslate" translate="no">${esc(workTitle(w))}</a><span class="pg-count">${charsOfWork(w).length}</span></h3>
+    <div class="char-grid">${charsOfWork(w).map(c => cardHTML(c, false)).join("")}</div></section>`).join("")}</div>`;
+}
+/* 返回連結：依來源（作品與世界觀／角色列表／平台篩選）決定 */
+const SECTION_LABEL = { about: "作者資訊", platforms: "進駐平台", characters: "角色列表", worlds: "作品與世界觀", top: "首頁" };
 function backOf(from) {
-  if (from === "world") return { href: "#worlds", label: "← 返回世界觀" };
+  if (!from || from === "world" || from === "works") return { href: "#worlds", label: "← 返回作品與世界觀" };
   if (from && from.startsWith("sec:") && SECTION_LABEL[from.slice(4)]) {
     const k = from.slice(4); return { href: k === "top" ? "#top" : "#" + k, label: `← 返回${SECTION_LABEL[k]}` };
   }
@@ -649,7 +672,7 @@ function backOf(from) {
     const p = PLATFORM_FILTERS.find(x => x.id === from.slice(9));
     if (p) return { href: `#platform/${p.id}`, label: `← 返回 ${plabel(p.key)} 角色列表` };
   }
-  return { href: "#characters", label: "← 返回作品列表" };
+  return { href: "#worlds", label: "← 返回作品與世界觀" };
 }
 function viewWork(w, from) {
   const list = charsOfWork(w), back = backOf(from);
@@ -669,7 +692,7 @@ function viewWork(w, from) {
 function viewPlatform(p) {
   const list = CHARACTERS.filter(c => platsOf(c).includes(p.key));
   return `<div class="panel-view">
-    <a class="back" href="#characters" data-back="1">← 返回作品列表</a>
+    <a class="back" href="#characters" data-back="1">← 返回角色列表</a>
     <header class="plat-head"><p class="eyebrow">Platform</p><h3 class="work-title notranslate" translate="no">${esc(plabel(p.key))}</h3>
     <p class="work-meta">${list.length} 位角色</p></header>
     <div class="char-grid">${list.length ? list.map(c => cardHTML(c, "platform:" + p.id)).join("")
@@ -678,40 +701,50 @@ function viewPlatform(p) {
 }
 
 /* ---------- hash routing ----------
-   作品頁 hash 帶來源：#work/<id>?from=world|works|platform:<id>；返回時捲回原本點擊的卡片 */
+   作品頁 hash 帶來源：#work/<id>?from=world|sec:<區塊>|platform:<id>（舊的 from=works 視同 world）；返回時捲回原本點擊的卡片 */
 const parseHash = (hash = location.hash) => {
   const raw = decodeURIComponent(hash.replace(/^#/, ""));
   const [path, q = ""] = raw.split("?");
-  const from = new URLSearchParams(q).get("from") || "";
+  const sp = new URLSearchParams(q), from = sp.get("from") || "", char = sp.get("c") || "";
   const [kind, id] = path.split("/");
-  return { path, kind, id, from };
+  return { path, kind, id, from, char };
 };
-/* 來源位置的正規化 key：works／worlds／platform/<id>／其他區塊 */
+/* 來源位置的正規化 key：worlds／characters／platform/<id>／其他區塊 */
+/* 舊的「作品列表」錨點（#works、#work、#work/all、無效作品）一律導向 #worlds */
+const OLD_WORKS = new Set(["works", "work", "work/all", "作品列表", "作品"]);
 const originKey = hash => {
   const { path, kind } = parseHash(hash);
-  if (!path || path === "characters" || path === "work" || path === "work/all" || (kind === "work" && !WORKS.find(w => w.id === parseHash(hash).id))) return "works";
-  if (path === "worlds") return "worlds";
+  if (path === "worlds" || OLD_WORKS.has(path) || (kind === "work" && !WORKS.find(w => w.id === parseHash(hash).id))) return "worlds";
+  if (!path || path === "characters") return "characters";
   return path;
 };
-const fromKey = from => from === "world" ? "worlds" : from && from.startsWith("platform:") ? "platform/" + from.slice(9)
-  : from && from.startsWith("sec:") && SECTION_LABEL[from.slice(4)] ? from.slice(4) : "works";
+const fromKey = from => from && from.startsWith("platform:") ? "platform/" + from.slice(9)
+  : from && from.startsWith("sec:") && SECTION_LABEL[from.slice(4)] ? from.slice(4) : "worlds";
 let lastHash = location.hash, prevOfDetail = null;
 function route(scroll) {
+  { const h = parseHash();
+    if (OLD_WORKS.has(h.path) || (h.kind === "work" && !WORKS.find(w => w.id === h.id))) history.replaceState(null, "", "#worlds"); }
   const { kind, id, from } = parseHash();
   let html, active = "";
   const work = kind === "work" && WORKS.find(w => w.id === id);
   if (work) { active = null; html = viewWork(work, from); }
   else if (kind === "platform" && PLATFORM_FILTERS.find(p => p.id === id)) { active = id; html = viewPlatform(PLATFORM_FILTERS.find(p => p.id === id)); }
-  else if (!view.querySelector(".work-grid")) html = viewWorks();   /* 離開詳細頁（或首次載入）時回到作品列表 */
+  else if (!view.querySelector(".all-chars")) html = viewAll();   /* 離開詳細頁（或首次載入）時回到角色列表（全部） */
   if (html !== undefined) {
     view.innerHTML = html;
     pf.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.p === active));
     observe(view.querySelectorAll(".reveal"));
   }
+  const { char } = parseHash();
+  if (work && char) {   /* 由「最新上架」開啟：展開並捲到該角色卡 */
+    const el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === char);
+    if (el) { el.classList.add("in", "open"); el.setAttribute("aria-expanded", "true"); settleScroll(el, "center");
+      el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600); return; }
+  }
   if (scroll && (work || kind === "platform")) { if (!restoreScroll()) $("#characters").scrollIntoView({ behavior: "smooth" }); }
   else if (scroll && !restoreScroll()) {
     const { path } = parseHash(), t = path && document.getElementById(path);
-    if (t) settleScroll(t); else if (originKey(location.hash) === "works" && path) settleScroll($("#characters"));
+    if (t) settleScroll(t);
   }
 }
 /* 記住點擊的卡片，返回時捲回該卡片 */
@@ -732,9 +765,9 @@ function restoreScroll() {
     return true;
   }
   let el = null;
-  if (r.target === "worlds") el = $(`#worldIndex a[data-work="${CSS.escape(r.work)}"]`);
+  if (r.target === "worlds") el = $(`#worldIndex .wkcard[data-work="${CSS.escape(r.work)}"]`);
   else if (r.char) el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === r.char);
-  else el = $(`#charView .wkcard[data-work="${CSS.escape(r.work)}"]`);
+  else el = $(`#charView .wgroup-head a[data-work="${CSS.escape(r.work)}"]`);
   if (!el) return false;
   try { sessionStorage.removeItem(RET_KEY); } catch {}
   el.closest(".reveal") && el.closest(".reveal").classList.add("in"); el.classList.add("in");
@@ -774,7 +807,7 @@ document.addEventListener("click", e => {
 });
 
 view.addEventListener("click", e => {
-  if (e.target.closest("a")) return;
+  if (e.target.closest("a, button, .lcode")) return;
   const c = e.target.closest(".ccard"); if (!c) return;
   c.setAttribute("aria-expanded", c.classList.toggle("open"));
 });
@@ -784,10 +817,52 @@ view.addEventListener("keydown", e => {
   }
 });
 
-/* ---------- world index ---------- */
-$("#worldIndex").innerHTML = SHOWN_WORKS.filter(w => w.id !== "others").map((w, i) => `<li class="reveal">
-  <a href="#work/${w.id}?from=world" data-work="${w.id}"><span class="wi-no">${String(i + 1).padStart(2, "0")}</span>
-  <span class="wi-title notranslate" translate="no">${esc(workTitle(w))}</span><span class="wi-tags">${esc(w.tags)}</span><span class="wi-go">→</span></a></li>`).join("");
+/* ---------- 作品與世界觀 ---------- */
+$("#worldIndex").innerHTML = worksGridHTML();
+
+/* ---------- 最新上架輪播 ---------- */
+(() => {
+  const box = $("#newest"); if (!box) return;
+  const shown = new Set(SHOWN_WORKS.map(w => w.id));
+  const items = NEWEST.map(n => CHARACTERS.find(c => c.name === n)).filter(c => c && shown.has(c.work)).slice(0, 3);
+  if (!items.length) { box.hidden = true; return; }
+  const multi = items.length > 1;
+  const slide = (c, i) => { const w = workOf(c);
+    return `<a class="nw-slide${i ? "" : " on"}" href="#work/${w.id}?from=world&c=${encodeURIComponent(c.name)}" data-work="${w.id}" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${items.length}"${i ? ' aria-hidden="true" tabindex="-1"' : ""}>
+      <div class="nw-img">${c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async">` : `<span class="nw-ph" aria-hidden="true">${esc([...c.name][0])}</span>`}</div>
+      <div class="nw-body">${c.story ? `<div class="cstory nw-story notranslate" translate="no">「${esc(c.story)}」</div>` : ""}
+        <h3 class="nw-name notranslate" translate="no">${esc(c.name)}</h3>
+        <p class="nw-work notranslate" translate="no">${esc(workTitle(w))}</p>
+        ${c.sum ? `<p class="nw-sum">${esc(c.sum)}</p>` : ""}<span class="nw-go">→</span></div></a>`; };
+  box.innerHTML = `<div class="nw-head"><span class="nw-eyebrow notranslate" translate="no">New Arrivals</span><h3 class="nw-title i18n" data-en="Newest Characters" data-ko="최신 캐릭터">最新上架</h3></div>
+    <div class="nw-stage" aria-roledescription="carousel" aria-label="最新上架">${items.map(slide).join("")}
+    ${multi ? `<button type="button" class="nw-arrow prev" aria-label="上一位">‹</button><button type="button" class="nw-arrow next" aria-label="下一位">›</button>` : ""}</div>
+    ${multi ? `<div class="nw-dots">${items.map((c, i) => `<button type="button" class="${i ? "" : "on"}" data-i="${i}" aria-label="第 ${i + 1} 位"></button>`).join("")}</div>` : ""}`;
+  if (!multi) return;
+  const slides = [...box.querySelectorAll(".nw-slide")], dots = [...box.querySelectorAll(".nw-dots button")];
+  let cur = 0, timer = null, paused = false;
+  const go = i => { cur = (i + items.length) % items.length;
+    slides.forEach((s, k) => { const on = k === cur; s.classList.toggle("on", on); s.toggleAttribute("aria-hidden", !on); s.tabIndex = on ? 0 : -1; if (on) s.removeAttribute("aria-hidden"); else s.setAttribute("aria-hidden", "true"); });
+    dots.forEach((d, k) => { d.classList.toggle("on", k === cur); d.setAttribute("aria-current", String(k === cur)); }); };
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  const start = () => { clearInterval(timer); if (!reduce.matches && !paused) timer = setInterval(() => { if (!document.hidden) go(cur + 1); }, 6500); };
+  box.querySelector(".prev").addEventListener("click", () => { go(cur - 1); start(); });
+  box.querySelector(".next").addEventListener("click", () => { go(cur + 1); start(); });
+  dots.forEach(d => d.addEventListener("click", () => { go(+d.dataset.i); start(); }));
+  const pause = () => { paused = true; clearInterval(timer); }, resume = () => { paused = false; start(); };
+  box.addEventListener("mouseenter", pause); box.addEventListener("mouseleave", resume);
+  box.addEventListener("focusin", pause); box.addEventListener("focusout", resume);
+  /* 觸控：按住暫停，左右滑動切換 */
+  let x0 = null, y0 = 0, swiped = false;
+  const stage = box.querySelector(".nw-stage");
+  stage.addEventListener("touchstart", e => { pause(); x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; swiped = false; }, { passive: true });
+  stage.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(t.clientY - y0)) { swiped = true; go(cur + (dx < 0 ? 1 : -1)); }
+    x0 = null; setTimeout(resume, 4000); }, { passive: true });
+  stage.addEventListener("click", e => { if (swiped) { e.preventDefault(); swiped = false; } }, true);
+  reduce.addEventListener && reduce.addEventListener("change", start);
+  start();
+})();
 
 /* ---------- nav + reveal ---------- */
 const bar = $(".topbar"), tog = $(".nav-toggle");
@@ -961,7 +1036,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     menu.querySelectorAll("button").forEach(b => b.setAttribute("aria-checked", String(b.dataset.lang === cur)));
     note.hidden = cur === "zh-TW";
     /* 暱稱等少數字串使用人工譯文（機器翻譯容易誤譯），保留原文於 data-zh */
-    document.querySelectorAll(".nick").forEach(el => {
+    document.querySelectorAll(".nick, .i18n").forEach(el => {
       if (!el.dataset.zh) el.dataset.zh = el.innerHTML;
       const t = cur !== "zh-TW" && el.dataset[cur];
       if (!t) el.innerHTML = el.dataset.zh;
@@ -1110,7 +1185,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
     if (h.kind === "platform") return "platform:" + h.id;
     const secs = ["worlds", "characters", "platforms", "about"];
     const y = window.scrollY + innerHeight * 0.35;
-    for (const id of secs) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top + window.scrollY <= y) return id === "worlds" ? "world" : id === "characters" ? "" : "sec:" + id; }
+    for (const id of secs) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top + window.scrollY <= y) return id === "worlds" ? "world" : "sec:" + id; }
     return "sec:top";
   };
   function openItem(x) {
