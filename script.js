@@ -20,11 +20,14 @@ const PLATFORMS = [
   { name: "CRUSH", url: "https://creators.passion.xyz/j_cna" },
   { name: "Tingle", url: "https://tingle.chat/chat/users/347248/profile?tab=characters" },
   { name: "卿卿我我", title: "LoveyDovey", sub: "卿卿我我 · 7755", url: "https://loveydovey.onelink.me/vs4G/8m9nxr1f" },
+  /* Frontia：好友邀請連結＋邀請碼（作者提供 2026-10-23）；須以網頁註冊，邀請碼僅能於註冊時填寫 */
+  { name: "Frontia", desc: "AI 角色聊天平台", url: "https://link.frontia.ai/yfdu453", invite: "PYNNVX",
+    note: { zh: "⚠ 請用網頁註冊，邀請碼只能在註冊時填寫", en: "⚠ Sign up on the web — the code can only be entered at sign-up", ko: "⚠ 웹에서 가입해 주세요. 초대 코드는 가입할 때만 입력할 수 있어요" } },
   { name: "Floze", url: "https://s.floze.ai/c/cmhfl7m4h0043l702nqup136d?locale=tw" },
 ];
 /* 進駐平台分組（依作者指定順序；lit.link 為總入口，不屬任何分組） */
 const PLATFORM_GROUPS = [
-  { id: "active", label: "活躍", eyebrow: "Active", names: ["灰骨 Ashbone", "Heartbeat", "Caveduck", "Melting", "Hyze"] },
+  { id: "active", label: "活躍", eyebrow: "Active", names: ["灰骨 Ashbone", "Heartbeat", "Caveduck", "Melting", "Hyze", "Frontia"] },
   { id: "mood", label: "看心情上架", eyebrow: "Now & Then", names: ["Storyaichat", "Plaitoon", "IsekaiZero", "Tikita", "WHIF", "FuWa", "卿卿我我"] },
   { id: "rest", label: "休假看情況", eyebrow: "On Leave", names: ["CRUSH", "Tingle", "Floze"] },
 ];
@@ -568,7 +571,7 @@ const sponsorHTML = p => p.sponsor ? `<div class="invite sponsor"><span class="i
 const pcardHTML = p => { const ic = piconOf(p.name); return `<div class="pcard reveal${p.url ? "" : " pending"}${ic ? " has-icon" : ""}${p.invite ? "" : " no-code"}">
   ${p.url ? `<a class="pstretch" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" aria-label="前往 ${esc(p.title || p.name)}${p.sub ? "（" + esc(p.sub) + "）" : ""}"></a>` : ""}
   <div class="phead"><span class="ptitle"><span class="pname notranslate" translate="no">${esc(p.title || p.name)}</span>${p.sub ? `<span class="psub notranslate" translate="no">${esc(p.sub)}</span>` : ""}</span>${ic ? `<span class="pico" aria-hidden="true"><img src="${ic}" alt="" width="160" height="160" loading="lazy" decoding="async"></span>` : ""}</div>
-  ${inviteHTML(p)}${sponsorHTML(p)}
+  ${inviteHTML(p)}${sponsorHTML(p)}${p.note ? `<p class="pnote i18n" data-en="${esc(p.note.en)}" data-ko="${esc(p.note.ko)}">${esc(p.note.zh)}</p>` : ""}
   <span class="plink">${p.url ? "Visit →" : "連結待補"}</span></div>`; };
 const PBYNAME = Object.fromEntries(PLATFORMS.map(p => [p.name, p]));
 const PGROUPED = new Set(PLATFORM_GROUPS.flatMap(g => g.names));
@@ -692,6 +695,16 @@ function backOf(from) {
   }
   return { href: "#worlds", label: "← 返回作品與世界觀" };
 }
+/* 《為卿停留》等作品頁：Frontia 註冊提示（好友邀請連結＋邀請碼；人工譯文 en/ko） */
+const FRONTIA_REF = "https://link.frontia.ai/yfdu453";
+function frontiaNoteHTML() {
+  const code = inviteOfPlatform("Frontia"); if (!code) return "";
+  const a = t => `<a href="${FRONTIA_REF}" target="_blank" rel="noopener noreferrer">${t}</a>`, c = `<code class="notranslate" translate="no">${esc(code)}</code>`;
+  const zh = `還沒註冊 Frontia？請用我的${a("好友邀請連結")}註冊，並填入邀請碼 ${c}。<br><strong>⚠ 請務必用網頁註冊</strong>，邀請碼只能在註冊時填寫。`;
+  const en = `New to Frontia? Sign up with my ${a("friend referral link")} and enter invite code ${c}.<br><strong>⚠ Please sign up on the web</strong> — the code can only be entered at sign-up.`;
+  const ko = `아직 Frontia 회원이 아니신가요? 제 ${a("친구 초대 링크")}로 가입하고 초대 코드 ${c}를 입력해 주세요.<br><strong>⚠ 반드시 웹에서 가입해 주세요.</strong> 초대 코드는 가입할 때만 입력할 수 있어요.`;
+  return `<p class="work-note i18n" data-html="1" data-en="${esc(en)}" data-ko="${esc(ko)}">${zh}</p>`;
+}
 function viewWork(w, from) {
   const list = charsOfWork(w), back = backOf(from);
   const platSet = [...new Set(list.flatMap(platsOf))].filter(p => p !== "未標註").map(plabel).join("・");
@@ -702,7 +715,7 @@ function viewWork(w, from) {
       <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
-      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>` : ""}
+      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>${w.links.some(l => l.platform === "Frontia" && l.url) ? frontiaNoteHTML() : ""}` : ""}
       <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
     </header>
     <div class="char-grid">${list.map(c => cardHTML(c, false)).join("")}</div>
@@ -753,6 +766,7 @@ function route(scroll) {
     view.innerHTML = html;
     pf.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.p === active));
     observe(view.querySelectorAll(".reveal"));
+    if (window.__i18nPaint) window.__i18nPaint();
   }
   const { char } = parseHash();
   if (work && char) {   /* 由「最新上架」開啟：展開並捲到該角色卡 */
@@ -1062,6 +1076,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
       else if (el.dataset.html) el.innerHTML = t; else el.textContent = t;
     });
   };
+  window.__i18nPaint = paint;   /* 動態頁面（作品頁）插入 .i18n 後重新套用 */
   let loading = false;
   const load = () => {
     if (window.google && google.translate && google.translate.TranslateElement) return apply();

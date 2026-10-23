@@ -807,3 +807,12 @@ html.search-open body{overscroll-behavior:none}
 .work-links .wl-icon{width:20px;height:20px;object-fit:contain}
 @media (max-width:640px){.work-links{justify-content:center}}
 @media (max-width:640px){.work-links .lpair{justify-content:center}}
+
+/* Frontia 註冊提示（作品頁）與平台卡片註記 */
+.work-note{max-width:36em;margin:6px 0 2px;padding:9px 12px;border-left:2px solid var(--gold-dim);background:rgba(217,191,140,.05);color:var(--mist);font-size:.8rem;line-height:1.75}
+.work-note a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.work-note a:hover{color:#fff}
+.work-note strong{color:#e8d6b0;font-weight:500}
+.work-note code{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;color:var(--gold);letter-spacing:.03em}
+.pcard .pnote{position:relative;z-index:2;margin:8px 0 0;color:var(--mist);font-size:.7rem;line-height:1.6}
+@media (max-width:640px){.work-note{margin:6px auto 2px;border-left:0;border-top:1px solid var(--gold-dim);text-align:center}}
