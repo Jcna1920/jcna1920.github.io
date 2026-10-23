@@ -39,7 +39,7 @@ const PLATFORM_ALIASES = {
   ashbone: "灰骨", "灰骨": "灰骨", "灰骨 ashbone": "灰骨",
   whif: "WHIF", "唯芙": "WHIF", hyze: "Hyze", melting: "Melting", plaitoon: "Plaitoon",
   isekaizero: "IsekaiZero", tikita: "Tikita", touchie: "Touchie", miraimind: "MiraiMind", miramind: "MiraiMind",
-  floze: "Floze", dokichat: "DokiChat", paradise: "Paradise", tingle: "Tingle", tinglechat: "Tingle",
+  floze: "Floze", frontia: "Frontia", dokichat: "DokiChat", paradise: "Paradise", tingle: "Tingle", tinglechat: "Tingle",
   gpts: "GPTs", gem: "Gemini Gem", gemini: "Gemini Gem", "卿卿我我": "卿卿我我", crush: "CRUSH",
   storyaichat: "Storyaichat", discord: "Discord", cookiechat: "Hyze",  /* CookieChat 已更名為 HYZE */
 };
@@ -49,6 +49,9 @@ const L = (platform, url, o = {}) => ({ platform: normPlatform(platform), url: u
 
 /* 角色資料：Discord「聖晶石」角色目錄（2026-10-17 擷取，平台與連結以此為準）
    ＋ Notion「原創」資料庫（頭像、較完整介紹）＋作者提供之已知資訊。未經確認的內容一律標示待補。 */
+/* 《為卿停留》為 Frontia 多人模擬：作品與四位角色共用同一連結 */
+const HEARTBEAT_WEIQING = L("Heartbeat", "https://heartbeat-app.net/troupes/5f9fc919-78ae-45b5-bffd-1525353e283e", { label: "多人模擬" });
+const FRONTIA_WEIQING = L("Frontia", "https://link.frontia.ai/969brxy", { label: "多人模擬" });
 const CHARACTERS = [
   // ── 永晝會
   { name: "秦時雨", code: "帝蛇", role: "永晝會現任當家（家主）", age: "44（外觀約 35）", work: "yongzhou", avatar: A+"qinshiyu.jpg",
@@ -416,6 +419,19 @@ const CHARACTERS = [
       L("灰骨", "https://ashbone.app/c/%E6%9F%B3%E5%AE%9B%E5%85%92-8dd399b2-8036-4808-8be4-f9c8c2f092d3?ref=0DEBEDF3")],
     sum: "出身江南落魄書香門第的新寡後母——你名義上的母親。",
     intro: "溫婉善良、刺繡琴藝精通，卻一進廚房就濃煙滾滾。煙雨江南裡，她把全部溫柔給了你，也把一份不敢說出口的依戀，藏在一碗燒焦的長壽麵裡。" },
+  // ── 為卿停留（玄暉國・韓國版；角色文字為作者提供之精簡版）
+  { name: "李奎憲", story: "為卿停留", work: "weiqing", avatar: A+"kuixian.jpg", links: [], linkStatus: "待補上",
+    sum: "玄暉國新王，得了江山，卻沒得到心上人。",
+    intro: "玄暉國新王，29歲。心上人如今是兄長新婚的妻子——他朝議上能冷然駁回任何奏請，卻拒絕不了她一句「你總會有辦法」。他太慣於被需要，有人只想陪著他，他反倒要問：「你有何所求？」" },
+  { name: "李泰謙", story: "為卿停留", work: "weiqing", avatar: A+"taiqian.jpg", links: [], linkStatus: "待補上",
+    sum: "昭寧大君，退出儲位之爭，娶得心愛之人。",
+    intro: "李奎憲之兄，31歲。栗髮、善騎射，直率重情。人人都說他得了最好的結局，他也這麼相信——只是妻子有心事時，似乎總先說給弟弟聽。「奎憲，你若另有安排便直說。」" },
+  { name: "尹荷潾", story: "為卿停留", work: "weiqing", avatar: A+"helin.jpg", links: [], linkStatus: "待補上",
+    sum: "清原府夫人，昭寧大君新婚之妻。",
+    intro: "26歲，善良、多感、有韌性。日子安穩體面，只是遇了難處、只要回頭，奎憲便在那裡。「我很好。人人都這麼說。」或許從來無人問過她：她自己想要什麼。" },
+  { name: "柳青", story: "為卿停留", work: "weiqing", avatar: A+"liuqing.jpg", links: [], linkStatus: "待補上",
+    sum: "內禁衛，王的親衛。",
+    intro: "黑笠紅羽，手按刀柄，總守在寢殿門外的燈影裡。那一夜，喝問「何人？」的，是他。" },
   // ── 赤瞳領主的血祭審判
   { name: "澤菲爾", work: "crimson", avatar: null, links: [L("灰骨")], sum: "《赤瞳領主的血祭審判》登場角色。", intro: "" },
   { name: "萊桑德", work: "crimson", avatar: null, links: [L("灰骨")], sum: "《赤瞳領主的血祭審判》登場角色。", intro: "" },
@@ -490,6 +506,8 @@ const WORKS = [
     hook: "艾蘭迪亞王國的國王與二王子，以及南境烈陽的公爵。", world: "" },
   { id: "gufeng", title: "古風", emoji: "🪽", cover: null, tags: "古風",
     hook: "煙雨江南的少將軍，與永夜桓國的金瞳暴君。", world: "" },
+  { id: "weiqing", title: "為卿停留", emoji: "❄️", cover: "assets/works/weiqing.webp", coverPos: "center", tags: "古風",
+    hook: "他得了江山，卻沒得到心上人。", world: "", links: [FRONTIA_WEIQING, HEARTBEAT_WEIQING] },
   { id: "starward", title: "星航失序", fullTitle: "《星航失序：思薩爾星圖》", cover: null, tags: "科幻・EABO・校園・聯名",
     hook: "同一張臉。兩個名字。",
     world: "以星際為舞台的科幻校園故事，採用 EABO 設定。宿弦 ╳ 宿蝕：同一張臉、兩個名字，以及誰都無法取代的存在位置。一場跨院聯合模擬，讓你成為兄弟關係裡從未預料過的變數。〔戀愛〕〔友情〕〔調查〕〔共犯〕\n弦蝕聯名角色（與月鈴、糰子、M9）。" },
@@ -506,7 +524,7 @@ const WORKS = [
 /* 平台篩選：由角色 links 推導 */
 const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck": "caveduck", "Storyaichat": "storyaichat", "Melting": "melting",
   "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "WHIF": "whif", "Hyze": "hyze", "Tikita": "tikita", "Touchie": "touchie", "MiraiMind": "miraimind",
-  "Floze": "floze", "DokiChat": "dokichat", "Paradise": "paradise", "Tingle": "tingle", "GPTs": "gpts", "Gemini Gem": "gemini",
+  "Floze": "floze", "Frontia": "frontia", "DokiChat": "dokichat", "Paradise": "paradise", "Tingle": "tingle", "GPTs": "gpts", "Gemini Gem": "gemini",
   "卿卿我我": "qingqing", "CRUSH": "crush", "Discord": "discord", "未標註": "none" };
 const PLAT_LABEL = { "灰骨": "灰骨 Ashbone", "Caveduck": "Caveduck（鴨答鴨答）", "卿卿我我": "卿卿我我（7755）" };
 const PRIMARY = ["Heartbeat", "灰骨", "Caveduck", "Storyaichat", "Melting", "Plaitoon"];
@@ -541,7 +559,7 @@ const PAUSED = new Set(["GPTs", "Gemini Gem"]);
 const PICON_DIR = "assets/platforms/";
 const PICONS = { "灰骨": "ashbone", "灰骨 Ashbone": "ashbone", "Heartbeat": "heartbeat", "Caveduck": "caveduck", "Storyaichat": "storyaichat",
   "Melting": "melting", "Plaitoon": "plaitoon", "IsekaiZero": "isekaizero", "Hyze": "hyze", "Tikita": "tikita", "WHIF": "whif",
-  "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "Floze": "floze", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
+  "Tingle": "tingle", "CRUSH": "crush", "FuWa": "fuwa", "Floze": "floze", "Frontia": "frontia", "卿卿我我": "loveydovey", "LoveyDovey": "loveydovey" };
 const piconOf = k => PICONS[k] && !PAUSED.has(k) ? PICON_DIR + PICONS[k] + ".png" : "";
 const inviteHTML = p => p.invite ? `<div class="invite"><span class="ilabel">邀請碼</span><code class="notranslate" translate="no">${esc(p.invite)}</code>
   <button type="button" class="copy" data-copy="${esc(p.invite)}" aria-label="複製 ${esc(p.title || p.name)} 邀請碼">複製</button></div>` : "";
@@ -599,7 +617,7 @@ function linksHTML(c) {
     ? `<span class="lbtn off paused" aria-disabled="true" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}（連結暫停）"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status && l.status !== "暫停" ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="lstatus">暫停</span></span>`
     : l.url
     ? withCode(l, `<a class="lbtn" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}"><span class="lname"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>${l.status ? `<span class="lstatus">${esc(l.status)}</span>` : ""}<span class="larrow">↗</span></a>`)
-    : `<span class="lbtn off" aria-disabled="true" title="尚無連結"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span></span>`).join("")}</div>`;
+    : `<span class="lbtn off" aria-disabled="true" title="尚無連結"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>`).join("")}</div>`;
 }
 function cardHTML(c, showWork) {
   const tags = (!c.links.length || c.linkStatus) ? `<span class="tag prep" title="平台連結準備中">${esc(c.linkStatus || "準備中")}</span>` : platsOf(c).map(p => {
@@ -684,6 +702,7 @@ function viewWork(w, from) {
       <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
+      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>` : ""}
       <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
     </header>
     <div class="char-grid">${list.map(c => cardHTML(c, false)).join("")}</div>

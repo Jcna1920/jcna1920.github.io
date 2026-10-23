@@ -799,5 +799,11 @@ html.search-open body{overscroll-behavior:none}
 .lcode .copy.done{background:linear-gradient(180deg,#e6d1a6,#c9ab72);color:#1b0f22;border-color:var(--gold)}
 @media (max-width:420px){.lpair{flex-wrap:wrap}}
 
-/* 《神之檻》《晚禱之家》封面：手機卡片完整顯示方形主視覺，使直書標題置中且不被角標遮住 */
-@media (max-width:640px){.wkcard[data-work="kamigori"] .wkcover>img,.wkcard[data-work="vespers"] .wkcover>img{object-fit:contain;object-position:center;padding:12% 0 9%;box-sizing:border-box}}
+/* 《神之檻》《晚禱之家》《為卿停留》封面：手機卡片完整顯示方形主視覺，使直書標題置中且不被角標遮住 */
+@media (max-width:640px){.wkcard[data-work="kamigori"] .wkcover>img,.wkcard[data-work="vespers"] .wkcover>img,.wkcard[data-work="weiqing"] .wkcover>img{object-fit:contain;object-position:center;padding:12% 0 9%;box-sizing:border-box}}
+
+/* 作品層級平台連結（例：《為卿停留》Frontia 多人模擬） */
+.work-links{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 4px}
+.work-links .wl-icon{width:20px;height:20px;object-fit:contain}
+@media (max-width:640px){.work-links{justify-content:center}}
+@media (max-width:640px){.work-links .lpair{justify-content:center}}
