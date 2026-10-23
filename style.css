@@ -798,3 +798,6 @@ html.search-open body{overscroll-behavior:none}
 .lcode .copy:hover{background:rgba(217,191,140,.12)}
 .lcode .copy.done{background:linear-gradient(180deg,#e6d1a6,#c9ab72);color:#1b0f22;border-color:var(--gold)}
 @media (max-width:420px){.lpair{flex-wrap:wrap}}
+
+/* 《神之檻》《晚禱之家》封面：手機卡片完整顯示方形主視覺，使直書標題置中且不被角標遮住 */
+@media (max-width:640px){.wkcard[data-work="kamigori"] .wkcover>img,.wkcard[data-work="vespers"] .wkcover>img{object-fit:contain;object-position:center;padding:12% 0 9%;box-sizing:border-box}}
