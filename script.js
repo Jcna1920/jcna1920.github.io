@@ -470,7 +470,23 @@ const WORKS = [
   { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center", tags: "", hook: "", world: "" },
   { id: "iloveu", title: "I💗U", cover: "assets/works/iloveu.webp", coverPos: "center", tags: "BG・病態依戀",
     hook: "病態的愛，也是唯一的救贖。", world: "" },
-  { id: "shenhai", title: "深海戰艦", cover: A+"leviathan.jpg", tags: "", hook: "", world: "" },
+  { id: "shenhai", title: "深海戰艦", cover: A+"leviathan.jpg", tags: "", hook: "", world: "",
+    /* 利維坦號十名重刑犯（作者提供文字，原文照錄） */
+    roster: { eyebrow: "Inmates", title: "十名重刑犯", items: [
+      { no: "01", en: "Ezekiel", zh: "以西結", role: "暴亂首腦/01號重犯", height: "192cm", look: "蒼白八塊肌，銀白長髮，左眼死白右眼冰藍。" },
+      { no: "02", en: "Koa", zh: "柯亞", role: "底艙苦力/02號重犯", height: "195cm", look: "巨獸背闊肌，深古銅膚色，半身戰士圖騰。" },
+      { no: "03", en: "Valerius", zh: "瓦勒瑞斯", role: "囚醫/03號重犯", height: "186cm", look: "修長挺拔，冷白皮，戴銀絲眼鏡熟男。" },
+      { no: "04", en: "Silas", zh: "賽勒斯", role: "黑市藥頭/04號重犯", height: "182cm", look: "靈活精實，小麥色，深綠眼帶舌環。" },
+      { no: "05", en: "Bastien", zh: "巴斯蒂安", role: "輪機房黑工/05號重犯", height: "188cm", look: "肩寬胸厚如重裝甲，滿身燙疤。" },
+      { no: "06", en: "Dmitri", zh: "德米特里", role: "啞巴死囚/06號重犯", height: "184cm", look: "蒼白精壯，漆黑平頭，喉嚨巨大刀疤。" },
+      { no: "07", en: "Zion", zh: "錫安", role: "底艙無冕王/07號重犯", height: "193cm", look: "黑曜石戰神體格，雷鬼辮，暗金眼眸。" },
+      { no: "08", en: "Mateo", zh: "馬特奧", role: "暴動刺客/08號重犯", height: "183cm", look: "精瘦橄欖皮，孔雀藍眼，側頸刀疤。" },
+      { no: "09", en: "Anders", zh: "安德斯", role: "鍋爐房苦力/09號重犯", height: "194cm", look: "健美冠軍肌肉，烤紅粗糙膚色，金髮寸頭。" },
+      { no: "10", en: "Jin", zh: "迅", role: "壓艙水鬼/10號重犯", height: "181cm", look: "游泳流線型體格，淺古銅肌，緊身潛水褲。" },
+    ] },
+    /* 利維坦號（多人）的全部平台連結，網址同角色卡 */
+    links: [L("Whif", "https://whif.io/characters/af0b5f2c-cfaa-40b9-b196-3ed63ccb742b", { label: "多人模擬・先行" }), L("HeartBeat", "https://heartbeat-app.net/characters/16b6396b-ff9d-4860-b2a8-da93a858479f", { label: "多人模擬" }),
+      L("Caveduck", "https://caveduck.io/zh-hant/share/characters/7c60bd3e-ac96-43ce-8690-3aa094a7991d", { label: "多人模擬" })] },
   { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
     hook: "黑道、斯文敗類與重案組的狂犬。",
     world: "現代都市裡的三位「惡人」：佔有慾極強的黑道權泰錫、以心理博弈操弄人心的權在京，以及雨宮警局重案組的狂犬褚赫。" },
@@ -714,6 +730,13 @@ function frontiaNoteHTML() {
   const ko = `아직 Frontia 회원이 아니신가요? 제 ${a("친구 초대 링크")}로 가입하고 초대 코드 ${c}를 입력해 주세요.<br><strong>⚠ 반드시 웹에서 가입해 주세요.</strong> 초대 코드는 가입할 때만 입력할 수 있어요.`;
   return `<p class="work-note i18n" data-html="1" data-en="${esc(en)}" data-ko="${esc(ko)}">${zh}</p>`;
 }
+/* 作品頁名冊（例：《深海戰艦》十名重刑犯）：編號徽章＋英／中文名、身分、身高與外貌 */
+function rosterHTML(r) {
+  return `<section class="roster" aria-label="${esc(r.title)}"><p class="eyebrow notranslate" translate="no">${esc(r.eyebrow || "Roster")}</p><h4 class="roster-title">${esc(r.title)}</h4>
+    <ol class="roster-list">${r.items.map(x => `<li class="rcard"><span class="rno notranslate" translate="no" aria-hidden="true">${esc(x.no)}</span>
+      <div class="rbody"><p class="rname"><span class="ren notranslate" translate="no">${esc(x.en)}</span><span class="rzh notranslate" translate="no">${esc(x.zh)}</span></p>
+      <p class="rrole">${esc(x.role)}</p><p class="rlook"><span class="rh">${esc(x.height)}</span>${esc(x.look)}</p></div></li>`).join("")}</ol></section>`;
+}
 function viewWork(w, from) {
   const list = charsOfWork(w), back = backOf(from);
   const platSet = [...new Set(list.flatMap(platsOf))].filter(p => p !== "未標註").map(plabel).join("・");
@@ -724,9 +747,10 @@ function viewWork(w, from) {
       <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
-      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>${w.links.some(l => l.platform === "Frontia" && l.url) ? frontiaNoteHTML() : ""}` : ""}
+      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(l.platform === "Caveduck" ? "Caveduck" : plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>${w.links.some(l => l.platform === "Frontia" && l.url) ? frontiaNoteHTML() : ""}` : ""}
       <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
     </header>
+    ${w.roster ? rosterHTML(w.roster) : ""}
     <div class="char-grid">${list.map(c => cardHTML(c, false)).join("")}</div>
   </div>`;
 }

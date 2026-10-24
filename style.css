@@ -816,3 +816,20 @@ html.search-open body{overscroll-behavior:none}
 .work-note code{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;color:var(--gold);letter-spacing:.03em}
 .pcard .pnote{position:relative;z-index:2;margin:8px 0 0;color:var(--mist);font-size:.7rem;line-height:1.6}
 @media (max-width:640px){.work-note{margin:6px auto 2px;border-left:0;border-top:1px solid var(--gold-dim);text-align:center}}
+
+/* 作品頁名冊（《深海戰艦》十名重刑犯） */
+.roster{margin:0 0 40px}
+.roster-title{font-family:inherit;font-size:1.15rem;letter-spacing:.2em;color:var(--gold);margin:4px 0 18px;font-weight:500}
+.roster-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rcard{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border:1px solid var(--line);border-radius:4px;background:rgba(8,5,13,.45)}
+.rno{flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--gold-dim);
+  color:var(--gold);font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;font-size:.85rem;letter-spacing:.04em;background:radial-gradient(circle,rgba(217,191,140,.12),transparent 70%)}
+.rbody{min-width:0}
+.rbody p{margin:0}
+.rname{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.ren{color:#f2e6cf;font-size:1rem;letter-spacing:.04em}
+.rzh{color:var(--gold);font-size:.86rem}
+.rrole{color:var(--mist);font-size:.76rem;margin-top:3px!important}
+.rlook{font-size:.82rem;line-height:1.7;margin-top:6px!important;color:#d8cde4}
+.rh{display:inline-block;margin-right:8px;padding:0 7px;border:1px solid var(--line);border-radius:999px;font-size:.7rem;color:var(--gold);font-family:ui-monospace,"SFMono-Regular",Menlo,monospace}
+@media (max-width:640px){.roster-list{grid-template-columns:1fr;gap:10px}.rcard{padding:12px 13px;gap:12px}.rno{width:34px;height:34px;font-size:.78rem}}
