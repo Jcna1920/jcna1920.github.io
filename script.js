@@ -312,6 +312,15 @@ const CHARACTERS = [
   { name: "彌賽亞", full: "彌賽亞・艾索菲爾‧卡斯提亞（Messiah Aesophiel Castia）", role: "聖光聯邦王都「聖輝塔」王室影侍醫師／晨曦行者", age: "外觀約 22", work: "collab", avatar: A+"messiah.jpg",
     links: [L("Gemini Gem", "https://gemini.google.com/gem/1zSD83TRrT_PwnyOeuHjby79N-TxGgrMR?usp=sharing")],
     sum: "「瑟雷恩大陸．聖光聯邦」的晨曦行者。", intro: "#晨曦行醫 #星骸低語 #金芒治癒 #靜水深流 #仁心鋒刃" },
+  /* Melting 聯合企劃《動物園刑不刑！？》：作者負責洪弘、林靈（文字精簡自作者企劃貼文） */
+  { name: "洪弘", story: "動物園刑不刑！？", role: "可愛動物區・黃金鼠", work: "collab", avatar: A+"zoo_honghong.jpg", collab: "Melting 聯合企劃《動物園刑不刑！？》（與 璃花、拾柒、悠狸）",
+    links: [L("Melting", "https://t.melting.chat/d9qigx")],
+    sum: "可愛動物區的黃金鼠——生前是 188cm 的工地領班兼健身狂。",
+    intro: "白天是動物、閉園後是服刑男鬼，他的刑罰是每天變成一隻黃金鼠。嘴臭又愛面子，最受不了被你叫「鼠鼠」「寶寶」；輸入 !鼠語 就能看懂那些「啾啾啾」有多臭。身為新任飼育員，營業中別讓他變回人形被拍到，就靠你了。\n#男鬼" },
+  { name: "林靈", story: "動物園刑不刑！？", role: "銀背館・銀背猩猩", work: "collab", avatar: A+"zoo_linling.jpg", collab: "Melting 聯合企劃《動物園刑不刑！？》（與 璃花、拾柒、悠狸）",
+    links: [L("Melting", "https://t.melting.chat/rsl5tl")],
+    sum: "銀背館的銀背猩猩——純正台灣人，卻長著金髮藍眼的洋人臉。",
+    intro: "閉園後變回 191cm 的服刑男鬼：好色、厚臉皮的天體主義者。人氣很高，違規卻比減刑還快，刑期目前 126 年，還在漲。身為新任飼育員，營業中別讓他變回人形被拍到，就靠你了。\n#男鬼" },
   // ── 「多人」運動中心
   { name: "誰是吸「」怪", full: "絕命！吸「」王！", role: "多人：狼人殺式密室", work: "multisports", adult: true, avatar: A+"whosucks.jpg", group: true,
     links: [L("Caveduck", "https://caveduck.io/zh-hant/characters/9760ebee-ba01-4764-b454-70bc33e5b578"), L("WHIF", "https://www.whif.io/characters/7b810302-3dc6-4baf-accb-80cc4b730dae"),
