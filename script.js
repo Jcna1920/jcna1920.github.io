@@ -171,10 +171,7 @@ const CHARACTERS = [
     sum: "患有病態嫉妒的黑手黨首領。",
     intro: "在外界眼中，他是冷血無情、獨裁且極具威嚴的惡魔。但在你面前，他只是一個被恐懼與佔有慾驅使的偏執狂。\n開場：他剛結束地下賭場的談判，回到防彈莊園。保鏢立刻回報——你今天出門時，和一名陌生男人說了幾句話。他的「奧賽羅症候群」瞬間爆發，理智徹底歸零……\n#BG #黑手黨 #總裁 #體型差 #佔有慾 #強制愛" },
   // ── 深海戰艦
-  { name: "深海戰艦：利維坦號", role: "多人：十名重刑犯", work: "shenhai", avatar: A+"leviathan.jpg", group: true,
-    links: [L("Whif", "https://whif.io/characters/af0b5f2c-cfaa-40b9-b196-3ed63ccb742b", { label: "先行" }), L("HeartBeat", "https://heartbeat-app.net/characters/16b6396b-ff9d-4860-b2a8-da93a858479f")],
-    sum: "你是最高看守長，掌控深海戰艦上的十名重刑犯。", intro: "" },
-  { name: "亞歷斯塔", code: "艦長", role: "深海戰艦：利維坦號・艦長", work: "shenhai", avatar: A+"alista.jpg",
+  { name: "亞歷斯塔", story: "深海戰艦：利維坦號", code: "艦長", role: "深海戰艦：利維坦號・艦長", work: "shenhai", avatar: A+"alista.jpg",
     links: [L("WHIF", "https://www.whif.io/characters/52765a00-2e81-4633-8c89-8551b23d81ae")],
     sum: "深海戰艦的艦長，以軍階與高壓支配一切——多一個欺負你的不好嗎? :)", intro: "#現代 #軍階壓制 #高壓支配 #佔有慾 #心機攻" },
   // ── 成為惡人的合法配偶
@@ -470,7 +467,7 @@ const WORKS = [
   { id: "baihu", title: "白虎部隊：404", cover: "assets/works/whitetiger404.webp", coverPos: "center", tags: "", hook: "", world: "" },
   { id: "iloveu", title: "I💗U", cover: "assets/works/iloveu.webp", coverPos: "center", tags: "BG・病態依戀",
     hook: "病態的愛，也是唯一的救贖。", world: "" },
-  { id: "shenhai", title: "深海戰艦", cover: A+"leviathan.jpg", tags: "", hook: "", world: "",
+  { id: "shenhai", title: "深海戰艦：利維坦號", cover: A+"leviathan.jpg", tags: "", hook: "", world: "",
     /* 利維坦號十名重刑犯（作者提供文字，原文照錄） */
     roster: { eyebrow: "Inmates", title: "十名重刑犯", items: [
       { no: "01", en: "Ezekiel", zh: "以西結", role: "暴亂首腦/01號重犯", height: "192cm", look: "蒼白八塊肌，銀白長髮，左眼死白右眼冰藍。" },
@@ -484,7 +481,7 @@ const WORKS = [
       { no: "09", en: "Anders", zh: "安德斯", role: "鍋爐房苦力/09號重犯", height: "194cm", look: "健美冠軍肌肉，烤紅粗糙膚色，金髮寸頭。" },
       { no: "10", en: "Jin", zh: "迅", role: "壓艙水鬼/10號重犯", height: "181cm", look: "游泳流線型體格，淺古銅肌，緊身潛水褲。" },
     ] },
-    /* 利維坦號（多人）的全部平台連結，網址同角色卡 */
+    /* 利維坦號（多人）的全部平台連結 */
     links: [L("Whif", "https://whif.io/characters/af0b5f2c-cfaa-40b9-b196-3ed63ccb742b", { label: "多人模擬・先行" }), L("HeartBeat", "https://heartbeat-app.net/characters/16b6396b-ff9d-4860-b2a8-da93a858479f", { label: "多人模擬" }),
       L("Caveduck", "https://caveduck.io/zh-hant/share/characters/7c60bd3e-ac96-43ce-8690-3aa094a7991d", { label: "多人模擬" })] },
   { id: "evilspouse", title: "成為惡人的合法配偶", cover: "assets/covers/evilspouse.jpg", tags: "現代・黑道・犯罪",
