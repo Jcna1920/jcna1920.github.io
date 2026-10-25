@@ -55,6 +55,7 @@ const L = (platform, url, o = {}) => ({ platform: normPlatform(platform), url: u
 /* 《為卿停留》為 Frontia 多人模擬：作品與四位角色共用同一連結 */
 const HEARTBEAT_WEIQING = L("Heartbeat", "https://heartbeat-app.net/troupes/5f9fc919-78ae-45b5-bffd-1525353e283e", { label: "多人模擬" });
 const FRONTIA_WEIQING = L("Frontia", "https://link.frontia.ai/969brxy", { label: "多人模擬" });
+const ISEKAI_WEIQING = L("IsekaiZero", "https://www.isekaizero.ai/storylines/6adb31539bd9991a80bd5eef", { label: "多人模擬" });
 const CHARACTERS = [
   // ── 永晝會
   { name: "秦時雨", code: "帝蛇", role: "永晝會現任當家（家主）", age: "44（外觀約 35）", work: "yongzhou", avatar: A+"qinshiyu.jpg",
@@ -532,7 +533,7 @@ const WORKS = [
   { id: "gufeng", title: "古風", emoji: "🪽", cover: null, tags: "古風",
     hook: "煙雨江南的少將軍，與永夜桓國的金瞳暴君。", world: "" },
   { id: "weiqing", title: "為卿停留", emoji: "❄️", cover: "assets/works/weiqing.webp", coverPos: "center", tags: "古風",
-    hook: "他得了江山，卻沒得到心上人。", world: "", links: [FRONTIA_WEIQING, HEARTBEAT_WEIQING] },
+    hook: "他得了江山，卻沒得到心上人。", world: "", links: [FRONTIA_WEIQING, HEARTBEAT_WEIQING, ISEKAI_WEIQING] },
   { id: "starward", title: "星航失序", fullTitle: "《星航失序：思薩爾星圖》", cover: null, tags: "科幻・EABO・校園・聯名",
     hook: "同一張臉。兩個名字。",
     world: "以星際為舞台的科幻校園故事，採用 EABO 設定。宿弦 ╳ 宿蝕：同一張臉、兩個名字，以及誰都無法取代的存在位置。一場跨院聯合模擬，讓你成為兄弟關係裡從未預料過的變數。〔戀愛〕〔友情〕〔調查〕〔共犯〕\n弦蝕聯名角色（與月鈴、糰子、M9）。" },
@@ -744,7 +745,7 @@ function viewWork(w, from) {
       <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
       <p class="wktags">${esc(w.tags)}</p>
       ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
-      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(l.platform === "Caveduck" ? "Caveduck" : plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); return code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; }).join("")}</div>${w.links.some(l => l.platform === "Frontia" && l.url) ? frontiaNoteHTML() : ""}` : ""}
+      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(l.platform === "Caveduck" ? "Caveduck" : plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); const item = code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; return l.platform === "Frontia" ? item + frontiaNoteHTML() : item; }).join("")}</div>` : ""}
       <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
     </header>
     ${w.roster ? rosterHTML(w.roster) : ""}

@@ -833,3 +833,7 @@ html.search-open body{overscroll-behavior:none}
 .rlook{font-size:.82rem;line-height:1.7;margin-top:6px!important;color:#d8cde4}
 .rh{display:inline-block;margin-right:8px;padding:0 7px;border:1px solid var(--line);border-radius:999px;font-size:.7rem;color:var(--gold);font-family:ui-monospace,"SFMono-Regular",Menlo,monospace}
 @media (max-width:640px){.roster-list{grid-template-columns:1fr;gap:10px}.rcard{padding:12px 13px;gap:12px}.rno{width:34px;height:34px;font-size:.78rem}}
+/* Frontia 註冊說明緊接在 Frontia 按鈕下方（work-links 內獨佔一行）；手機上邀請碼一律置於按鈕下方 */
+.work-links .work-note{flex-basis:100%;margin:0 0 4px}
+@media (max-width:640px){.work-links .work-note{margin:0 auto 4px}}
+@media (max-width:420px){.work-links .lpair{flex-direction:column;gap:6px}}
