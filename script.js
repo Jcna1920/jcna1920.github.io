@@ -624,8 +624,11 @@ document.addEventListener("click", async e => {
 });
 
 /* ---------- character card ---------- */
+/* 浮水印：純 CSS/DOM 疊層，不改原圖；要移除只需刪 wmHTML 呼叫或 .wm 樣式 */
+const WATERMARK = "J_CNa／雨宮";
+const wmHTML = (big) => `<span class="wm${big ? " wm-big" : ""} notranslate" translate="no" aria-hidden="true">${big ? `<span class="wm-tile"></span>` : ""}<span class="wm-txt">${WATERMARK}</span></span>`;
 function avatarHTML(c) {
-  if (c.avatar) return `<img class="avatar" src="${esc(c.avatar)}" alt="${esc(c.name)} 頭像">`;
+  if (c.avatar) return `<span class="avatar-wrap"><img class="avatar" src="${esc(c.avatar)}" alt="${esc(c.name)} 頭像">${wmHTML(false)}</span>`;
   return `<div class="avatar ph" aria-hidden="true">${esc([...c.name][0])}</div>`;
 }
 const plabel = p => PLAT_LABEL[p] || p;
@@ -673,7 +676,7 @@ function coordOf(w) {
   return `RA ${ra} · DEC ${d >= 0 ? "+" : "−"}${String(Math.abs(d)).padStart(2, "0")}°`;
 }
 function coverHTML(w) {
-  if (w.cover) return `<img src="${esc(w.cover)}" alt=""${w.coverPos ? ` style="object-position:${esc(w.coverPos)}"` : ""}><span class="reticle" aria-hidden="true"></span>`;
+  if (w.cover) return `<img src="${esc(w.cover)}" alt=""${w.coverPos ? ` style="object-position:${esc(w.coverPos)}"` : ""}><span class="reticle" aria-hidden="true"></span>${wmHTML(true)}`;
   const h = hashOf(w.id), hue = 255 + (h % 50), tilt = (h % 40) - 20, size = 34 + (h % 14);
   return `<div class="cover-planet" style="--hue:${hue};--tilt:${tilt}deg;--size:${size}%" aria-hidden="true">
     <span class="planet"></span><span class="orbit"><span class="moon"></span></span>
@@ -893,7 +896,7 @@ $("#worldIndex").innerHTML = worksGridHTML();
   const multi = items.length > 1;
   const slide = (c, i) => { const w = workOf(c);
     return `<a class="nw-slide${i ? "" : " on"}" href="#work/${w.id}?from=world&c=${encodeURIComponent(c.name)}" data-work="${w.id}" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${items.length}"${i ? ' aria-hidden="true" tabindex="-1"' : ""}>
-      <div class="nw-img">${c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async">` : `<span class="nw-ph" aria-hidden="true">${esc([...c.name][0])}</span>`}</div>
+      <div class="nw-img">${c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async">${wmHTML(false)}` : `<span class="nw-ph" aria-hidden="true">${esc([...c.name][0])}</span>`}</div>
       <div class="nw-body">${c.story ? `<div class="cstory nw-story notranslate" translate="no">「${esc(c.story)}」</div>` : ""}
         <h3 class="nw-name notranslate" translate="no">${esc(c.name)}</h3>
         <p class="nw-work notranslate" translate="no">${esc(workTitle(w))}</p>

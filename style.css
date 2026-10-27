@@ -837,3 +837,17 @@ html.search-open body{overscroll-behavior:none}
 .work-links .work-note{flex-basis:100%;margin:0 0 4px}
 @media (max-width:640px){.work-links .work-note{margin:0 auto 4px}}
 @media (max-width:420px){.work-links .lpair{flex-direction:column;gap:6px}}
+/* ---------- 浮水印（J_CNa／雨宮）：疊在頭像與封面上，不改原圖、不擋點擊 ---------- */
+.avatar-wrap{position:relative;flex:none;display:inline-block;line-height:0;border-radius:50%}
+.nw-img{position:relative}
+.wm{position:absolute;inset:0;z-index:3;pointer-events:none;user-select:none;overflow:hidden;border-radius:inherit;line-height:1}
+.wm-txt{position:absolute;right:8px;bottom:7px;font-family:var(--serif-tc,serif);font-size:11px;letter-spacing:.08em;white-space:nowrap;
+  color:rgba(246,234,208,.34);text-shadow:0 0 1px rgba(0,0,0,.7),0 0 4px rgba(0,0,0,.6),0 1px 3px rgba(0,0,0,.5)}
+/* 圓形頭像：置於底部中央 */
+.avatar-wrap .wm-txt,.nw-img .wm-txt{right:auto;left:50%;transform:translateX(-50%);bottom:10%;font-size:8px;letter-spacing:0;color:rgba(246,234,208,.35)}
+.nw-img .wm-txt{font-size:10px}
+/* 大封面：極淡的斜向重複 */
+.wm-tile{position:absolute;inset:-50%;transform:rotate(-24deg);opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='110'%3E%3Ctext x='10' y='60' font-family='serif' font-size='15' letter-spacing='2' fill='%23f6ead0'%3EJ_CNa%EF%BC%8F%E9%9B%A8%E5%AE%AE%3C/text%3E%3C/svg%3E");background-size:220px 110px}
+.work-hero-cover .wm-txt{right:50%;transform:translateX(50%);bottom:9%}
+@media (max-width:420px){.wm-txt{font-size:10px;right:6px;bottom:6px}}
