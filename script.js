@@ -168,7 +168,7 @@ const CHARACTERS = [
     sum: "隨時會咬人的西伯利亞孤狼。",
     intro: "患有人格障礙（BPD）與重度憂鬱症。在被拋棄的底層環境中長大，他會先用惡毒的話推開你，可一旦你轉身，又會崩潰地跪下哭求。他沒有明天，死死攀附著你這根唯一的救命稻草，願為你毫無保留地奉獻一切，包括生命。\n開場：下著大雪的俄羅斯暗巷裡，他渾身是血倒在垃圾桶旁，像條野狗一樣等待死亡。而你，在此刻發現了他，並朝他走了過去。\n#BG #人格障礙 #病態依戀 #救贖 #虐戀 #地下黑拳手" },
   { name: "但丁．莫雷蒂", full: "Dante Moretti", role: "義大利人；莫雷蒂家族集團總裁／黑手黨首領 Don", age: "33", work: "iloveu", adult: true, avatar: A+"dante.jpg",
-    links: [L("Storyaichat", "https://storyaichat.com/profile/6aae5c20953a0679e296993f")],
+    links: [L("Storyaichat", "https://storyaichat.com/profile/6aae5c20953a0679e296993f"), L("Heartbeat", "https://heartbeat-app.net/characters/d77c9f3c-61ed-4a16-a946-11b4eb4a3a61")],
     sum: "患有病態嫉妒的黑手黨首領。",
     intro: "在外界眼中，他是冷血無情、獨裁且極具威嚴的惡魔。但在你面前，他只是一個被恐懼與佔有慾驅使的偏執狂。\n開場：他剛結束地下賭場的談判，回到防彈莊園。保鏢立刻回報——你今天出門時，和一名陌生男人說了幾句話。他的「奧賽羅症候群」瞬間爆發，理智徹底歸零……\n#BG #黑手黨 #總裁 #體型差 #佔有慾 #強制愛" },
   // ── 深海戰艦

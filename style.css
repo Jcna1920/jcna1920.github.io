@@ -851,3 +851,8 @@ html.search-open body{overscroll-behavior:none}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='110'%3E%3Ctext x='10' y='60' font-family='serif' font-size='15' letter-spacing='2' fill='%23f6ead0'%3EJ_CNa%EF%BC%8F%E9%9B%A8%E5%AE%AE%3C/text%3E%3C/svg%3E");background-size:220px 110px}
 .work-hero-cover .wm-txt{right:50%;transform:translateX(50%);bottom:9%}
 @media (max-width:420px){.wm-txt{font-size:10px;right:6px;bottom:6px}}
+/* 頭像浮水印加強：桌機 9px/0.42，手機 10px/0.5 */
+.avatar-wrap .wm-txt,.nw-img .wm-txt{font-size:9px;color:rgba(246,234,208,.42)}
+.nw-img .wm-txt{font-size:11px}
+.avatar-wrap .wm-txt{bottom:20%;letter-spacing:-.01em}
+@media (max-width:640px){.avatar-wrap .wm-txt,.nw-img .wm-txt{font-size:10px;color:rgba(246,234,208,.5);bottom:30%;letter-spacing:-.02em;text-shadow:0 0 1px rgba(0,0,0,.8),0 0 4px rgba(0,0,0,.65)}}
