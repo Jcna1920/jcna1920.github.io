@@ -203,6 +203,131 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px}
 .locscene .loclabel{position:absolute;left:8px;top:8px;font-family:var(--f-ui);font-size:12px;letter-spacing:.12em;padding:2px 8px;background:rgba(12,14,22,.72);border:1px solid var(--gilt-dim);border-radius:3px;color:var(--vellum)}
 .card .cast.scn{background-size:cover;background-position:center 75%;image-rendering:pixelated}
 </style>
+<style id="world-ui">
+/* 世界觀 UI：聖都艾德拉的手抄本・鍍金聖物匣・彩繪玻璃。只覆寫外觀，不動結構與邏輯。 */
+:root{
+  --parch:#efe2c2; --parch-2:#e4d2a8; --parch-3:#d6bf8c; --ink:#2b1d10; --ink-2:#4e3a22; --ink-3:#6e5636;
+  --gold-hi:#f6dc8e; --gold:#cfa956; --gold-lo:#8d6a2a; --wax:#7c1d22; --wax-hi:#a8343a;
+  --glass-b:#2f4f9a; --glass-r:#8f2430; --glass-g:#3f7a52;
+  --frame:url(ui/corner-tl.svg) top left/24px no-repeat,url(ui/corner-tr.svg) top right/24px no-repeat,url(ui/corner-bl.svg) bottom left/24px no-repeat,url(ui/corner-br.svg) bottom right/24px no-repeat;
+}
+/* 白日：大教堂的冷光與彩窗投影 */
+body{background:
+  radial-gradient(520px 340px at 12% -6%,rgba(63,94,168,.20),transparent 70%),
+  radial-gradient(460px 300px at 58% -10%,rgba(207,169,86,.16),transparent 70%),
+  radial-gradient(520px 340px at 96% -4%,rgba(143,36,48,.18),transparent 70%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 2px,transparent 2px 64px),
+  #0d0f19;background-attachment:fixed}
+/* 夜晚：燭光 */
+body:has(.nightrow){background:
+  radial-gradient(700px 520px at 70% 30%,rgba(255,170,70,.16),transparent 65%),
+  radial-gradient(380px 300px at 72% 34%,rgba(255,206,120,.10),transparent 70%),
+  #0b0806;background-attachment:fixed}
+
+/* 鍊條分隔線 */
+.head{border-bottom:0;padding-bottom:20px;background:url(ui/chain.svg) left bottom/32px 14px repeat-x}
+.tabs{border-bottom:0;padding-bottom:6px;background:url(ui/chain.svg) left bottom/24px 10px repeat-x}
+.tabs button{font-family:var(--f-display);font-size:14px;letter-spacing:.12em}
+.tabs button[aria-selected="true"]{color:var(--gold-hi);border-color:transparent;text-shadow:0 0 8px rgba(246,220,142,.45)}
+.day h1{background:linear-gradient(180deg,#fff4cf 10%,var(--gold) 60%,var(--gold-lo));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 0 #000)}
+.kicker{font-family:var(--f-display);color:var(--gold);letter-spacing:.3em}
+.kicker::before{content:"";display:inline-block;width:14px;height:10px;margin-right:8px;vertical-align:-1px;background:url(ui/fleur.svg) center/contain no-repeat}
+
+/* 聖像龕：哥德拱頂肖像框 */
+.portrait{border:3px solid var(--gold-lo);outline:1px solid var(--gold);outline-offset:-7px;box-shadow:0 0 0 1px #000,0 0 0 4px #2a1a08,0 0 28px rgba(207,169,86,.18);border-radius:150px 150px 8px 8px}
+@media (max-width:880px){.portrait{border-radius:90px 90px 8px 8px}}
+.nameplate{background:linear-gradient(180deg,#2a1d0e,#180f07);border:1px solid var(--gold-lo);border-radius:3px;padding:6px 12px;box-shadow:inset 0 1px 0 rgba(246,220,142,.25)}
+.nameplate h2{color:var(--gold-hi)}
+.aura{border-left:0;padding:8px 12px 8px 30px;background:url(ui/fleur.svg) 8px 50%/14px no-repeat,rgba(207,169,86,.06);border-radius:3px}
+
+/* 鍍金量表 */
+.meter .bar{height:9px;border-radius:0;background:linear-gradient(#0a0805,#1c140a);border:1px solid var(--gold-lo);box-shadow:0 0 0 1px #000,inset 0 1px 2px #000;margin-top:5px}
+.meter .bar span{background:linear-gradient(180deg,var(--gold-hi),var(--gold) 45%,var(--gold-lo));box-shadow:inset -1px 0 0 #fff3}
+.meter .bar span,.spec .track span{background-image:linear-gradient(180deg,var(--gold-hi),var(--gold) 45%,var(--gold-lo)),repeating-linear-gradient(90deg,transparent 0 9px,rgba(0,0,0,.35) 9px 10px);background-blend-mode:multiply}
+.meter.bad .bar span{background:linear-gradient(180deg,#e0857a,var(--wax-hi) 45%,var(--wax))}
+.meter .row{font-family:var(--f-display)}
+.ap i{width:12px;height:12px;border-color:var(--gold-lo);background:#1a1208}
+.ap i.on{background:radial-gradient(circle at 35% 35%,var(--gold-hi),var(--gold) 50%,var(--gold-lo));box-shadow:0 0 10px rgba(246,220,142,.5)}
+
+/* 羊皮紙手抄本面板（局部重定義色票，文字對比保持高） */
+.card,.detail,.origin,.echo,.consent,.fact{
+  --vellum:var(--ink);--vellum-dim:var(--ink-2);--muted:var(--ink-3);--gilt:#7a5410;--gilt-dim:#8a6526;--line:#b89c66;--nave-2:var(--parch-2);--panel:var(--parch);--gilt-glow:rgba(122,84,16,.12);
+  color:var(--ink);
+  background:var(--frame),radial-gradient(120% 90% at 50% 40%,var(--parch) 55%,var(--parch-3)),var(--parch);
+  border:2px solid #6e4c1c;box-shadow:0 0 0 1px #000,0 0 0 3px var(--gold-lo),0 6px 18px rgba(0,0,0,.45),inset 0 0 24px rgba(120,80,30,.25);border-radius:4px}
+.card{position:relative;padding-top:14px}
+.card:hover{border-color:#6e4c1c;box-shadow:0 0 0 1px #000,0 0 0 3px var(--gold),0 0 18px rgba(246,220,142,.35),inset 0 0 24px rgba(120,80,30,.25)}
+.card.done:hover{box-shadow:0 0 0 1px #000,0 0 0 3px var(--gold-lo),inset 0 0 24px rgba(120,80,30,.25)}
+.card .cast{border:2px solid #3a2810;border-radius:2px;margin:-8px -8px 6px;box-shadow:inset 0 0 0 1px var(--gold)}
+.card h3,.detail h3{color:#3a1408;font-weight:900}
+.detail h3::first-letter,.card h3::first-letter{color:var(--wax);font-size:1.25em}
+.detail{padding:22px}
+.chip{border-color:#a2834c;color:var(--ink-2);background:rgba(255,255,255,.25)}
+.chip.urgent{border-color:var(--wax);color:var(--wax);background:rgba(124,29,34,.08)}
+.chip.worse{background:var(--wax);border-color:#4a0d10;color:#fbe8d0}
+.chip.major{background:linear-gradient(var(--gold-hi),var(--gold));border-color:var(--gold-lo);color:#2a1a08}
+.chip.ok{border-color:var(--glass-g);color:#24553a}
+.chip.mir{border-color:var(--gilt-dim);color:#6d4a0c}
+.hidden-layer{border-left-color:var(--wax);color:var(--ink);background:linear-gradient(90deg,rgba(124,29,34,.10),transparent)}
+.opt{background:linear-gradient(180deg,#f3e8cc,#e3cf9f);border:1px solid #9c7d45;box-shadow:inset 0 1px 0 #fff8}
+.opt:hover:not(:disabled){border-color:var(--wax);box-shadow:0 0 0 1px var(--wax),inset 0 1px 0 #fff8}
+.opt .cost{color:var(--wax);font-weight:500}
+.result{border-top:0;padding-top:16px;background:url(ui/chain.svg) left top/24px 10px repeat-x}
+.consent{background:var(--frame),linear-gradient(var(--parch),var(--parch-2))}
+
+/* 派系紋章（依事件 tag） */
+.card[data-tag]::after{position:absolute;top:-6px;right:12px;width:26px;height:34px;display:grid;place-items:center;padding-bottom:6px;font-size:14px;line-height:1;color:#fff3d6;background:var(--fc,#5a4a2a);clip-path:polygon(0 0,100% 0,100% 78%,50% 100%,0 78%);box-shadow:0 0 0 1px #000;text-shadow:0 1px 0 #000;z-index:2;outline:1px solid var(--gold);content:var(--fe,"✦")}
+.card[data-tag="教會"]{--fc:#e9e0c6;--fe:"✝"}.card[data-tag="教會"]::after{color:#7a5410}
+.card[data-tag="軍事"]{--fc:#4b5361;--fe:"⚔"}
+.card[data-tag="制度"]{--fc:#2f4f9a;--fe:"♛"}
+.card[data-tag="外交"]{--fc:#3f7a52;--fe:"✉"}
+.card[data-tag="形象"]{--fc:#8a6a2c;--fe:"☀"}
+.card[data-tag="民生"]{--fc:#8a5a2b;--fe:"❦"}
+.card[data-tag="神秘"]{--fc:#4a2a6a;--fe:"✧"}
+.card[data-tag="私人"]{--fc:#7c1d22;--fe:"❤"}
+.card[data-tag="重大"]{--fc:#b8892e;--fe:"✹"}
+
+/* 封蠟與聖物匣按鈕 */
+.btn{border-radius:2px;font-family:var(--f-display);letter-spacing:.14em;border:1px solid var(--gold);color:var(--gold-hi);background:linear-gradient(180deg,#2a1d0e,#160e06);box-shadow:0 0 0 1px #000,inset 0 1px 0 rgba(246,220,142,.3)}
+.btn:hover:not(:disabled){background:linear-gradient(180deg,#3a2812,#1e1408);box-shadow:0 0 0 1px #000,0 0 12px rgba(246,220,142,.35)}
+.btn.solid{color:#fbe8c8;font-weight:700;background:radial-gradient(circle at 30% 25%,var(--wax-hi),var(--wax) 55%,#4a0d10);border:1px solid #3a0a0c;box-shadow:0 0 0 2px var(--gold-lo),0 0 0 3px #000,inset 0 1px 0 rgba(255,200,180,.35),0 3px 8px rgba(0,0,0,.5);text-shadow:0 1px 0 #2a0406}
+.btn.solid::before{content:"✠ ";color:var(--gold-hi)}
+.btn.ghost{color:var(--vellum-dim);border-color:var(--gold-lo)}
+.card .btn,.detail .btn,.consent .btn{color:var(--gold-hi)}
+.detail .btn.ghost{color:#e8dcc0}
+
+/* 夜：燭光與私語 */
+.scene{border:1px solid #6b4a1c;border-radius:4px;background:var(--frame),radial-gradient(90% 120% at 20% 0%,rgba(255,176,80,.16),transparent 60%),linear-gradient(180deg,#1d140c,#0f0a06);box-shadow:0 0 0 1px #000,0 0 0 3px #3a2810,0 0 40px rgba(255,170,70,.10),inset 0 0 40px rgba(0,0,0,.6)}
+.scene .line{color:#f6e7c8;text-shadow:0 0 12px rgba(255,190,100,.25)}
+.nightrow .px{background:radial-gradient(circle at 50% 70%,rgba(255,190,100,.35),transparent 65%),#24180d;border:2px solid var(--gold-lo);box-shadow:0 0 0 1px #000,0 0 20px rgba(255,170,70,.3);border-radius:60px 60px 6px 6px}
+.act{background:linear-gradient(180deg,#1f150b,#140d06);border:1px solid #5a3e18;border-radius:3px}
+.act:hover{border-color:var(--gold);box-shadow:0 0 12px rgba(255,190,100,.25)}
+.act b{color:#f2dfb6}.act span{color:#bfa77c}
+.act.special{border-color:var(--gold);background:linear-gradient(180deg,#2c1d0c,#170f06)}
+
+/* 場景畫框 */
+.locscene{border:3px solid var(--gold-lo);border-radius:3px;box-shadow:0 0 0 1px #000,0 0 0 4px #2a1a08,0 0 0 5px var(--gold-lo),0 8px 20px rgba(0,0,0,.5)}
+.locscene .loclabel{font-family:var(--f-display);color:var(--gold-hi);background:linear-gradient(#2a1d0e,#140c05);border-color:var(--gold);border-radius:2px;letter-spacing:.2em}
+.castbig figure,.lineup .px,.roster button{background:linear-gradient(180deg,#3a3f52,#2a2c3a)}
+.castbig figure{border:1px solid var(--gold-lo);border-radius:3px}
+.castbig figcaption{font-family:var(--f-display)}
+.roster{background:var(--gold-lo);border-color:var(--gold-lo)}
+.roster button:nth-child(2n){background:linear-gradient(180deg,#343848,#25273a)}
+
+/* 標題與結局 */
+.title-screen h1,.ending h2{background:linear-gradient(180deg,#fff4cf 10%,var(--gold) 55%,var(--gold-lo));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 18px rgba(207,169,86,.25))}
+.title-screen .sub{color:var(--gold)}
+.title-screen .sub::before,.title-screen .sub::after{content:"";display:inline-block;width:28px;height:20px;vertical-align:middle;background:url(ui/fleur.svg) center/contain no-repeat;margin:0 10px}
+.origin{padding:12px 14px}
+.origin[aria-pressed="true"]{box-shadow:0 0 0 1px #000,0 0 0 3px var(--gold),0 0 16px rgba(246,220,142,.4),inset 0 0 24px rgba(120,80,30,.25);background:var(--frame),linear-gradient(#f7ecd0,#e9d6a8)}
+.lineup{background:var(--gold-lo);box-shadow:0 0 0 1px #000}
+.quote{border-left:0;padding:10px 16px 10px 40px;background:url(ui/fleur.svg) 10px 16px/18px no-repeat,linear-gradient(90deg,rgba(207,169,86,.10),transparent);color:#f6e7c8}
+.spec .track{height:10px;border-radius:0;background:#120c06;border:1px solid var(--gold-lo)}
+.spec .track span{background:linear-gradient(180deg,#b79a5e,#7a6234)}
+.fact{padding:14px 20px}.fact b{color:#7a1d22}
+.toast{background:linear-gradient(#2a1d0e,#140c05);border-color:var(--gold);color:var(--gold-hi);font-family:var(--f-display)}
+.journal .d,.obs b{color:var(--gold)}
+</style>
 
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -947,7 +1072,7 @@ function renderStage(){
 }
 function cardHTML(e,i){const d=EV[e.id];
  const chip=e.done?`<span class="chip ok">已處理</span>`:e.status==="重大"?`<span class="chip major">重大事件</span>`:e.status==="惡化"?`<span class="chip worse">惡化</span>`:e.status==="急件"?`<span class="chip urgent">急件</span>`:`<span class="chip">萌芽</span>`;
- return `<button class="card${e.done?" done":""}" ${e.done?"":`data-i="${i}"`}>
+ return `<button class="card${e.done?" done":""}" data-tag="${esc(d.tag)}" ${e.done?"":`data-i="${i}"`}>
   <div class="cast scn" style="background-image:url(${SCN.src(sceneLoc(e.id),sceneLoc(e.id)==="castle"?castleStage(S):0)})">${(WHO[e.id]||[]).slice(0,2).map(w=>`<img class="px" src="${PX.src(w)}" alt="${esc(CHARS[w].n)}">`).join("")}</div>
   <div class="chips">${chip}<span class="chip">${esc(d.tag)}</span></div>
   <h3>${esc(d.t)}</h3><span class="src">${esc(d.src)}</span>
