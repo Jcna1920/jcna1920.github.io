@@ -193,6 +193,15 @@ main{min-width:0;display:flex;flex-direction:column;gap:20px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 .fade{animation:fade .5s ease both}
 @keyframes fade{from{opacity:.0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.locscene{position:relative;width:100%;aspect-ratio:16/9;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#1b1626}
+.locscene .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.locscene .who{position:absolute;left:0;right:0;bottom:4%;display:flex;justify-content:center;gap:2%;pointer-events:none}
+.locscene .who .px{width:clamp(56px,16%,104px);height:auto;aspect-ratio:1;filter:drop-shadow(0 3px 0 rgba(20,16,30,.45))}
+.locscene .who{bottom:0;height:46%;gap:0;z-index:1}
+.locscene .who .px{height:100%;width:auto;max-width:34%;object-fit:contain;object-position:50% 100%;aspect-ratio:auto;margin:0 -2%;filter:drop-shadow(0 0 1px rgba(255,244,214,.9)) drop-shadow(0 0 4px rgba(255,236,190,.45)) drop-shadow(0 4px 3px rgba(10,8,20,.55))}
+.nightrow .px{object-fit:contain}
+.locscene .loclabel{position:absolute;left:8px;top:8px;font-family:var(--f-ui);font-size:12px;letter-spacing:.12em;padding:2px 8px;background:rgba(12,14,22,.72);border:1px solid var(--gilt-dim);border-radius:3px;color:var(--vellum)}
+.card .cast.scn{background-size:cover;background-position:center 75%;image-rendering:pixelated}
 </style>
 
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -669,6 +678,19 @@ const PX=(()=>{
  return{src(id,variant){const k=id+(variant||"");if(!cache[k]){const c=CHARS[id];if(!c)return"";cache[k]=draw(Object.assign({},c.s,variant==="tired"?{tired:1}:{}))}return cache[k]}};
 })();
 
+/* ---------- location scenes: 2D pixel-art backdrops for daytime (平日) locations, drawn in-code ---------- */
+const LOC={E01:"gate",E02:"castle",E03:"lowtown",E04:"cathedral",E05:"barracks",E06:"farm",E07:"cathedral",E08:"castle",E09:"market",E10:"market",E11:"lowtown",E12:"market",E13:"castle",E14:"market",E15:"plaza",E16:"cathedral",E17:"cathedral",E18:"market",M1:"plaza",M2:"barracks",M3:"lowtown",M4:"cathedral",M5:"cathedral"};
+const LOC_N={castle:"王城",cathedral:"聖堂區",gate:"北門・聖療院",market:"中央市街",lowtown:"下城",barracks:"西側軍營",farm:"城外農區",plaza:"祈願廣場"};
+const CASTLE_N=["落寞","復甦","重建","富興"];
+/* 王城 stage follows the day count relative to story length: <25% 落寞, <50% 復甦, <80% 重建, else 富興 (endless = 富興) */
+function castleStage(s){if(!s)return 0;if(s.endless)return 3;const p=s.day/Math.max(1,s.len);return p<.25?0:p<.5?1:p<.8?2:3}
+/* backgrounds: 16-bit style pixel-art paintings in messiah/bg/ (512×288, 96-colour palette), scaled with crisp pixels */
+const SCN={src(loc,stg){return `bg/${loc==="castle"?"castle"+(stg||0):loc}.webp`}};
+function sceneLoc(id){return LOC[id]||"castle"}
+function sceneHTML(loc,who,label){
+ const stg=loc==="castle"?castleStage(S):0;
+ const lab=label||(loc==="castle"?`${LOC_N.castle}・${CASTLE_N[stg]}`:LOC_N[loc]);
+ return `<div class="locscene fade" data-loc="${loc}" data-stage="${stg}"><img class="bg px" src="${SCN.src(loc,stg)}" decoding="async" alt="${esc(lab)}的像素場景"><div class="who">${(who||[]).map(w=>`<img class="px" src="${PX.src(w)}" alt="${esc(CHARS[w].n)}" title="${esc(CHARS[w].n)}">`).join("")}</div><span class="loclabel">${esc(lab)}</span></div>`}
 const SK={pale:"#f4e6df",light:"#f1d3bd",warm:"#ecc3a2",tan:"#d4a27a",olive:"#c49a72",brown:"#9a6a48",deep:"#74492f"};
 const CHARS={
  michael:{n:"彌迦爾・阿斯塔",r:"彌賽亞",s:{skin:"#f6ece8",hair:"#f2efe8",back:"vlong",top:"fringe",side:"long",eyes:"#efb12e",o1:"#f1eee8",o2:"#d6d0c6",robe:1,wings:"#2e2850",halo:"#e3b74e",horns:"#54467a",chains:"#d8ae55",blush:false}},
@@ -703,6 +725,8 @@ const CHARS={
  weaver:{n:"老織工",r:"市街工坊",s:{skin:"#e2bc98",hair:"#c8c4bc",back:"none",top:"fringe",side:"short",eyes:"#5a4a3a",o1:"#8a5a5a",dress:1,skirt:"#6a4848",scarf:"#b89a6a",smile:1}},
  guard:{n:"北門守軍隊長",r:"城門守軍",s:{skin:SK.tan,hair:"#3a2a1e",back:"none",top:"messy",side:"short",eyes:"#3a2a1e",o1:"#4a5060",plate:"#8a8e96",belt:"#6a4a2a",stern:1,blush:false}}
 };
+/* v2 角色立繪：sprites/{id}.webp（高解析像素圖），缺圖時回退至 PX 畫布 */
+const SPR=new Set(Object.keys(CHARS));{const _px=PX.src;PX.src=(id,v)=>SPR.has(id)?`sprites/${id}${id==="michael"&&v==="tired"?"_tired":""}.webp`:_px(id,v);}
 const WHO={E01:["evelyn","guard"],E02:["oswin","leonis","oderic"],E03:["victor","roderick"],E04:["fiona","serena"],E05:["karl","hector"],E06:["chief","claude"],E07:["margaret"],E08:["leonis","lisia"],E09:["olan"],E10:["cobbler"],E11:["prophet","ethel"],E12:["weaver"],E13:["veronica"],E14:["mira"],E15:["oldman"],E16:["evelyn","sevian"],E17:["fiona"],E18:["ivy"],M1:["evelyn","karl"],M2:["leonis","hector"],M3:["olan","cassian","derek"],M4:["margaret","sevian"],M5:["noah","evelyn"]};
 
 /* ---------- state ---------- */
@@ -900,7 +924,7 @@ function renderStage(){
  if(S.phase==="morning"){
   if(S.open!=null){st.innerHTML=detailHTML(S.open);bindDetail();return}
   const allDone=S.events.every(e=>e.done);
-  st.innerHTML=`<p class="kicker">清晨簡報</p>
+  st.innerHTML=`${sceneHTML("castle",[...new Set(S.events.flatMap(e=>(WHO[e.id]||[]).slice(0,1)))].slice(0,3))}<p class="kicker">清晨簡報</p>
    <p class="lead">${S.day===1?"你被任命為聖證者的第一個早晨。三件事同時送到你桌上，行動力不夠把每件都做到最好。":"今天有三件事等著你。沒處理的事不會消失，它們會惡化，或被別人接手。"}</p>
    ${S.echoes.length?`<div class="echo"><p class="kicker" style="margin:0 0 2px">昨日的回聲</p>${S.echoes.map(t=>`<p>${esc(t)}</p>`).join("")}</div>`:""}
    <div class="cards">${S.events.map((e,i)=>cardHTML(e,i)).join("")}</div>
@@ -924,7 +948,7 @@ function renderStage(){
 function cardHTML(e,i){const d=EV[e.id];
  const chip=e.done?`<span class="chip ok">已處理</span>`:e.status==="重大"?`<span class="chip major">重大事件</span>`:e.status==="惡化"?`<span class="chip worse">惡化</span>`:e.status==="急件"?`<span class="chip urgent">急件</span>`:`<span class="chip">萌芽</span>`;
  return `<button class="card${e.done?" done":""}" ${e.done?"":`data-i="${i}"`}>
-  <div class="cast">${(WHO[e.id]||[]).slice(0,2).map(w=>`<img class="px" src="${PX.src(w)}" alt="${esc(CHARS[w].n)}">`).join("")}</div>
+  <div class="cast scn" style="background-image:url(${SCN.src(sceneLoc(e.id),sceneLoc(e.id)==="castle"?castleStage(S):0)})">${(WHO[e.id]||[]).slice(0,2).map(w=>`<img class="px" src="${PX.src(w)}" alt="${esc(CHARS[w].n)}">`).join("")}</div>
   <div class="chips">${chip}<span class="chip">${esc(d.tag)}</span></div>
   <h3>${esc(d.t)}</h3><span class="src">${esc(d.src)}</span>
   <p>${e.done?esc(e.res.split("\n")[0]):esc(d.d)}</p></button>`}
@@ -935,6 +959,7 @@ function detailHTML(i){const e=S.events[i],d=EV[e.id];
    <div class="row-actions"><button class="btn" id="m-ask">先問他願不願意</button><button class="btn ghost" id="m-order">替他決定</button><button class="btn ghost" id="m-cancel">再想想</button></div></div>`}
  return `<div class="detail fade">
   <div class="chips"><span class="chip">${esc(d.src)}</span><span class="chip">${esc(d.tag)}</span>${e.status==="惡化"?'<span class="chip worse">惡化</span>':""}${d.major?'<span class="chip major">重大事件</span>':""}</div>
+  ${sceneHTML(sceneLoc(e.id),(WHO[e.id]||[]))}
   <div class="castbig">${(WHO[e.id]||[]).map(w=>`<figure><img class="px" src="${PX.src(w)}" alt=""><figcaption>${esc(CHARS[w].n)}<span>${esc(CHARS[w].r)}</span></figcaption></figure>`).join("")}</div>
   <h3>${esc(d.t)}</h3><p class="desc">${esc(d.d)}</p>
   ${e.inv&&d.h?`<p class="hidden-layer">${esc(d.h)}</p>`:""}
