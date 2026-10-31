@@ -330,6 +330,68 @@ body:has(.nightrow){background:
 </style>
 
 <style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<style id="scenes2">
+/* ===== scenes2：夜晚聖堂深處、傍晚、結局、標題 ===== */
+.locscene .bg{image-rendering:pixelated}
+@keyframes fadeDark{to{opacity:0;filter:brightness(.2)}}
+.stage.leaving>*{animation:fadeDark .45s ease forwards}
+/* P1 夜晚：彌迦爾的房間 */
+body:has(.sanctum){background:radial-gradient(700px 520px at 70% 30%,rgba(255,170,70,.16),transparent 65%),#0b0806;background-attachment:fixed}
+.night-scene{padding:14px}
+.sanctum{aspect-ratio:16/9}
+.sanctum .mich{position:absolute;left:53%;bottom:3%;height:56%;width:auto;z-index:1;image-rendering:pixelated;filter:drop-shadow(0 0 2px rgba(255,214,150,.8)) drop-shadow(0 0 10px rgba(255,180,90,.35)) drop-shadow(0 4px 3px rgba(10,8,20,.6))}
+.sanctum[data-v="cold"] .mich{filter:drop-shadow(0 0 2px rgba(255,120,120,.7)) drop-shadow(0 0 10px rgba(200,40,60,.4)) drop-shadow(0 4px 3px rgba(10,8,20,.6))}
+.sanctum .candle{position:absolute;inset:0;pointer-events:none;background:radial-gradient(30% 40% at 31% 52%,rgba(255,190,90,.18),transparent 70%);mix-blend-mode:screen;animation:flick 3.2s ease-in-out infinite alternate;z-index:1}
+.sanctum[data-v="cold"] .candle{background:radial-gradient(30% 40% at 31% 52%,rgba(120,170,255,.14),transparent 70%)}
+.sanctum[data-v="tired"] .candle{animation-duration:.9s}
+@keyframes flick{0%{opacity:.55}40%{opacity:1}70%{opacity:.7}100%{opacity:.95}}
+.speech{position:relative;margin:-12% 3% 0;z-index:2;padding:12px 18px 12px;background:var(--frame),linear-gradient(180deg,rgba(239,226,194,.96),rgba(214,191,140,.96));border:2px solid var(--gold-lo);border-radius:3px;box-shadow:0 0 0 1px #000,0 6px 18px rgba(0,0,0,.55);color:var(--ink)}
+.speech .kicker{margin:0 0 2px;color:var(--wax);font-size:12px}
+.speech .line{color:var(--ink)!important;text-shadow:none!important;font-size:17px;line-height:1.75;max-width:none}
+.giltpanel{margin-top:14px;padding:16px;border:1px solid var(--gold-lo);border-radius:3px;background:var(--frame),radial-gradient(80% 140% at 50% 0%,rgba(255,196,110,.16),transparent 65%),linear-gradient(180deg,#22170c,#140d07);box-shadow:inset 0 1px 0 rgba(246,220,142,.25),0 0 22px rgba(255,170,70,.10);display:flex;flex-direction:column;gap:12px}
+.sanctum .loclabel{z-index:2}
+@media (max-width:700px){
+ .night-scene{padding:8px}
+ .speech{margin:10px 0 0}
+ .sanctum{overflow:hidden}
+ .sanctum-wrap{display:flex;flex-direction:column}
+ .sanctum .mich{height:62%}
+}
+/* P5 夜晚：側欄肖像燭光 */
+body:has(.sanctum) #pimg{filter:sepia(.35) saturate(1.15) brightness(.92) hue-rotate(-8deg);transition:filter .8s}
+body:has(.sanctum) .portrait{box-shadow:0 0 0 1px #000,0 0 0 4px #2a1a08,0 0 36px rgba(255,170,70,.30)}
+#pimg{transition:filter .8s}
+/* P2 傍晚 */
+.locscene.dusk .bg{filter:sepia(.45) saturate(1.3) hue-rotate(-18deg) brightness(.78) contrast(1.05)}
+.locscene.dusk::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(120,40,90,.35),rgba(255,140,60,.18) 55%,rgba(20,10,30,.35));mix-blend-mode:multiply;pointer-events:none}
+.locscene.dusk .who{z-index:2}
+.locscene.dusk .who .px{filter:brightness(.85) sepia(.2) drop-shadow(0 0 3px rgba(255,170,90,.6)) drop-shadow(0 4px 3px rgba(10,8,20,.55))}
+.changes li{display:inline-flex;align-items:center;gap:5px}
+.changes .up::before{content:"";width:12px;height:9px;background:url(ui/fleur.svg) center/contain no-repeat}
+.changes .down::before{content:"";width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--wax-hi),var(--wax) 60%,#4a0e12);box-shadow:0 0 0 1px #2a0608}
+/* P3 結局 */
+.ending .endart{margin:0 auto;position:relative;width:min(340px,80%);aspect-ratio:3/5;padding:14px;background:var(--frame),linear-gradient(180deg,#22170c,#120c06);border:3px solid var(--gold-lo);border-radius:170px 170px 6px 6px;box-shadow:0 0 0 1px #000,0 0 0 6px #2a1a08,0 0 0 7px var(--gold-lo),0 0 60px var(--tint,rgba(207,169,86,.4))}
+.ending .endart::before{content:"";position:absolute;left:10px;right:10px;bottom:6px;height:10px;background:url(ui/chain.svg) left center/24px 10px repeat-x}
+.ending .endart img{width:100%;height:100%;object-fit:cover;border-radius:160px 160px 3px 3px;border:1px solid var(--gold)}
+.ending[data-end="trueM"]{--tint:rgba(246,220,142,.55)}.ending[data-end="son"]{--tint:rgba(255,170,90,.55)}
+.ending[data-end="tyrant"]{--tint:rgba(80,120,230,.6)}.ending[data-end="blank"]{--tint:rgba(220,226,240,.45)}
+.ending[data-end="demon"]{--tint:rgba(200,30,50,.6)}.ending[data-end="sole"]{--tint:rgba(170,70,200,.55)}.ending[data-end="anti"]{--tint:rgba(60,150,100,.55)}
+.ending{position:relative}
+.ending::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(600px 420px at 65% 20%,var(--tint),transparent 70%);opacity:.35}
+@media (min-width:900px){.ending{display:grid;grid-template-columns:300px minmax(0,1fr);column-gap:28px;align-items:start}.ending .endart{grid-row:1/span 20;width:100%;position:sticky;top:16px}.ending>*:not(.endart){grid-column:2}}
+/* P4 標題 */
+.titlescn{margin:4px 0}
+.titlescn .bg{filter:brightness(.92)}
+.titlescn .lineup{position:absolute;left:0;right:0;bottom:2%;background:none!important;box-shadow:none!important;padding:0;width:auto;max-width:none;justify-content:center;gap:0;z-index:1}
+.titlescn .lineup .px{background:none!important;width:12%;height:auto;aspect-ratio:1;margin:0 -1%;filter:drop-shadow(0 0 1px rgba(255,244,214,.9)) drop-shadow(0 0 4px rgba(255,236,190,.4)) drop-shadow(0 4px 3px rgba(10,8,20,.55))}
+/* P5 側欄：手抄本頁 */
+#sidepane .obs,#sidepane .journal{padding:12px 12px 12px 14px;background:var(--frame),linear-gradient(180deg,rgba(239,226,194,.07),rgba(239,226,194,.03));border:1px solid rgba(207,169,86,.35);border-radius:3px}
+#sidepane .obs b::before,#sidepane .journal .d::before{content:"";display:inline-block;width:10px;height:8px;margin-right:5px;background:url(ui/fleur.svg) center/contain no-repeat}
+#sidepane .obs li{grid-template-columns:6em minmax(0,1fr)}
+#sidepane .obs b{white-space:nowrap}
+#sidepane .journal li{padding-bottom:8px;border-bottom:1px dashed rgba(207,169,86,.22)}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -1059,13 +1121,14 @@ function renderStage(){
  }
  if(S.phase==="evening"){
   const dl=diffList(S);
-  st.innerHTML=`<div class="scene fade"><p class="kicker">傍晚結算</p>
+  const dw=[...new Set(S.events.flatMap(e=>(WHO[e.id]||[]).slice(0,2)))].slice(0,4);
+  st.innerHTML=`<div class="scene fade">${sceneHTML("castle",dw,"王城・黃昏").replace('class="locscene','class="locscene dusk')}<p class="kicker">傍晚結算</p>
    ${S.events.map(e=>`<p style="margin:0;font-size:15px"><b>${esc(EV[e.id].t)}</b>　<span style="color:var(--muted)">${e.done?esc(e.choice):"擱置"}</span></p>`).join("")}
    ${S.evening.notes.length?`<div class="notices">${S.evening.notes.map(t=>`<p style="color:#e2a097">${esc(t)}</p>`).join("")}</div>`:""}
    <p class="note">祈願不會在夜裡停止。今天，王國這樣改變了：</p>
    <ul class="changes">${dl.length?dl.map(x=>`<li class="${x.good?"up":"down"}">${x.l} ${x.v>0?"+":""}${x.v}</li>`).join(""):"<li>一切如常</li>"}</ul>
    <div class="row-actions"><button class="btn solid" id="tonight">回到聖堂深處</button></div></div>`;
-  $("#tonight").onclick=()=>startNight(S);return;
+  $("#tonight").onclick=()=>{st.classList.add("leaving");setTimeout(()=>{st.classList.remove("leaving");startNight(S)},450)};return;
  }
  if(S.phase==="night"){st.innerHTML=nightHTML();bindNight();return}
  if(S.phase==="end"){st.innerHTML=endHTML();bindEnd();return}
@@ -1110,6 +1173,8 @@ function bindDetail(){const i=S.open;
  if(o)o.onclick=()=>{const p=S.pending;chooseOpt(S,p.ei,p.oi,"order");S.open=null;render()};
  if(c)c.onclick=()=>{S.pending=null;render()};
 }
+function sanctumVar(s){if(s.m.load>=65)return"tired";const k=vectors(s.m)[0].k;return k==="son"?"warm":(k==="tyrant"||k==="demon")?"cold":"base"}
+const SANCT_N={base:"燭光",tired:"散落的黑羽",warm:"有麵包香的夜",cold:"冷光與鎖鏈"};
 function nightHTML(){const n=S.night;
  const tag={milestone:"他變了",memory:"他記得",open:"夜晚"}[n.kind];
  let body;
@@ -1123,7 +1188,8 @@ function nightHTML(){const n=S.night;
   body=`<p class="line fade" style="color:var(--vellum)">${esc(n.reply)}</p>
    ${n.notices.length?`<div>${n.notices.map(t=>`<p class="notice-noticed" style="margin:2px 0">你注意到：${esc(t)}</p>`).join("")}</div>`:""}
    <div class="row-actions"><button class="btn solid" id="next">${S.day>=S.len&&!S.endless?"看看他成為了什麼":"迎接第 "+(S.day+1)+" 日"}</button></div>`}
- return `<div class="scene fade"><p class="kicker">${tag}</p><div class="nightrow"><img class="px" src="${PX.src("michael",S.m.load>=65?"tired":"")}" alt="彌迦爾"><p class="line">${esc(n.line)}</p></div>${body}</div>`}
+ const v=sanctumVar(S);
+ return `<div class="scene night-scene fade"><div class="locscene sanctum" data-v="${v}"><img class="bg px" src="bg/${v==="base"?"sanctum":"sanctum_"+v}.webp" decoding="async" alt="聖堂深處，彌迦爾的房間"><div class="candle"></div><img class="mich px" src="${PX.src("michael",S.m.load>=65?"tired":"")}" alt="彌迦爾"><span class="loclabel">聖堂深處・${SANCT_N[v]}</span></div><div class="speech"><p class="kicker">${tag}</p><p class="line">${esc(n.line)}</p></div><div class="giltpanel">${body}</div></div>`}
 function bindNight(){
  document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>doAct(S,b.dataset.a));
  document.querySelectorAll("[data-sub]").forEach(b=>b.onclick=()=>doAct(S,S.night.sub,+b.dataset.sub));
@@ -1133,7 +1199,7 @@ function endHTML(){
  const vs=vectors(S.m),max=vs[0].s,top=VEC[vs[0].k],sec=VEC[vs[1].k];
  const close=vs[0].s-vs[1].s<6;
  const quote=REINT_END[vs[0].k];
- return `<div class="ending fade">
+ return `<div class="ending fade" data-end="${vs[0].k}"><figure class="endart"><img src="endings/${vs[0].k}.webp" alt="${esc(top.n)}的彌迦爾"></figure>
   <p class="kicker">${S.endless?"他現在的樣子":"第 "+S.len+" 日之後"}・這段關係把他變成了</p>
   <h2>${close?`${top.n}，也是${sec.n}`:top.n}</h2>
   <p class="quote">${esc(quote)}</p>
@@ -1172,7 +1238,7 @@ function titleHTML(){
   <span class="sub">MESSIAH ・ THE ONE WHO BEARS ALL WISHES</span>
   <h1>彌賽亞<br>萬願者</h1>
   <p class="pitch">阿斯特里亞王國，聖都艾德拉。這裡有一位從不拒絕祈求的救世主。你被任命為他的「聖證者」：白天，你在王室、教會、軍方、商會和灰燼會之間處理王國的事務；夜晚，你是唯一被允許留在他身邊的人。</p>
-  <div class="lineup">${["michael","evelyn","lisia","sevian","margaret","karl","mira","cassian"].map(i=>`<img class="px" src="${PX.src(i)}" alt="${esc(CHARS[i].n)}" title="${esc(CHARS[i].n)}">`).join("")}</div>
+  <div class="locscene titlescn"><img class="bg px" src="bg/title.webp" alt="聖都艾德拉的黃昏全景"><div class="lineup">${["michael","evelyn","lisia","sevian","margaret","karl","mira","cassian"].map(i=>`<img class="px" src="${PX.src(i)}" alt="${esc(CHARS[i].n)}" title="${esc(CHARS[i].n)}">`).join("")}</div></div>
   <p class="pitch">你的每一個選擇，都會一點一點把他塑造成某種樣子。</p>
   <p class="kicker">你的出身</p>
   <div class="origins">${ORIGINS.map(o=>`<button class="origin" data-o="${o.id}" aria-pressed="${o.id===chosenOrigin.id}"><b>${o.n}</b><span>${o.d}</span></button>`).join("")}</div>
