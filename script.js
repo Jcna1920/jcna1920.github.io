@@ -27,9 +27,8 @@ const PLATFORMS = [
 ];
 /* 進駐平台分組（依作者指定順序；lit.link 為總入口，不屬任何分組） */
 const PLATFORM_GROUPS = [
-  { id: "active", label: "活躍", eyebrow: "Active", names: ["灰骨 Ashbone", "Heartbeat", "Caveduck", "Melting", "Hyze", "Frontia"] },
-  { id: "mood", label: "看心情上架", eyebrow: "Now & Then", names: ["Storyaichat", "Plaitoon", "IsekaiZero", "Tikita", "WHIF", "FuWa", "卿卿我我"] },
-  { id: "rest", label: "休假看情況", eyebrow: "On Leave", names: ["CRUSH", "Tingle", "Floze"] },
+  { id: "active", label: "活躍", eyebrow: "Active", names: ["Heartbeat", "Caveduck"] },
+  { id: "mood", label: "看心情上架", eyebrow: "Now & Then", names: ["灰骨 Ashbone", "Melting", "Hyze", "Frontia", "Storyaichat", "Plaitoon", "IsekaiZero", "Tikita", "WHIF", "FuWa", "卿卿我我", "CRUSH", "Tingle", "Floze"] },
 ];
 const PLATFORM_HUB = "lit.link";
 
