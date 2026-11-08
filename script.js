@@ -545,6 +545,7 @@ const WORKS = [
   { id: "others", title: "其他作品", cover: null, tags: "單篇角色",
     hook: "尚未歸類的單篇角色。", world: "" },
 ];
+;window.__applyPublished&&window.__applyPublished({PLATFORMS,PLATFORM_GROUPS,CHARACTERS,WORKS}); /* 後台已發布資料（失敗則沿用內建資料） */
 
 /* 平台篩選：由角色 links 推導 */
 const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck": "caveduck", "Storyaichat": "storyaichat", "Melting": "melting",
@@ -569,6 +570,7 @@ const PLATFORM_FILTERS = (() => {
    新角色上架時手動更新：把角色的 name（與 CHARACTERS 中的 name 完全相同）加到最前面，最多顯示 3 位。
    找不到或屬於隱藏作品的名字會自動略過；清空陣列即隱藏整個輪播。 */
 const NEWEST = ["神名憐", "達拉斯", "赫拉分"];
+;window.__applyPublishedNewest&&window.__applyPublishedNewest(NEWEST);
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
