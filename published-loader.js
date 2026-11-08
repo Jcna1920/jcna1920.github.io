@@ -7,6 +7,7 @@
   var ADMIN = "https://jcna-creator-admin.jcna-amamiya.workers.dev";
   var SECTIONS = ["about", "platforms", "worlds", "characters"];
   var IMG = ["cover", "avatar", "image", "icon"];
+  var VIS = ["public", "coming-soon", "hidden"];
   var CONTACT_KEYS = ["instagram", "x", "threads", "plurk", "discord1", "discord2", "marshmallow"];
   var LAST = null;
   function str(v, max, where) { if (typeof v !== "string" || v.length > max) fail(where); return v; }
@@ -79,12 +80,24 @@
     var site = P.site == null ? {} : P.site; if (!isObj(site)) fail("site");
     var W = ctx.WORKS, C = ctx.CHARACTERS, PL = ctx.PLATFORMS;
     var byId = {}; W.forEach(function (w) { byId[w.id] = w; });
-    var seen = {}, works = P.worlds.map(function (p, i) { var id = p && (p._id || p.id); if (typeof id !== "string" || !id || seen[id]) fail("world" + i); seen[id] = 1;
-      var d = clean(p, "world:" + id); d.id = id; return byId[id] ? Object.assign({}, byId[id], d) : d; });
+    var seen = {}, vis = {}, works = [];
+    P.worlds.forEach(function (p, i) { var id = p && (p._id || p.id); if (typeof id !== "string" || !id || seen[id]) fail("world" + i); seen[id] = 1;
+      var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("world.visibility:" + id); vis[id] = v;
+      if (v === "hidden") return; // 墓碑：不輸出、也不讓內建資料復活
+      var d = clean(p, "world:" + id); d.id = id;
+      if (v === "coming-soon") { var b = byId[id] || {}; var o = { id: id, title: d.title || b.title, emoji: d.emoji, cover: d.cover, coverPos: b.coverPos, tags: d.tags, visibility: "coming-soon" }; works.push(o); return; } // 只留展示欄位，不合併內建故事
+      works.push(byId[id] ? Object.assign({}, byId[id], d) : d); });
     W.forEach(function (w) { if (!seen[w.id]) works.push(w); });
-    var usedC = {}, chars = P.characters.map(function (p, n) { var i = idx(p && p._id, "c"); if (i < 0 || usedC[i]) fail("character" + n); usedC[i] = 1;
-      var d = clean(p, "character:" + p._id); if (!Array.isArray(d.links)) d.links = C[i] && C[i].links ? C[i].links : []; return C[i] ? Object.assign({}, C[i], d) : d; });
+    var usedC = {}, chars = [];
+    P.characters.forEach(function (p, n) { var i = idx(p && p._id, "c"); if (i < 0 || usedC[i]) fail("character" + n); usedC[i] = 1;
+      var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("character.visibility:" + p._id);
+      if (v === "hidden") return;
+      var d = clean(p, "character:" + p._id);
+      if (v === "coming-soon") { chars.push({ name: d.name, avatar: d.avatar, avatarPos: C[i] && C[i].avatarPos, work: d.work, links: [], visibility: "coming-soon" }); return; }
+      if (!Array.isArray(d.links)) d.links = C[i] && C[i].links ? C[i].links : []; chars.push(C[i] ? Object.assign({}, C[i], d) : d); });
     C.forEach(function (c, i) { if (!usedC[i]) chars.push(c); });
+    // 隱藏或未開放世界觀底下的角色一律不輸出（含後台沒有、只存在內建的角色）
+    chars = chars.filter(function (c) { return vis[c.work] !== "hidden" && vis[c.work] !== "coming-soon"; });
     var usedP = {}, plats = P.platforms.map(function (p, n) { var i = idx(p && p._id, "p"); if (i < 0 || usedP[i]) fail("platform" + n); usedP[i] = 1;
       var d = clean(p, "platform:" + p._id), o = PL[i]; if (!o) return d;
       if (d.name && d.name !== o.name) { d.title = d.name; } delete d.name; // 原 name 是穩定別名

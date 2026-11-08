@@ -545,7 +545,10 @@ const WORKS = [
   { id: "others", title: "其他作品", cover: null, tags: "單篇角色",
     hook: "尚未歸類的單篇角色。", world: "" },
 ];
-;window.__applyPublished&&window.__applyPublished({PLATFORMS,PLATFORM_GROUPS,CHARACTERS,WORKS}); /* 後台已發布資料（失敗則沿用內建資料） */
+;/* 動態可見性保護（fail-closed）：已發布資料必須成功套用；缺少、無效或任何錯誤時，世界觀與角色一律不使用內建資料 */
+window.__PUBLISHED_FAILED = true;
+try { if (window.__applyPublished && window.__applyPublished({PLATFORMS,PLATFORM_GROUPS,CHARACTERS,WORKS}) === true) window.__PUBLISHED_FAILED = false; } catch (e) {}
+if (window.__PUBLISHED_FAILED) { WORKS.length = 0; CHARACTERS.length = 0; }
 
 /* 平台篩選：由角色 links 推導 */
 const PLATFORM_IDS = { "Heartbeat": "heartbeat", "灰骨": "ashbone", "Caveduck": "caveduck", "Storyaichat": "storyaichat", "Melting": "melting",
@@ -577,7 +580,10 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&l
 const charsOfWork = w => CHARACTERS.filter(c => c.work === w.id);
 const workOf = c => WORKS.find(w => w.id === c.work);
 /* 沒有角色的作品（例如角色已併入其他作品）不顯示於作品與世界觀；資料保留 */
-const SHOWN_WORKS = WORKS.filter(w => charsOfWork(w).length);
+/* 可見度：未開放（coming-soon）作品顯示卡片但不可進入；隱藏作品已由 loader 移除 */
+const isSoon = x => x && x.visibility === "coming-soon";
+const SHOWN_WORKS = WORKS.filter(w => isSoon(w) || charsOfWork(w).length);
+const OPEN_WORKS = SHOWN_WORKS.filter(w => !isSoon(w));
 const workTitle = w => w.fullTitle || (w.id === "others" ? w.title : `《${w.title}》`);
 
 const PAUSED = new Set(["GPTs", "Gemini Gem"]);
@@ -650,6 +656,7 @@ function linksHTML(c) {
     : `<span class="lbtn off" aria-disabled="true" title="尚無連結"><span class="notranslate" translate="no">${esc(pname(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span>`).join("")}</div>`;
 }
 function cardHTML(c, showWork) {
+  if (isSoon(c)) return `<article class="ccard reveal locked" aria-disabled="true" data-name="${esc(c.name)}"><div class="ctop">${avatarHTML(c)}<div><div class="cname"><span class="notranslate" translate="no">${esc(c.name)}</span></div><div class="ccode soon">未開放</div></div></div></article>`;
   const tags = (!c.links.length || c.linkStatus) ? `<span class="tag prep" title="平台連結準備中">${esc(c.linkStatus || "準備中")}</span>` : platsOf(c).map(p => {
     const retired = c.links.some(l => l.platform === p && l.status === "已退");
     return `<span class="tag notranslate${retired ? " retired" : ""}" translate="no">${esc(plabel(p))}</span>`;
@@ -693,8 +700,13 @@ pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}
    預留每個世界的宣傳影片：WORKS 項目加上 video（靜音循環，mp4/webm 路徑）即會疊在封面上；目前皆未設定。 */
 const clip = (t, n) => { t = String(t || ""); return t.length > n ? t.slice(0, n).replace(/[，、。；：\s]+$/, "") + "…" : t; };
 const promoHTML = w => w.video ? `<video class="wkvideo" src="${esc(w.video)}" muted loop autoplay playsinline preload="none" aria-hidden="true"${w.cover ? ` poster="${esc(w.cover)}"` : ""}></video>` : "";
+const UNAVAILABLE_HTML = `<div class="load-fail" role="status"><p>作品與角色資料暫時無法載入。</p><p class="muted">請稍後重新整理頁面再試一次。</p><button type="button" class="btn-ghost load-retry">重新載入</button></div>`;
 function worksGridHTML() {
+  if (window.__PUBLISHED_FAILED) return UNAVAILABLE_HTML;
   return `<div class="work-grid">${SHOWN_WORKS.map((w, i) => {
+    if (isSoon(w)) return `<div class="wkcard reveal locked" aria-disabled="true" data-work="${esc(w.id)}">
+      <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span><span class="soon-badge">未開放</span></div>
+      <div class="wkbody">${w.tags ? `<p class="wktags">${esc(w.tags)}</p>` : ""}<h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3><p class="wkcount soon">即將開放</p></div></div>`;
     const n = charsOfWork(w).length, blurb = w.world && w.world !== w.hook ? clip(w.world, 70) : "";
     return `<a class="wkcard reveal" href="#work/${w.id}?from=world" data-work="${w.id}">
       <div class="wkcover${w.video ? " has-video" : ""}">${coverHTML(w)}${promoHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span></div>
@@ -705,7 +717,8 @@ function worksGridHTML() {
 }
 /* 角色列表「全部」：依作品分組列出所有角色 */
 function viewAll() {
-  return `<div class="all-chars">${SHOWN_WORKS.map(w => `<section class="wgroup">
+  if (window.__PUBLISHED_FAILED) return UNAVAILABLE_HTML;
+  return `<div class="all-chars">${OPEN_WORKS.map(w => `<section class="wgroup">
     <h3 class="wgroup-head"><a href="#work/${w.id}?from=sec:characters" data-work="${w.id}" class="notranslate" translate="no">${esc(workTitle(w))}</a><span class="pg-count">${charsOfWork(w).length}</span></h3>
     <div class="char-grid">${charsOfWork(w).map(c => cardHTML(c, false)).join("")}</div></section>`).join("")}</div>`;
 }
@@ -790,10 +803,10 @@ const fromKey = from => from && from.startsWith("platform:") ? "platform/" + fro
 let lastHash = location.hash, prevOfDetail = null;
 function route(scroll) {
   { const h = parseHash();
-    if (OLD_WORKS.has(h.path) || (h.kind === "work" && !WORKS.find(w => w.id === h.id))) history.replaceState(null, "", "#worlds"); }
+    if (OLD_WORKS.has(h.path) || (h.kind === "work" && !OPEN_WORKS.find(w => w.id === h.id))) history.replaceState(null, "", "#worlds"); }
   const { kind, id, from } = parseHash();
   let html, active = "";
-  const work = kind === "work" && WORKS.find(w => w.id === id);
+  const work = kind === "work" && OPEN_WORKS.find(w => w.id === id);
   if (work) { active = null; html = viewWork(work, from); }
   else if (kind === "platform" && PLATFORM_FILTERS.find(p => p.id === id)) { active = id; html = viewPlatform(PLATFORM_FILTERS.find(p => p.id === id)); }
   else if (!view.querySelector(".all-chars")) html = viewAll();   /* 離開詳細頁（或首次載入）時回到角色列表（全部） */
@@ -874,9 +887,11 @@ document.addEventListener("click", e => {
   }
 });
 
+/* fail-closed 提示的重新載入按鈕（事件委派，不用內嵌 handler） */
+document.addEventListener("click", e => { if (e.target.closest && e.target.closest(".load-retry")) location.reload(); });
 view.addEventListener("click", e => {
   if (e.target.closest("a, button, .lcode")) return;
-  const c = e.target.closest(".ccard"); if (!c) return;
+  const c = e.target.closest(".ccard"); if (!c || c.classList.contains("locked")) return;
   c.setAttribute("aria-expanded", c.classList.toggle("open"));
 });
 view.addEventListener("keydown", e => {
@@ -892,7 +907,7 @@ $("#worldIndex").innerHTML = worksGridHTML();
 (() => {
   const box = $("#newest"); if (!box) return;
   const shown = new Set(SHOWN_WORKS.map(w => w.id));
-  const items = NEWEST.map(n => CHARACTERS.find(c => c.name === n)).filter(c => c && shown.has(c.work)).slice(0, 3);
+  const items = NEWEST.map(n => CHARACTERS.find(c => c.name === n)).filter(c => c && !isSoon(c) && shown.has(c.work) && OPEN_WORKS.some(w => w.id === c.work)).slice(0, 3);
   if (!items.length) { box.hidden = true; return; }
   const multi = items.length > 1;
   const slide = (c, i) => { const w = workOf(c);
@@ -1162,9 +1177,9 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
   const btn = $("#searchBtn"), dlg = $("#searchDlg"), input = $("#searchInput"), out = $("#searchResults");
   if (!btn || !dlg) return;
   const norm = s => String(s || "").normalize("NFKC").toLowerCase().replace(/[\s・·．.\-_／/「」《》『』（）()【】,，、:：!！?？~～'"“”]+/g, "");
-  const shownWorkIds = new Set(SHOWN_WORKS.map(w => w.id));
+  const shownWorkIds = new Set(OPEN_WORKS.map(w => w.id));
   /* 角色 */
-  const CIDX = CHARACTERS.filter(c => shownWorkIds.has(c.work)).map(c => {
+  const CIDX = CHARACTERS.filter(c => shownWorkIds.has(c.work) && !isSoon(c)).map(c => {
     const w = workOf(c), plats = platsOf(c).filter(p => p !== "未標註");
     const tags = [c.group && "多人", c.status, c.linkStatus || (!c.links.length && "準備中")].filter(Boolean);
     return { c, w, plats, tags,
@@ -1173,7 +1188,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
            text: norm([c.sum, c.intro, c.age].join(" ")) } };
   });
   /* 作品（隱藏的空作品不列入） */
-  const WIDX = SHOWN_WORKS.map(w => ({ w, n: charsOfWork(w).length,
+  const WIDX = OPEN_WORKS.map(w => ({ w, n: charsOfWork(w).length,
     f: { name: norm(w.title + " " + (w.fullTitle || "")), meta: norm(w.tags), text: norm([w.hook, w.world].join(" ")) } }));
   /* 平台：篩選按鈕（有角色）＋進駐平台卡片；不含邀請碼 */
   const aliasOf = key => Object.keys(PLATFORM_ALIASES).filter(a => PLATFORM_ALIASES[a] === key);
