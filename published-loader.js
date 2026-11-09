@@ -85,7 +85,7 @@
       var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("world.visibility:" + id); vis[id] = v;
       if (v === "hidden") return; // 墓碑：不輸出、也不讓內建資料復活
       var d = clean(p, "world:" + id); d.id = id;
-      if (v === "coming-soon") { var b = byId[id] || {}; var o = { id: id, title: d.title || b.title, emoji: d.emoji, cover: d.cover, coverPos: b.coverPos, tags: d.tags, visibility: "coming-soon" }; works.push(o); return; } // 只留展示欄位，不合併內建故事
+      if (v === "coming-soon") { var b = byId[id] || {}; var o = { id: id, title: d.title || b.title, emoji: d.emoji, cover: d.cover, coverPos: d.coverPos || b.coverPos, coverFocus: d.coverFocus, tags: d.tags, visibility: "coming-soon" }; works.push(o); return; } // 只留展示欄位，不合併內建故事
       works.push(byId[id] ? Object.assign({}, byId[id], d) : d); });
     W.forEach(function (w) { if (!seen[w.id]) works.push(w); });
     var usedC = {}, chars = [];
@@ -93,7 +93,7 @@
       var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("character.visibility:" + p._id);
       if (v === "hidden") return;
       var d = clean(p, "character:" + p._id);
-      if (v === "coming-soon") { chars.push({ name: d.name, avatar: d.avatar, avatarPos: C[i] && C[i].avatarPos, work: d.work, links: [], visibility: "coming-soon" }); return; }
+      if (v === "coming-soon") { chars.push({ name: d.name, avatar: d.avatar, avatarFocus: d.avatarFocus, work: d.work, links: [], visibility: "coming-soon" }); return; }
       if (!Array.isArray(d.links)) d.links = C[i] && C[i].links ? C[i].links : []; chars.push(C[i] ? Object.assign({}, C[i], d) : d); });
     C.forEach(function (c, i) { if (!usedC[i]) chars.push(c); });
     // 隱藏或未開放世界觀底下的角色一律不輸出（含後台沒有、只存在內建的角色）

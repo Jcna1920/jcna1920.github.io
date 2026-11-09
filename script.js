@@ -635,7 +635,7 @@ document.addEventListener("click", async e => {
 const WATERMARK = "J_CNa／雨宮";
 const wmHTML = (big) => `<span class="wm${big ? " wm-big" : ""} notranslate" translate="no" aria-hidden="true">${big ? `<span class="wm-tile"></span>` : ""}<span class="wm-txt">${WATERMARK}</span></span>`;
 function avatarHTML(c) {
-  if (c.avatar) return `<span class="avatar-wrap"><img class="avatar" src="${esc(c.avatar)}" alt="${esc(c.name)} 頭像">${wmHTML(false)}</span>`;
+  if (c.avatar) { const st = focusStyle(c.avatarFocus); return `<span class="avatar-wrap"><img class="avatar" src="${esc(c.avatar)}" alt="${esc(c.name)} 頭像"${st ? ` style="${st}"` : ""}>${wmHTML(false)}</span>`; }
   return `<div class="avatar ph" aria-hidden="true">${esc([...c.name][0])}</div>`;
 }
 const plabel = p => PLAT_LABEL[p] || p;
@@ -683,8 +683,15 @@ function coordOf(w) {
   const d = ((h >> 11) % 90) * ((h >> 17) & 1 ? 1 : -1);
   return `RA ${ra} · DEC ${d >= 0 ? "+" : "−"}${String(Math.abs(d)).padStart(2, "0")}°`;
 }
+/* 圖片顯示參數：{x,y,zoom}；缺省沿用 coverPos 字串或 CSS 預設，不改原圖 */
+const focusStyle = (f, legacy) => {
+  if (f && typeof f === "object" && Number.isFinite(f.x) && Number.isFinite(f.y) && Number.isFinite(f.zoom))
+    return `object-position:${+f.x}% ${+f.y}%;transform:scale(${+f.zoom});transform-origin:${+f.x}% ${+f.y}%`;
+  if (typeof legacy === "string" && legacy) return `object-position:${esc(legacy)}`;
+  return "";
+};
 function coverHTML(w) {
-  if (w.cover) return `<img src="${esc(w.cover)}" alt=""${w.coverPos ? ` style="object-position:${esc(w.coverPos)}"` : ""}><span class="reticle" aria-hidden="true"></span>${wmHTML(true)}`;
+  if (w.cover) { const st = focusStyle(w.coverFocus, w.coverPos); return `<img src="${esc(w.cover)}" alt=""${st ? ` style="${st}"` : ""}><span class="reticle" aria-hidden="true"></span>${wmHTML(true)}`; }
   const h = hashOf(w.id), hue = 255 + (h % 50), tilt = (h % 40) - 20, size = 34 + (h % 14);
   return `<div class="cover-planet" style="--hue:${hue};--tilt:${tilt}deg;--size:${size}%" aria-hidden="true">
     <span class="planet"></span><span class="orbit"><span class="moon"></span></span>
@@ -912,7 +919,7 @@ $("#worldIndex").innerHTML = worksGridHTML();
   const multi = items.length > 1;
   const slide = (c, i) => { const w = workOf(c);
     return `<a class="nw-slide${i ? "" : " on"}" href="#work/${w.id}?from=world&c=${encodeURIComponent(c.name)}" data-work="${w.id}" role="group" aria-roledescription="slide" aria-label="${i + 1} / ${items.length}"${i ? ' aria-hidden="true" tabindex="-1"' : ""}>
-      <div class="nw-img">${c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async">${wmHTML(false)}` : `<span class="nw-ph" aria-hidden="true">${esc([...c.name][0])}</span>`}</div>
+      <div class="nw-img">${c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async"${(st=>{const x=focusStyle(c.avatarFocus);return x?` style="${x}"`:"";})()}">${wmHTML(false)}` : `<span class="nw-ph" aria-hidden="true">${esc([...c.name][0])}</span>`}</div>
       <div class="nw-body">${c.story ? `<div class="cstory nw-story notranslate" translate="no">「${esc(c.story)}」</div>` : ""}
         <h3 class="nw-name notranslate" translate="no">${esc(c.name)}</h3>
         <p class="nw-work notranslate" translate="no">${esc(workTitle(w))}</p>
@@ -1224,7 +1231,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
   };
   const NT = 'class="notranslate" translate="no"';
   let items = [], sel = -1, lastFocus = null;
-  const thumbC = c => c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy">` : `<span class="sr-ph" aria-hidden="true">${esc([...c.name][0])}</span>`;
+  const thumbC = c => c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy"${focusStyle(c.avatarFocus) ? ` style="${focusStyle(c.avatarFocus)}"` : ""}>` : `<span class="sr-ph" aria-hidden="true">${esc([...c.name][0])}</span>`;
   const thumbW = w => w.cover ? `<img src="${esc(w.cover)}" alt="" loading="lazy"${w.coverPos ? ` style="object-position:${esc(w.coverPos)}"` : ""}>` : `<span class="sr-ph planet" aria-hidden="true"></span>`;
   const thumbP = k => piconOf(k) ? `<img src="${piconOf(k)}" alt="" loading="lazy">` : `<span class="sr-ph" aria-hidden="true">◎</span>`;
   function render() {

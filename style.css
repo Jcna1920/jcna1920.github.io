@@ -864,3 +864,7 @@ html.search-open body{overscroll-behavior:none}
 .wkcount.soon,.ccode.soon{color:var(--mist);letter-spacing:.2em}
 .ccard.locked{cursor:default;opacity:.75}
 .load-fail{max-width:560px;margin:24px auto;padding:28px;text-align:center;border:1px solid var(--line);background:var(--card);display:flex;flex-direction:column;gap:12px;align-items:center}.load-fail .muted{color:var(--mist);font-size:.9rem}
+
+/* 圖片 focus：縮放時仍裁切在框內；hover 微放大改套在外層以免蓋掉使用者縮放 */
+.wkcover>img[style*="transform:scale"]{transition:none}
+.avatar[style*="transform:scale"]{transition:none}
