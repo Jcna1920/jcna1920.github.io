@@ -564,7 +564,8 @@ const PLATFORM_FILTERS = (() => {
   const keys = Object.keys(count);
   PRIMARY.forEach(p => { if (!(p in count)) { count[p] = 0; keys.push(p); } });
   const rank = p => p === "未標註" ? 999 : (PRIMARY.includes(p) ? PRIMARY.indexOf(p) : 100 - count[p] / 100);
-  return keys.sort((a, b) => rank(a) - rank(b) || count[b] - count[a])
+  /* 「準備中」（無平台連結）不另列篩選按鈕；這些角色仍在「全部」與作品頁中照常顯示 */
+  return keys.filter(k => k !== "未標註").sort((a, b) => rank(a) - rank(b) || count[b] - count[a])
     .map(k => ({ id: PLATFORM_IDS[k] || encodeURIComponent(k), key: k, label: k === "灰骨" ? "灰骨" : k === "卿卿我我" ? "卿卿我我（7755）" : k === "未標註" ? "準備中" : k, count: count[k] }));
 })();
 
@@ -577,7 +578,9 @@ const NEWEST = ["神名憐", "達拉斯", "赫拉分"];
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-const charsOfWork = w => CHARACTERS.filter(c => c.work === w.id);
+/* 未開放（coming-soon）角色一律排在最後，其餘維持原順序 */
+const soonLast = list => list.filter(c => c.visibility !== "coming-soon").concat(list.filter(c => c.visibility === "coming-soon"));
+const charsOfWork = w => soonLast(CHARACTERS.filter(c => c.work === w.id));
 const workOf = c => WORKS.find(w => w.id === c.work);
 /* 沒有角色的作品（例如角色已併入其他作品）不顯示於作品與世界觀；資料保留 */
 /* 可見度：未開放（coming-soon）作品顯示卡片但不可進入；隱藏作品已由 loader 移除 */
@@ -710,7 +713,7 @@ const promoHTML = w => w.video ? `<video class="wkvideo" src="${esc(w.video)}" m
 const UNAVAILABLE_HTML = `<div class="load-fail" role="status"><p>作品與角色資料暫時無法載入。</p><p class="muted">請稍後重新整理頁面再試一次。</p><button type="button" class="btn-ghost load-retry">重新載入</button></div>`;
 function worksGridHTML() {
   if (window.__PUBLISHED_FAILED) return UNAVAILABLE_HTML;
-  return `<div class="work-grid">${SHOWN_WORKS.map((w, i) => {
+  return `<div class="mq mq-works"><div class="work-grid mq-track">${SHOWN_WORKS.map((w, i) => {
     if (isSoon(w)) return `<div class="wkcard reveal locked" aria-disabled="true" data-work="${esc(w.id)}">
       <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span><span class="soon-badge">未開放</span></div>
       <div class="wkbody">${w.tags ? `<p class="wktags">${esc(w.tags)}</p>` : ""}<h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3><p class="wkcount soon">即將開放</p></div></div>`;
@@ -720,14 +723,120 @@ function worksGridHTML() {
       <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3>
       ${w.hook ? `<p class="wkhook">${esc(w.hook)}</p>` : ""}${blurb ? `<p class="wkworld">${esc(blurb)}</p>` : ""}
       <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
-  }).join("")}</div>`;
+  }).join("")}</div></div>`;
 }
-/* 角色列表「全部」：依作品分組列出所有角色 */
+/* 角色列表「全部」：依作品分組；一次顯示一個世界觀，下方角色跑馬燈，跑完一輪淡入下一個世界觀 */
 function viewAll() {
   if (window.__PUBLISHED_FAILED) return UNAVAILABLE_HTML;
-  return `<div class="all-chars">${OPEN_WORKS.map(w => `<section class="wgroup">
+  const ws = OPEN_WORKS.filter(w => charsOfWork(w).length), multi = ws.length > 1;
+  return `<div class="all-chars wq">${multi ? `<div class="wq-nav"><button type="button" class="wq-btn" data-step="-1" aria-label="上一個世界觀">‹</button><span class="wq-pos" aria-live="polite">1 / ${ws.length}</span><button type="button" class="wq-btn" data-step="1" aria-label="下一個世界觀">›</button></div>` : ""}${ws.map((w, i) => `<section class="wgroup${i ? "" : " on"}" data-work="${w.id}"${i ? " hidden" : ""}>
     <h3 class="wgroup-head"><a href="#work/${w.id}?from=sec:characters" data-work="${w.id}" class="notranslate" translate="no">${esc(workTitle(w))}</a><span class="pg-count">${charsOfWork(w).length}</span></h3>
-    <div class="char-grid">${charsOfWork(w).map(c => cardHTML(c, false)).join("")}</div></section>`).join("")}</div>`;
+    <div class="mq mq-chars"><div class="char-grid mq-track">${charsOfWork(w).map(c => cardHTML(c, false)).join("")}</div></div></section>`).join("")}</div>`;
+}
+/* ---------- 跑馬燈（作品與世界觀、角色列表）----------
+   以捲動位置推進（觸控可直接左右滑）；滑鼠移入、鍵盤焦點、展開角色卡、離開畫面時暫停。
+   複製的卡片僅供無縫循環：aria-hidden、不可 Tab。減少動態效果時不自動捲動，改為可手動橫向捲動。 */
+const MQ_REDUCE = matchMedia("(prefers-reduced-motion: reduce)");
+function makeMarquee(sc, opt = {}) {
+  const track = sc.querySelector(".mq-track"), speed = opt.speed || 40, hoverEl = opt.hoverEl || sc;
+  let period = 0, pos = 0, setAt = 0, moved = 0, raf = 0, last = 0, touchUntil = 0, seen = true, dead = false, cycled = false;
+  const holds = new Set();
+  function build() {
+    track.querySelectorAll("[data-mq-clone]").forEach(n => n.remove());
+    sc.classList.remove("mq-on"); period = 0; pos = setAt = 0; sc.scrollLeft = 0;
+    const items = [...track.children];
+    if (MQ_REDUCE.matches || !items.length || track.offsetWidth <= sc.clientWidth + 2) return;
+    items.forEach((n, i) => { const c = n.cloneNode(true);
+      c.setAttribute("data-mq-clone", ""); c.setAttribute("aria-hidden", "true"); c.classList.add("in"); c.classList.remove("open", "ret-flash");
+      if (c.classList.contains("ccard")) { c.setAttribute("aria-expanded", "false"); c.dataset.no = String(i + 1).padStart(2, "0"); }
+      [c, ...c.querySelectorAll("a,button,[tabindex],video")].forEach(x => x.setAttribute("tabindex", "-1"));
+      track.appendChild(c); });
+    period = track.children[items.length].offsetLeft - items[0].offsetLeft;
+    sc.classList.add("mq-on");
+  }
+  const paused = () => holds.size || !seen || document.hidden || performance.now() < touchUntil || track.querySelector(".ccard.open");
+  function frame(t) {
+    if (dead || !sc.isConnected) return;
+    raf = requestAnimationFrame(frame);
+    const dt = last ? Math.min(t - last, 100) / 1000 : 0; last = t;
+    checkSeen(t);
+    if (paused() || MQ_REDUCE.matches) return;
+    if (period) {
+      pos += speed * dt; moved += speed * dt;
+      if (pos >= period) pos -= period;
+      sc.scrollLeft = pos; setAt = sc.scrollLeft;
+      if (opt.onCycle && !cycled && moved >= period) { cycled = true; opt.onCycle(); }
+    } else if (opt.onCycle && !cycled) { moved += dt * 1000; if (moved >= (opt.dwell || 7000)) { cycled = true; opt.onCycle(); } }
+  }
+  /* 使用者自行捲動（滑動／觸控板）→ 同步位置並維持循環 */
+  sc.addEventListener("scroll", () => {
+    if (!period || Math.abs(sc.scrollLeft - setAt) < 1.5) return;   /* 自己設定的位置 */
+    let x = sc.scrollLeft; if (x >= period) { x -= period; sc.scrollLeft = x; }
+    pos = setAt = sc.scrollLeft;
+  }, { passive: true });
+  const enter = e => { if (e.pointerType === "mouse") holds.add("hover"); }, leave = e => { if (e.pointerType === "mouse") holds.delete("hover"); };
+  hoverEl.addEventListener("pointerenter", enter); hoverEl.addEventListener("pointerleave", leave);
+  if (matchMedia("(hover:hover)").matches && hoverEl.matches(":hover")) holds.add("hover");
+  sc.addEventListener("focusin", e => { if (e.target.matches(":focus-visible")) holds.add("focus"); });
+  sc.addEventListener("focusout", e => { if (!sc.contains(e.relatedTarget)) holds.delete("focus"); });
+  sc.addEventListener("touchstart", () => { touchUntil = Infinity; }, { passive: true });
+  sc.addEventListener("touchend", () => { touchUntil = performance.now() + 3000; }, { passive: true });
+  /* 離開畫面時暫停（每 0.4 秒檢查一次位置） */
+  let seenAt = -1e9;
+  const checkSeen = t => { if (t - seenAt < 400) return; seenAt = t; const r = sc.getBoundingClientRect(); seen = r.bottom > 0 && r.top < innerHeight && r.width > 0; };
+  let rw = sc.clientWidth;
+  const ro = "ResizeObserver" in window ? new ResizeObserver(() => { if (Math.abs(sc.clientWidth - rw) > 1) { rw = sc.clientWidth; build(); } }) : null;
+  if (ro) ro.observe(sc);
+  const onReduce = () => build();
+  MQ_REDUCE.addEventListener && MQ_REDUCE.addEventListener("change", onReduce);
+  build(); raf = requestAnimationFrame(frame);
+  const api = {
+    destroy() { dead = true; cancelAnimationFrame(raf); hoverEl.removeEventListener("pointerenter", enter); hoverEl.removeEventListener("pointerleave", leave); ro && ro.disconnect(); MQ_REDUCE.removeEventListener && MQ_REDUCE.removeEventListener("change", onReduce); },
+    /* 讓某張卡片進入可視範圍並暫停一下（返回捲動、搜尋定位用） */
+    show(el) { touchUntil = performance.now() + 6000; const x = Math.max(0, el.offsetLeft - track.offsetLeft - (sc.clientWidth - el.offsetWidth) / 2); pos = period ? x % period : x; sc.scrollLeft = pos; setAt = sc.scrollLeft; }
+  };
+  sc.__mq = api; return api;
+}
+/* 角色列表：一次一個世界觀，跑完一輪換下一個；‹ › 可手動切換 */
+function mountWorldQueue(wq) {
+  const secs = [...wq.querySelectorAll(":scope > .wgroup")], pos = wq.querySelector(".wq-pos");
+  let cur = 0, mq = null, minH = 0;
+  const reduceAll = () => MQ_REDUCE.matches || secs.length < 2;
+  function attach() {
+    mq && mq.destroy();
+    mq = makeMarquee(secs[cur].querySelector(".mq"), { speed: 46, hoverEl: wq, dwell: 7000, onCycle: () => go(cur + 1) });
+    minH = Math.max(minH, wq.offsetHeight); wq.style.minHeight = minH + "px";   /* 換世界觀時不讓下方版面跳動 */
+  }
+  function go(i, instant) {
+    if (reduceAll()) return;
+    const next = (i + secs.length) % secs.length; if (next === cur && !instant) return;
+    const old = secs[cur]; cur = next;
+    const swap = () => { secs.forEach((s, k) => { const on = k === cur; s.hidden = !on; s.classList.toggle("on", on); s.classList.remove("wq-out"); });
+      if (!instant) { secs[cur].classList.remove("wq-in"); void secs[cur].offsetWidth; secs[cur].classList.add("wq-in"); }
+      if (pos) pos.textContent = `${cur + 1} / ${secs.length}`; attach(); };
+    if (instant || old === secs[cur]) swap(); else { old.classList.add("wq-out"); setTimeout(swap, 380); }
+  }
+  function layout() {
+    if (!wq.isConnected) { mq && mq.destroy(); return MQ_REDUCE.removeEventListener && MQ_REDUCE.removeEventListener("change", layout); }
+    if (reduceAll()) { mq && mq.destroy(); mq = null; wq.style.minHeight = ""; secs.forEach(s => { s.hidden = false; s.classList.add("on"); });
+      secs.forEach(s => { const sc = s.querySelector(".mq"); sc.__mq && sc.__mq.destroy(); makeMarquee(sc); }); wq.classList.add("wq-all"); return; }
+    wq.classList.remove("wq-all"); secs.forEach((s, k) => { const sc = s.querySelector(".mq"); if (k !== cur && sc.__mq) sc.__mq.destroy(); s.hidden = k !== cur; s.classList.toggle("on", k === cur); });
+    attach();
+  }
+  wq.addEventListener("click", e => { const b = e.target.closest(".wq-btn"); if (b) go(cur + +b.dataset.step); });
+  MQ_REDUCE.addEventListener && MQ_REDUCE.addEventListener("change", layout);
+  wq.__wq = { reveal(el) { const s = el.closest(".wgroup"), k = secs.indexOf(s); if (k >= 0 && k !== cur && !reduceAll()) go(k, true); } };
+  layout();
+}
+function mountMarquees(root) {
+  root.querySelectorAll(".wq").forEach(mountWorldQueue);
+  root.querySelectorAll(".mq-works").forEach(sc => makeMarquee(sc, { speed: 40 }));
+}
+/* 讓被定位的卡片（返回／搜尋）切到所屬世界觀並捲進可視範圍 */
+function mqReveal(el) {
+  const wq = el.closest(".wq"); if (wq && wq.__wq) wq.__wq.reveal(el);
+  const sc = el.closest(".mq"), card = el.closest(".ccard, .wkcard");
+  if (sc && sc.__mq && card) sc.__mq.show(card);
 }
 /* 返回連結：依來源（作品與世界觀／角色列表／平台篩選）決定 */
 const SECTION_LABEL = { about: "作者資訊", platforms: "進駐平台", characters: "角色列表", worlds: "作品與世界觀", top: "首頁" };
@@ -777,7 +886,7 @@ function viewWork(w, from) {
   </div>`;
 }
 function viewPlatform(p) {
-  const list = CHARACTERS.filter(c => platsOf(c).includes(p.key));
+  const list = soonLast(CHARACTERS.filter(c => platsOf(c).includes(p.key)));
   return `<div class="panel-view">
     <a class="back" href="#characters" data-back="1">← 返回角色列表</a>
     <header class="plat-head"><p class="eyebrow">Platform</p><h3 class="work-title notranslate" translate="no">${esc(plabel(p.key))}</h3>
@@ -810,7 +919,8 @@ const fromKey = from => from && from.startsWith("platform:") ? "platform/" + fro
 let lastHash = location.hash, prevOfDetail = null;
 function route(scroll) {
   { const h = parseHash();
-    if (OLD_WORKS.has(h.path) || (h.kind === "work" && !OPEN_WORKS.find(w => w.id === h.id))) history.replaceState(null, "", "#worlds"); }
+    if (OLD_WORKS.has(h.path) || (h.kind === "work" && !OPEN_WORKS.find(w => w.id === h.id))) history.replaceState(null, "", "#worlds");
+    else if (h.kind === "platform") history.replaceState(null, "", "#characters"); }   /* 平台篩選列已移除：舊的 #platform/… 連結一律回到角色列表（全部） */
   const { kind, id, from } = parseHash();
   let html, active = "";
   const work = kind === "work" && OPEN_WORKS.find(w => w.id === id);
@@ -822,6 +932,7 @@ function route(scroll) {
     pf.querySelectorAll("a").forEach(a => a.classList.toggle("on", a.dataset.p === active));
     observe(view.querySelectorAll(".reveal"));
     if (window.__i18nPaint) window.__i18nPaint();
+    mountMarquees(view);
   }
   const { char } = parseHash();
   if (work && char) {   /* 由「最新上架」開啟：展開並捲到該角色卡 */
@@ -858,6 +969,7 @@ function restoreScroll() {
   else el = $(`#charView .wgroup-head a[data-work="${CSS.escape(r.work)}"]`);
   if (!el) return false;
   try { sessionStorage.removeItem(RET_KEY); } catch {}
+  mqReveal(el);
   el.closest(".reveal") && el.closest(".reveal").classList.add("in"); el.classList.add("in");
   settleScroll(el, "center"); el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600);
   return true;
@@ -909,6 +1021,7 @@ view.addEventListener("keydown", e => {
 
 /* ---------- 作品與世界觀 ---------- */
 $("#worldIndex").innerHTML = worksGridHTML();
+mountMarquees($("#worldIndex"));
 
 /* ---------- 最新上架輪播 ---------- */
 (() => {
@@ -965,7 +1078,7 @@ const io = "IntersectionObserver" in window
 function observe(nodes) { nodes.forEach(n => io ? io.observe(n) : n.classList.add("in")); }
 observe(document.querySelectorAll(".reveal"));
 route(false);
-if (/^#(work|platform)\//.test(location.hash)) setTimeout(() => $("#characters").scrollIntoView(), 0);
+if (/^#(work\/|platform\/|characters$)/.test(location.hash)) setTimeout(() => $("#characters").scrollIntoView(), 0);
 if (history.scrollRestoration) history.scrollRestoration = "manual";
 
 /* ---------- starfield（多層星空、緩慢視差；尊重 prefers-reduced-motion） ---------- */
@@ -1203,7 +1316,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
   const PIDX = [];
   PLATFORM_FILTERS.filter(p => p.key !== "未標註").forEach(p => {
     const card = PLATFORMS.find(x => cardKey(x) === p.key || x.name === p.key);
-    PIDX.push({ key: p.key, label: plabel(p.key), sub: card && card.title ? card.name : (card && card.sub) || "", href: `#platform/${p.id}`, count: p.count,
+    PIDX.push({ key: p.key, label: plabel(p.key), sub: card && card.title ? card.name : (card && card.sub) || "", href: "#platforms", card: card ? card.name : p.key, cardLabel: card ? (card.title || card.name) : plabel(p.key), count: p.count,   /* 篩選列已移除：改捲到進駐平台卡片 */
       f: { name: norm([p.key, plabel(p.key), card && card.title, card && card.sub, card && card.name].join(" ")), meta: norm(aliasOf(p.key).join(" ")) } });
   });
   PLATFORMS.forEach(x => {
@@ -1302,7 +1415,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
       return;
     }
     if (x.card) {   /* 沒有角色的平台：捲到進駐平台的卡片 */
-      const el = [...document.querySelectorAll("#platformGrid .pcard")].find(c => (c.querySelector(".pname") || {}).textContent === x.label);
+      const el = [...document.querySelectorAll("#platformGrid .pcard")].find(c => (c.querySelector(".pname") || {}).textContent === (x.cardLabel || x.label));
       if (el) { settleScroll(el, "center"); el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600); }
       else settleScroll($("#platforms"));
       return;

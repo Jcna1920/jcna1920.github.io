@@ -868,3 +868,35 @@ html.search-open body{overscroll-behavior:none}
 /* 圖片 focus：縮放時仍裁切在框內；hover 微放大改套在外層以免蓋掉使用者縮放 */
 .wkcover>img[style*="transform:scale"]{transition:none}
 .avatar[style*="transform:scale"]{transition:none}
+
+/* 角色列表不顯示平台篩選列 */
+.pfilter[hidden]{display:none}
+
+/* 跑馬燈：作品與世界觀、角色列表（滑鼠移入暫停；觸控可左右滑；減少動態效果時改為手動橫向捲動） */
+.mq{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;margin-top:-8px;padding:8px 0 22px;scrollbar-width:thin;scrollbar-color:var(--gold-dim) transparent}
+.mq.mq-on{scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.mq.mq-on::-webkit-scrollbar{display:none}
+.mq>.mq-track{display:flex;width:max-content;align-items:stretch}
+.mq>.work-grid.mq-track>.wkcard{flex:0 0 clamp(230px,24vw,270px)}
+.mq>.char-grid.mq-track{align-items:flex-start}
+.mq>.char-grid.mq-track>.ccard{flex:0 0 clamp(250px,26vw,290px)}
+.mq .reveal{opacity:1;transform:none}
+.ccard[data-mq-clone]::after{content:"Nº " attr(data-no)}
+.wq{position:relative}
+.wq .wgroup-head{padding-right:120px}
+.wq-nav{position:absolute;top:0;right:0;z-index:2;display:flex;align-items:center;gap:6px;font-family:var(--serif);font-size:.78rem;letter-spacing:.1em;color:var(--mist)}
+.wq-btn{width:28px;height:28px;border:1px solid var(--line-soft);border-radius:50%;background:transparent;color:var(--gold);font-size:1.05rem;line-height:1;cursor:pointer;transition:.3s}
+.wq-btn:hover,.wq-btn:focus-visible{border-color:var(--gold);outline:none}
+.wq-pos{min-width:3.6em;text-align:center}
+.wq-all .wgroup-head{padding-right:0}
+.wq-all .wq-nav{display:none}
+.wq .wgroup{transition:opacity .38s ease}
+.wq .wgroup.wq-out{opacity:0}
+.wq .wgroup.wq-in{animation:wqIn .5s ease}
+@keyframes wqIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (max-width:680px){
+  .mq>.work-grid.mq-track>.wkcard{flex-basis:min(68vw,250px)}
+  .mq>.char-grid.mq-track>.ccard{flex-basis:min(78vw,280px)}
+  .wq .wgroup-head{padding-right:104px;font-size:.95rem}
+}
+@media (prefers-reduced-motion:reduce){.wq .wgroup.wq-in{animation:none}}
