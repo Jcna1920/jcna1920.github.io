@@ -54,6 +54,8 @@
     return r;
   }
   function idx(id, pre) { var m = new RegExp("^" + pre + "-(\\d{3})$").exec(id || ""); return m ? +m[1] : -1; }
+  // 後台新增項目使用隨機編號（如 c-dLqlnKUOC1Pl）：視為全新項目，不對應內建資料
+  function isNewId(id, pre) { return typeof id === "string" && new RegExp("^" + pre + "-[A-Za-z0-9_-]{4,40}$").test(id) && idx(id, pre) < 0; }
   function theme(site) {
     var t = site.theme; if (t == null) return null; if (!isObj(t)) fail("theme");
     var c = t.colors || {}, out = {};
@@ -89,16 +91,21 @@
       works.push(byId[id] ? Object.assign({}, byId[id], d) : d); });
     W.forEach(function (w) { if (!seen[w.id]) works.push(w); });
     var usedC = {}, chars = [];
-    P.characters.forEach(function (p, n) { var i = idx(p && p._id, "c"); if (i < 0 || usedC[i]) fail("character" + n); usedC[i] = 1;
+    var usedNewC = {};
+    P.characters.forEach(function (p, n) { var id = p && p._id, i = idx(id, "c");
+      if (i < 0) { if (!isNewId(id, "c") || usedNewC[id]) fail("character" + n); usedNewC[id] = 1; i = "new:" + id; }
+      else { if (usedC[i]) fail("character" + n); usedC[i] = 1; }
       var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("character.visibility:" + p._id);
       if (v === "hidden") return;
       var d = clean(p, "character:" + p._id);
       if (v === "coming-soon") { chars.push({ name: d.name, avatar: d.avatar, avatarFocus: d.avatarFocus, work: d.work, links: [], visibility: "coming-soon" }); return; }
-      if (!Array.isArray(d.links)) d.links = C[i] && C[i].links ? C[i].links : []; chars.push(C[i] ? Object.assign({}, C[i], d) : d); });
+      var base = typeof i === "number" ? C[i] : null; if (!Array.isArray(d.links)) d.links = base && base.links ? base.links : []; chars.push(base ? Object.assign({}, base, d) : d); });
     C.forEach(function (c, i) { if (!usedC[i]) chars.push(c); });
     // 隱藏或未開放世界觀底下的角色一律不輸出（含後台沒有、只存在內建的角色）
     chars = chars.filter(function (c) { return vis[c.work] !== "hidden" && vis[c.work] !== "coming-soon"; });
-    var usedP = {}, plats = P.platforms.map(function (p, n) { var i = idx(p && p._id, "p"); if (i < 0 || usedP[i]) fail("platform" + n); usedP[i] = 1;
+    var usedP = {}, usedNewP = {}, plats = P.platforms.map(function (p, n) { var id = p && p._id, i = idx(id, "p");
+      if (i < 0) { if (!isNewId(id, "p") || usedNewP[id]) fail("platform" + n); usedNewP[id] = 1; return clean(p, "platform:" + id); }
+      if (usedP[i]) fail("platform" + n); usedP[i] = 1;
       var d = clean(p, "platform:" + p._id), o = PL[i]; if (!o) return d;
       if (d.name && d.name !== o.name) { d.title = d.name; } delete d.name; // 原 name 是穩定別名
       return Object.assign({}, o, d); });
