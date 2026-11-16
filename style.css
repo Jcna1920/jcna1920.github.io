@@ -900,3 +900,99 @@ html.search-open body{overscroll-behavior:none}
   .wq .wgroup-head{padding-right:104px;font-size:.95rem}
 }
 @media (prefers-reduced-motion:reduce){.wq .wgroup.wq-in{animation:none}}
+
+/* 進入作品頁特效 */
+.wfly{position:fixed;z-index:60;overflow:hidden;border-radius:var(--radius);pointer-events:none;background:#0b0611;box-shadow:0 40px 90px -30px rgba(0,0,0,.85)}
+.wfly>img{width:100%;height:100%;object-fit:cover;display:block}
+.wfly-bd{position:fixed;inset:0;z-index:59;pointer-events:none;background:radial-gradient(circle at 50% 45%,rgba(40,20,52,.82),rgba(10,6,14,.95))}
+.wenter:not(.landed) .wstage-bg{visibility:hidden}
+.wenter .back,.wenter .wstage-panel,.wenter .wstage-extra,.wenter .wthumb{opacity:0}
+.wenter.go .back,.wenter.go .wstage-panel,.wenter.go .wstage-extra{animation:wIn .55s ease both}
+.wenter.go .wthumb{animation:wIn .45s ease both;animation-delay:calc(var(--i,0) * 75ms + 200ms)}
+@keyframes wIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.wfade{animation:wFade .35s ease both}
+@keyframes wFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.wshow .wslide{transition:none}.wenter.go .wthumb,.wenter.go .wstage-panel{animation-name:wFade}.wstage .swap{animation:none!important}}
+
+/* 作品頁舞台：黑白世界觀底圖＋左側介紹與橫排角色＋右側角色大頭像（沿用站內紫黑金配色） */
+.wstage{position:relative;width:100vw;margin-left:calc(50% - 50vw);min-height:min(760px,92vh);overflow:hidden;isolation:isolate;
+  border-top:1px solid rgba(217,191,140,.18);border-bottom:1px solid rgba(217,191,140,.18);background:#0b0611}
+.wstage-bg{position:absolute;inset:0;z-index:-1}
+.wstage-bg>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.42) contrast(1.08)}
+.wstage-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,7,17,.92) 0%,rgba(12,7,17,.7) 42%,rgba(12,7,17,.25) 75%,rgba(12,7,17,.5)),
+  linear-gradient(180deg,rgba(12,7,17,.35),transparent 30%,transparent 70%,rgba(12,7,17,.85))}
+.wstage.no-cover .wstage-bg{background:radial-gradient(circle at 70% 40%,rgba(120,70,140,.35),transparent 60%),linear-gradient(160deg,#21122a,#0c0711)}
+.wstage-in{position:relative;max-width:1160px;margin:0 auto;min-height:inherit;padding:56px clamp(20px,5vw,48px) 40px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:36px;align-items:stretch}
+.wstage-left{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-width:0}
+.wstage-panel{max-width:600px;max-height:470px;overflow:auto;padding-right:8px;scrollbar-width:thin;scrollbar-color:var(--gold-dim) transparent}
+.wstage-panel .work-title{margin:6px 0 10px}
+.wstage-panel .work-world{margin-top:14px;max-width:none}
+.wstage-hint{margin-top:18px;font-size:.78rem;letter-spacing:.18em;color:var(--gold);opacity:.75}
+.wchar-name{font-family:var(--serif-tc);font-weight:500;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:.14em;color:#f4ecf8;line-height:1.25;margin:4px 0 6px;
+  text-shadow:0 2px 24px rgba(0,0,0,.6)}
+.wstage-panel .ccode{font-size:1rem}
+.wchar-sum{margin-top:14px;font-size:1rem;color:#efe6f3;line-height:1.75;padding-left:12px;border-left:2px solid var(--gold-dim)}
+.wstage-panel .cmeta{margin-top:14px}
+.wstage-panel .cintro{margin-top:12px;color:var(--lavender);font-size:.9rem;line-height:1.85;white-space:pre-line}
+.wstage-panel .lhead{margin-top:16px}
+.wstage-roster{display:flex;gap:12px;overflow-x:auto;padding:8px 2px 12px;scrollbar-width:thin;scrollbar-color:var(--gold-dim) transparent;overscroll-behavior-x:contain}
+.wthumb{flex:none;width:92px;padding:0;border:0;background:none;cursor:pointer;color:inherit;text-align:center;font:inherit}
+.wthumb-img{position:relative;display:block;width:92px;height:112px;overflow:hidden;border:1px solid rgba(217,191,140,.28);
+  background:linear-gradient(160deg,#2d1838,#120a17);clip-path:polygon(0 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%);transition:border-color .3s,box-shadow .3s,transform .3s}
+.wthumb-img>img{width:100%;height:100%;object-fit:cover;filter:saturate(.75) brightness(.85);transition:filter .3s}
+.wthumb-ph{display:grid;place-items:center;width:100%;height:100%;font-family:var(--serif-tc);font-size:1.6rem;color:var(--gold)}
+.wthumb-name{display:block;margin-top:6px;font-family:var(--serif-tc);font-size:.76rem;letter-spacing:.06em;color:var(--lavender);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wthumb:hover .wthumb-img,.wthumb:focus-visible .wthumb-img{border-color:var(--gold-dim);transform:translateY(-3px)}
+.wthumb:hover .wthumb-img>img,.wthumb.on .wthumb-img>img{filter:none}
+.wthumb:focus-visible{outline:none}
+.wthumb.on .wthumb-img{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(217,191,140,.35)}
+.wthumb.on .wthumb-name{color:var(--gold)}
+.wthumb-world .wthumb-img>img{filter:grayscale(.3) brightness(.8)}
+.wthumb.locked{cursor:default}
+.wthumb.locked .wthumb-img>img{filter:grayscale(1) brightness(.45)}
+.wthumb.locked:hover .wthumb-img{transform:none;border-color:rgba(217,191,140,.28)}
+.wthumb-lock{position:absolute;inset:auto 0 0;padding:4px 0;background:rgba(12,7,17,.8);font-size:.66rem;letter-spacing:.2em;color:var(--gold)}
+.wthumb.locked .wthumb-name{opacity:.55}
+.wstage-art{position:relative;display:flex;align-items:center;justify-content:center;min-width:0}
+.wportrait{position:relative;width:min(100%,440px);aspect-ratio:1;overflow:hidden;border-radius:4px;
+  -webkit-mask-image:radial-gradient(ellipse 72% 72% at 50% 45%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 72% 72% at 50% 45%,#000 58%,transparent 100%)}
+.wportrait>img{width:100%;height:100%;object-fit:cover;display:block}
+.wportrait.ph{display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,#4a2858,#160c1b 70%);font-family:var(--serif-tc);font-size:6rem;color:var(--gold)}
+.wstage-art::before{content:"";position:absolute;width:min(92%,460px);aspect-ratio:1;border:1px solid rgba(217,191,140,.22);transform:rotate(45deg);opacity:0;transition:opacity .4s;pointer-events:none}
+.wstage.has-char .wstage-art::before{opacity:1}
+.wstage .swap{animation:wSwap .45s ease both}
+.wstage-art.swap{animation:wArt .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes wSwap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes wArt{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+.wstage-extra{margin-top:36px}
+.wstage-extra:empty{display:none}
+@media (max-width:860px){
+  .wstage{min-height:0}
+  .wstage-in{grid-template-columns:1fr;gap:18px;padding:32px 20px 26px}
+  .wstage-art{order:-1}
+  .wstage:not(.has-char) .wstage-art{display:none}
+  .wportrait{width:min(78vw,300px)}
+  .wstage-art::before{width:min(70vw,280px)}
+  .wstage-panel{max-height:none;overflow:visible;padding-right:0}
+  .wstage-roster{margin:0 -20px;padding:8px 20px 12px}
+  .wthumb{width:76px}.wthumb-img{width:76px;height:94px}
+  .wstage-bg::after{background:linear-gradient(180deg,rgba(12,7,17,.55),rgba(12,7,17,.82) 45%,rgba(12,7,17,.95))}
+}
+
+/* 作品與世界觀：單張大卡片輪播 */
+.wshow{max-width:720px;margin:0 auto;position:relative}
+.wshow-stage{display:grid;overflow:hidden;border-radius:14px}
+.wshow .wslide{grid-area:1/1;opacity:0;transform:translateX(28px);transition:opacity .7s ease,transform .7s ease,border-color .4s,box-shadow .4s;pointer-events:none;border-radius:14px}
+.wshow .wslide.on{opacity:1;transform:none;pointer-events:auto;z-index:1}
+.wshow .wkcard:hover{transform:none}
+.wshow .wkcover{aspect-ratio:16/9}
+.wshow .wkbody{padding:22px 28px 24px;flex:none}
+.wshow .wkbody h3{font-size:1.5rem;margin:6px 0 8px}
+.wshow .wkhook{flex:none;font-size:.95rem;line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wshow .wkcount{margin-top:14px;padding-top:12px}
+.wshow-nav{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:18px;font-family:var(--serif);font-size:.82rem;letter-spacing:.12em;color:var(--mist)}
+@media (max-width:680px){
+  .wshow .wkbody{padding:16px 18px 18px}
+  .wshow .wkbody h3{font-size:1.15rem}
+  .wshow .wkhook{font-size:.86rem}
+}

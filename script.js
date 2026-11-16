@@ -711,19 +711,50 @@ pf.innerHTML = `<a href="#characters" data-p="">全部<span>${CHARACTERS.length}
 const clip = (t, n) => { t = String(t || ""); return t.length > n ? t.slice(0, n).replace(/[，、。；：\s]+$/, "") + "…" : t; };
 const promoHTML = w => w.video ? `<video class="wkvideo" src="${esc(w.video)}" muted loop autoplay playsinline preload="none" aria-hidden="true"${w.cover ? ` poster="${esc(w.cover)}"` : ""}></video>` : "";
 const UNAVAILABLE_HTML = `<div class="load-fail" role="status"><p>作品與角色資料暫時無法載入。</p><p class="muted">請稍後重新整理頁面再試一次。</p><button type="button" class="btn-ghost load-retry">重新載入</button></div>`;
+/* 作品與世界觀：一次一張大卡片（大圖＋標題＋導語），約 5 秒自動換下一張；滑過／焦點暫停，‹ › 手動切換，手機可左右滑。
+   未開放作品排最後、顯示「未開放」且不可點。 */
 function worksGridHTML() {
   if (window.__PUBLISHED_FAILED) return UNAVAILABLE_HTML;
-  return `<div class="mq mq-works"><div class="work-grid mq-track">${SHOWN_WORKS.map((w, i) => {
-    if (isSoon(w)) return `<div class="wkcard reveal locked" aria-disabled="true" data-work="${esc(w.id)}">
-      <div class="wkcover">${coverHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span><span class="soon-badge">未開放</span></div>
+  const order = SHOWN_WORKS.map((w, i) => ({ w, i })), list = order.filter(x => !isSoon(x.w)).concat(order.filter(x => isSoon(x.w)));
+  const slide = ({ w, i }, k) => {
+    const sector = `<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span>`;
+    const hidden = k ? ' aria-hidden="true" inert' : "";
+    if (isSoon(w)) return `<div class="wkcard wslide locked${k ? "" : " on"}" aria-disabled="true" data-work="${esc(w.id)}"${hidden}>
+      <div class="wkcover">${coverHTML(w)}${sector}<span class="soon-badge">未開放</span></div>
       <div class="wkbody">${w.tags ? `<p class="wktags">${esc(w.tags)}</p>` : ""}<h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3><p class="wkcount soon">即將開放</p></div></div>`;
-    const n = charsOfWork(w).length, blurb = w.world && w.world !== w.hook ? clip(w.world, 70) : "";
-    return `<a class="wkcard reveal" href="#work/${w.id}?from=world" data-work="${w.id}">
-      <div class="wkcover${w.video ? " has-video" : ""}">${coverHTML(w)}${promoHTML(w)}<span class="wkcoord">${coordOf(w)}</span><span class="wksector">SECTOR ${String(i + 1).padStart(2, "0")}</span></div>
-      <div class="wkbody"><p class="wktags">${esc(w.tags)}</p><h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3>
-      ${w.hook ? `<p class="wkhook">${esc(w.hook)}</p>` : ""}${blurb ? `<p class="wkworld">${esc(blurb)}</p>` : ""}
-      <p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
-  }).join("")}</div></div>`;
+    const n = charsOfWork(w).length;
+    return `<a class="wkcard wslide${k ? "" : " on"}" href="#work/${w.id}?from=world" data-work="${w.id}"${hidden}${k ? ' tabindex="-1"' : ""}>
+      <div class="wkcover${w.video ? " has-video" : ""}">${coverHTML(w)}${promoHTML(w)}${sector}</div>
+      <div class="wkbody">${w.tags ? `<p class="wktags">${esc(w.tags)}</p>` : ""}<h3 translate="no" class="notranslate">${esc(workTitle(w))}</h3>
+      ${w.hook || w.world ? `<p class="wkhook">${esc(w.hook || clip(w.world, 80))}</p>` : ""}<p class="wkcount"><span>${n}</span> 位角色 <em>→</em></p></div></a>`;
+  };
+  return `<div class="wshow" aria-roledescription="carousel" aria-label="作品與世界觀"><div class="wshow-stage">${list.map(slide).join("")}</div>
+    ${list.length > 1 ? `<div class="wshow-nav"><button type="button" class="wq-btn" data-step="-1" aria-label="上一個世界觀">‹</button><span class="wq-pos" aria-live="polite">1 / ${list.length}</span><button type="button" class="wq-btn" data-step="1" aria-label="下一個世界觀">›</button></div>` : ""}</div>`;
+}
+function mountShow(box) {
+  const slides = [...box.querySelectorAll(".wslide")], pos = box.querySelector(".wq-pos"); if (slides.length < 2) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  let cur = 0, timer = 0, hover = false, focus = false, swiped = false;
+  const go = i => { cur = (i + slides.length) % slides.length;
+    slides.forEach((s, k) => { const on = k === cur; s.classList.toggle("on", on); s.toggleAttribute("inert", !on);
+      if (on) { s.removeAttribute("aria-hidden"); s.removeAttribute("tabindex"); } else { s.setAttribute("aria-hidden", "true"); if (s.tagName === "A") s.tabIndex = -1; } });
+    if (pos) pos.textContent = `${cur + 1} / ${slides.length}`; };
+  const seen = () => { const r = box.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+  const tick = () => { if (!box.isConnected) return clearInterval(timer); if (!hover && !focus && !document.hidden && !reduce.matches && seen()) go(cur + 1); };
+  const restart = () => { clearInterval(timer); timer = setInterval(tick, 5000); };
+  box.addEventListener("click", e => { const b = e.target.closest(".wq-btn"); if (b) { go(cur + +b.dataset.step); restart(); } });
+  box.addEventListener("click", e => { if (swiped && e.target.closest(".wslide")) { e.preventDefault(); e.stopPropagation(); swiped = false; } }, true);
+  box.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hover = true; });
+  box.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { hover = false; restart(); } });
+  box.addEventListener("focusin", e => { if (e.target.matches(":focus-visible")) focus = true; });
+  box.addEventListener("focusout", e => { if (!box.contains(e.relatedTarget)) focus = false; });
+  let x0 = null, y0 = 0;
+  const stage = box.querySelector(".wshow-stage");
+  stage.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; swiped = false; }, { passive: true });
+  stage.addEventListener("touchend", e => { if (x0 === null) return; const t = e.changedTouches[0], dx = t.clientX - x0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(t.clientY - y0)) { swiped = true; go(cur + (dx < 0 ? 1 : -1)); restart(); } x0 = null; }, { passive: true });
+  box.__show = { go: i => { go(i); restart(); }, index: el => slides.indexOf(el.closest(".wslide")) };
+  restart();
 }
 /* 角色列表「全部」：依作品分組；一次顯示一個世界觀，下方角色跑馬燈，跑完一輪淡入下一個世界觀 */
 function viewAll() {
@@ -793,6 +824,7 @@ function makeMarquee(sc, opt = {}) {
   const api = {
     destroy() { dead = true; cancelAnimationFrame(raf); hoverEl.removeEventListener("pointerenter", enter); hoverEl.removeEventListener("pointerleave", leave); ro && ro.disconnect(); MQ_REDUCE.removeEventListener && MQ_REDUCE.removeEventListener("change", onReduce); },
     /* 讓某張卡片進入可視範圍並暫停一下（返回捲動、搜尋定位用） */
+    hold(ms) { touchUntil = performance.now() + ms; },
     show(el) { touchUntil = performance.now() + 6000; const x = Math.max(0, el.offsetLeft - track.offsetLeft - (sc.clientWidth - el.offsetWidth) / 2); pos = period ? x % period : x; sc.scrollLeft = pos; setAt = sc.scrollLeft; }
   };
   sc.__mq = api; return api;
@@ -834,6 +866,7 @@ function mountMarquees(root) {
 }
 /* 讓被定位的卡片（返回／搜尋）切到所屬世界觀並捲進可視範圍 */
 function mqReveal(el) {
+  const sh = el.closest(".wshow"); if (sh && sh.__show) { const k = sh.__show.index(el); if (k >= 0) sh.__show.go(k); }
   const wq = el.closest(".wq"); if (wq && wq.__wq) wq.__wq.reveal(el);
   const sc = el.closest(".mq"), card = el.closest(".ccard, .wkcard");
   if (sc && sc.__mq && card) sc.__mq.show(card);
@@ -868,23 +901,79 @@ function rosterHTML(r) {
       <div class="rbody"><p class="rname"><span class="ren notranslate" translate="no">${esc(x.en)}</span><span class="rzh notranslate" translate="no">${esc(x.zh)}</span></p>
       <p class="rrole">${esc(x.role)}</p><p class="rlook"><span class="rh">${esc(x.height)}</span>${esc(x.look)}</p></div></li>`).join("")}</ol></section>`;
 }
+/* 作品頁（舞台式）：黑白世界觀大圖為底，左側為介紹面板與橫排關聯角色，點角色才顯示其主要介紹與大頭像。
+   未開放角色排最後、鎖定不可點。其他作品內容（平台連結、名冊）放在舞台下方。 */
+function worldPanelHTML(w, list, platSet) {
+  return `<p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
+    ${w.tags ? `<p class="wktags">${esc(w.tags)}</p>` : ""}
+    ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : w.hook ? `<p class="work-world">${esc(w.hook)}</p>` : ""}
+    <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p>
+    ${list.some(c => !isSoon(c)) ? `<p class="wstage-hint">點選下方角色，查看角色介紹</p>` : ""}`;
+}
+function charPanelHTML(c) {
+  const meta = [["全名", c.full], ["代號", c.code], ["身分", c.role], ["年齡", c.age], ["聯名", c.collab]]
+    .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd${k === "全名" ? ' class="notranslate" translate="no"' : ""}>${esc(v)}</dd>`).join("");
+  return `<p class="eyebrow">Character${c.status ? ` · ${esc(c.status)}` : ""}${c.group ? " · 多人" : ""}</p>
+    ${c.story ? `<div class="cstory notranslate" translate="no">「${esc(c.story)}」</div>` : ""}
+    <h3 class="wchar-name notranslate" translate="no">${esc(c.name)}</h3>
+    ${c.code ? `<div class="ccode">${esc(c.code)}</div>` : ""}
+    ${c.sum ? `<p class="wchar-sum">${esc(c.sum)}</p>` : ""}
+    ${meta ? `<dl class="cmeta">${meta}</dl>` : ""}
+    <p class="cintro">${esc(c.intro || "詳細介紹待補。")}</p>
+    <p class="lhead">遊玩平台</p>${linksHTML(c)}`;
+}
+const portraitHTML = c => c.avatar ? (st => `<div class="wportrait"><img src="${esc(c.avatar)}" alt="${esc(c.name)} 頭像"${st ? ` style="${st}"` : ""}>${wmHTML(false)}</div>`)(focusStyle(c.avatarFocus))
+  : `<div class="wportrait ph" aria-hidden="true"><span>${esc([...c.name][0])}</span></div>`;
+function thumbHTML(c, i) {
+  const st = focusStyle(c.avatarFocus), soon = isSoon(c);
+  const img = c.avatar ? `<img src="${esc(c.avatar)}" alt="" loading="lazy" decoding="async"${st ? ` style="${st}"` : ""}>` : `<span class="wthumb-ph">${esc([...c.name][0])}</span>`;
+  return `<button type="button" class="wthumb${soon ? " locked" : ""}" data-name="${esc(c.name)}" style="--i:${i + 1}"${soon ? ' aria-disabled="true" tabindex="-1"' : ' aria-pressed="false"'}>
+    <span class="wthumb-img">${img}${soon ? '<span class="wthumb-lock">未開放</span>' : ""}</span><span class="wthumb-name notranslate" translate="no">${esc(c.name)}</span></button>`;
+}
 function viewWork(w, from) {
   const list = charsOfWork(w), back = backOf(from);
   const platSet = [...new Set(list.flatMap(platsOf))].filter(p => p !== "未標註").map(plabel).join("・");
+  const st = focusStyle(w.coverFocus, w.coverPos);
+  const links = w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(l.platform === "Caveduck" ? "Caveduck" : plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); const item = code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; return l.platform === "Frontia" ? item + frontiaNoteHTML() : item; }).join("")}</div>` : "";
   return `<div class="panel-view">
     <a class="back" href="${back.href}" data-back="1">${esc(back.label)}</a>
-    <header class="work-hero">
-      <div class="work-hero-cover">${coverHTML(w)}</div>
-      <div><p class="eyebrow">World · ${coordOf(w)}</p><h3 class="work-title notranslate" translate="no">${esc(workTitle(w))}</h3>
-      <p class="wktags">${esc(w.tags)}</p>
-      ${w.world ? `<p class="work-world">${esc(w.world)}</p>` : `<p class="work-world">${esc(w.hook)}</p>`}
-      ${w.links && w.links.length ? `<div class="work-links">${w.links.filter(l => l.url).map(l => `<a class="lbtn wlink" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(plabel(l.platform))}${l.label ? "・" + esc(l.label) : ""}">${piconOf(l.platform) ? `<img class="wl-icon" src="${piconOf(l.platform)}" alt="" width="20" height="20">` : ""}<span class="lname"><span class="notranslate" translate="no">${esc(l.platform === "Caveduck" ? "Caveduck" : plabel(l.platform))}</span>${l.label ? `<em>${esc(l.label)}</em>` : ""}</span><span class="larrow">↗</span></a>`).map((btn, i) => { const l = w.links.filter(x => x.url)[i], code = inviteOfPlatform(l.platform); const item = code ? `<span class="lpair">${btn}<span class="lcode notranslate" translate="no"><code title="${esc(plabel(l.platform))} 邀請碼">${esc(code)}</code><button type="button" class="copy lcopy" data-copy="${esc(code)}" aria-label="複製 ${esc(plabel(l.platform))} 邀請碼">複製</button></span></span>` : btn; return l.platform === "Frontia" ? item + frontiaNoteHTML() : item; }).join("")}</div>` : ""}
-      <p class="work-meta">${list.length} 位角色${platSet ? `｜<span class="notranslate" translate="no">${esc(platSet)}</span>` : ""}</p></div>
-    </header>
-    ${w.roster ? rosterHTML(w.roster) : ""}
-    <div class="char-grid">${list.map(c => cardHTML(c, false)).join("")}</div>
+    <section class="wstage${w.cover ? "" : " no-cover"}" data-work="${esc(w.id)}" aria-label="${esc(workTitle(w))}">
+      <div class="wstage-bg" aria-hidden="true">${w.cover ? `<img src="${esc(w.cover)}" alt=""${st ? ` style="${st}"` : ""}>` : ""}</div>
+      <div class="wstage-in">
+        <div class="wstage-left">
+          <div class="wstage-panel" aria-live="polite">${worldPanelHTML(w, list, platSet)}</div>
+          <div class="wstage-roster" role="group" aria-label="關聯角色">
+            <button type="button" class="wthumb wthumb-world on" data-name="" aria-pressed="true" style="--i:0"><span class="wthumb-img">${w.cover ? `<img src="${esc(w.cover)}" alt=""${st ? ` style="${st}"` : ""}>` : `<span class="wthumb-ph">✦</span>`}</span><span class="wthumb-name">世界觀</span></button>
+            ${list.map(thumbHTML).join("")}
+          </div>
+        </div>
+        <div class="wstage-art" aria-hidden="true"></div>
+      </div>
+    </section>
+    <div class="wstage-extra">${links}${w.roster ? rosterHTML(w.roster) : ""}</div>
   </div>`;
 }
+/* 點選角色縮圖：切換介紹面板與右側大頭像 */
+function stagePick(name) {
+  const stage = view.querySelector(".wstage"); if (!stage) return false;
+  const w = WORKS.find(x => x.id === stage.dataset.work); if (!w) return false;
+  const list = charsOfWork(w), c = name ? list.find(x => x.name === name) : null;
+  if (name && (!c || isSoon(c))) return false;
+  const panel = stage.querySelector(".wstage-panel"), art = stage.querySelector(".wstage-art");
+  stage.querySelectorAll(".wthumb:not(.locked)").forEach(b => { const on = b.dataset.name === (c ? c.name : ""); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  const platSet = [...new Set(list.flatMap(platsOf))].filter(p => p !== "未標註").map(plabel).join("・");
+  panel.innerHTML = c ? charPanelHTML(c) : worldPanelHTML(w, list, platSet);
+  art.innerHTML = c ? portraitHTML(c) : "";
+  stage.classList.toggle("has-char", !!c);
+  [panel, art].forEach(n => { n.classList.remove("swap"); void n.offsetWidth; n.classList.add("swap"); });
+  if (window.__i18nPaint) window.__i18nPaint();
+  return true;
+}
+view.addEventListener("click", e => {
+  const b = e.target.closest(".wthumb"); if (!b || b.classList.contains("locked")) return;
+  stagePick(b.dataset.name);
+  if (matchMedia("(max-width: 680px)").matches) { const p = view.querySelector(".wstage-in"); p && p.scrollIntoView({ block: "start", behavior: "smooth" }); }
+});
 function viewPlatform(p) {
   const list = soonLast(CHARACTERS.filter(c => platsOf(c).includes(p.key)));
   return `<div class="panel-view">
@@ -894,6 +983,49 @@ function viewPlatform(p) {
     <div class="char-grid">${list.length ? list.map(c => cardHTML(c, "platform:" + p.id)).join("")
       : `<p class="empty">目前沒有標註於此平台的角色。</p>`}</div>
   </div>`;
+}
+
+/* ---------- 進入作品頁特效 ----------
+   點作品卡（或角色列表的作品標題）→ 封面大圖從卡片位置放大、移到作品頁頂端成為頁首大圖 → 角色卡依序出現。
+   直接開網址或返回只淡入；減少動態效果時不做位移動畫。 */
+let pendingEntry = null;
+const ENTRY_REDUCE = matchMedia("(prefers-reduced-motion: reduce)");
+function takeEntry(id) { const e = pendingEntry; pendingEntry = null; return e && e.id === id && Date.now() - e.t < 1500 && !ENTRY_REDUCE.matches ? e : null; }
+document.addEventListener("click", e => {
+  if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const a = e.target.closest && e.target.closest('#worldIndex a.wkcard, #charView .wgroup-head a[href^="#work/"]'); if (!a) return;
+  const id = a.dataset.work, img = a.querySelector(".wkcover > img");
+  const r = img ? img.closest(".wkcover").getBoundingClientRect() : null;
+  pendingEntry = { id, t: Date.now(), rect: r && r.width ? { x: r.left, y: r.top, w: r.width, h: r.height } : null };
+});
+function playEntry(p) {
+  const pv = view.querySelector(".panel-view"); if (!pv) return;
+  const banner = pv.querySelector(".wstage-bg"), bimg = banner && banner.querySelector(":scope > img");
+  pv.classList.add("wenter");
+  pv.querySelectorAll(".wthumb").forEach((c, i) => c.style.setProperty("--i", Math.min(i, 14)));
+  const tb = $(".topbar"), y = pv.getBoundingClientRect().top + window.scrollY - (tb ? tb.offsetHeight : 0) - 12;
+  window.scrollTo({ top: Math.max(0, y), behavior: "instant" });
+  const cleanup = [];
+  const finish = () => { cleanup.forEach(n => n.remove()); pv.classList.add("landed"); };
+  const goCards = () => pv.classList.add("go");
+  setTimeout(() => pv.classList.remove("wenter", "go", "landed"), 3200);   /* 動畫結束後回到一般狀態 */
+  if (!bimg || !bimg.animate) { finish(); goCards(); return; }
+  const br = banner.getBoundingClientRect(), vw = innerWidth, vh = innerHeight;
+  const bt = Math.max(br.top, 0), b = { left: br.left, top: bt, width: br.width, height: Math.max(1, Math.min(br.bottom, vh) - bt) };   /* 只飛到畫面內可見的部分 */
+  const mw = Math.min(vw * .9, 1040), mh = Math.min(mw * 9 / 16, vh * .62), mid = { x: (vw - mw) / 2, y: (vh - mh) / 2, w: mw, h: mh };
+  const from = p.rect || { x: mid.x + mw * .06, y: mid.y + mh * .06, w: mw * .88, h: mh * .88 };
+  const bd = document.createElement("div"); bd.className = "wfly-bd";
+  const fly = document.createElement("div"); fly.className = "wfly"; fly.setAttribute("aria-hidden", "true");
+  const im = bimg.cloneNode(); im.removeAttribute("loading"); fly.appendChild(im);
+  document.body.append(bd, fly); cleanup.push(bd, fly);
+  const box = r => ({ left: r.x + "px", top: r.y + "px", width: r.w + "px", height: r.h + "px" });
+  const ease = "cubic-bezier(.55,.05,.2,1)";
+  fly.animate([{ ...box(from), opacity: p.rect ? 1 : 0, offset: 0 }, { ...box(mid), opacity: 1, offset: .42 }, { ...box(mid), opacity: 1, offset: .52 },
+    { left: b.left + "px", top: b.top + "px", width: b.width + "px", height: b.height + "px", opacity: 1, borderRadius: "0px", offset: 1 }], { duration: 1050, easing: ease, fill: "forwards" });
+  im.animate([{ filter: "none" }, { filter: "none", offset: .5 }, { filter: getComputedStyle(bimg).filter || "grayscale(1)" }], { duration: 1050, easing: ease, fill: "forwards" });   /* 移動中轉為黑白 */
+  bd.animate([{ opacity: 0 }, { opacity: 1, offset: .25 }, { opacity: 1, offset: .5 }, { opacity: 0 }], { duration: 1050, fill: "forwards" });
+  setTimeout(goCards, 820);
+  setTimeout(finish, 1080);
 }
 
 /* ---------- hash routing ----------
@@ -935,12 +1067,16 @@ function route(scroll) {
     mountMarquees(view);
   }
   const { char } = parseHash();
+  if (work && char && stagePick(char)) { settleScroll(view.querySelector(".wstage"), "start"); return; }
   if (work && char) {   /* 由「最新上架」開啟：展開並捲到該角色卡 */
     const el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === char);
     if (el) { el.classList.add("in", "open"); el.setAttribute("aria-expanded", "true"); settleScroll(el, "center");
       el.classList.add("ret-flash"); setTimeout(() => el.classList.remove("ret-flash"), 1600); return; }
   }
-  if (scroll && (work || kind === "platform")) { if (!restoreScroll()) $("#characters").scrollIntoView({ behavior: "smooth" }); }
+  const entry = work && takeEntry(work.id);
+  if (work && html !== undefined && !entry) { const pv = view.querySelector(".panel-view"); pv && pv.classList.add("wfade"); }   /* 直接開啟／返回：只淡入 */
+  if (entry) playEntry(entry);
+  else if (scroll && (work || kind === "platform")) { if (!restoreScroll()) $("#characters").scrollIntoView({ behavior: "smooth" }); }
   else if (scroll && !restoreScroll()) {
     const { path } = parseHash(), t = path && document.getElementById(path);
     if (t) settleScroll(t);
@@ -1021,6 +1157,7 @@ view.addEventListener("keydown", e => {
 
 /* ---------- 作品與世界觀 ---------- */
 $("#worldIndex").innerHTML = worksGridHTML();
+document.querySelectorAll("#worldIndex .wshow").forEach(mountShow);
 mountMarquees($("#worldIndex"));
 
 /* ---------- 最新上架輪播 ---------- */
@@ -1401,6 +1538,7 @@ if (history.scrollRestoration) history.scrollRestoration = "manual";
       const w = x.w, char = x.c;
       const focusChar = () => {
         if (!char) return;
+        if (stagePick(char.name)) { settleScroll(view.querySelector(".wstage"), "start"); return; }
         const el = [...view.querySelectorAll(".ccard")].find(c => c.dataset.name === char.name);
         if (!el) return;
         el.classList.add("in", "open"); el.setAttribute("aria-expanded", "true");
