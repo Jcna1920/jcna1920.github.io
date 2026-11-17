@@ -34,6 +34,7 @@
     if (A.contacts) CONTACT_KEYS.forEach(function (k, i) { if (A.contacts[k]) links[i].setAttribute("href", A.contacts[k]); });
     return true;
   }
+  var NEW_W = /^w-[A-Za-z0-9_-]{4,40}$/, SLUG = /^[A-Za-z0-9_-]{1,40}$/;
   var HEX = /^#[0-9a-fA-F]{6}$/, DIRS = ["to bottom", "to right", "135deg"];
   function fail(m) { throw new Error("invalid published data: " + m); }
   function isObj(o) { return o && typeof o === "object" && !Array.isArray(o); }
@@ -82,8 +83,12 @@
     var site = P.site == null ? {} : P.site; if (!isObj(site)) fail("site");
     var W = ctx.WORKS, C = ctx.CHARACTERS, PL = ctx.PLATFORMS;
     var byId = {}; W.forEach(function (w) { byId[w.id] = w; });
-    var seen = {}, vis = {}, works = [];
-    P.worlds.forEach(function (p, i) { var id = p && (p._id || p.id); if (typeof id !== "string" || !id || seen[id]) fail("world" + i); seen[id] = 1;
+    var seen = {}, vis = {}, works = [], wAlias = {}, rawIds = {};
+    P.worlds.forEach(function (p) { if (p && typeof p._id === "string") rawIds[p._id] = 1; });
+    P.worlds.forEach(function (p, i) { var id = p && (p._id || p.id); if (typeof id !== "string" || !id || seen[id]) fail("world" + i);
+      // 後台新增世界觀使用隨機編號（如 w-_PEq4GUMOyFl）：若有自訂「id」欄位（如 yanjin）且不與任何既有世界觀衝突，就以它當公開 id
+      if (NEW_W.test(id) && !byId[id] && typeof p.id === "string" && SLUG.test(p.id) && p.id !== id && !byId[p.id] && !rawIds[p.id] && !seen[p.id]) { wAlias[id] = p.id; id = p.id; }
+      seen[id] = 1;
       var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("world.visibility:" + id); vis[id] = v;
       if (v === "hidden") return; // 墓碑：不輸出、也不讓內建資料復活
       var d = clean(p, "world:" + id); d.id = id;
@@ -97,7 +102,7 @@
       else { if (usedC[i]) fail("character" + n); usedC[i] = 1; }
       var v = p.visibility; if (v != null && VIS.indexOf(v) < 0) fail("character.visibility:" + p._id);
       if (v === "hidden") return;
-      var d = clean(p, "character:" + p._id);
+      var d = clean(p, "character:" + p._id); if (typeof d.work === "string" && wAlias[d.work]) d.work = wAlias[d.work]; // 角色填隨機世界觀編號也能對上
       if (v === "coming-soon") { chars.push({ name: d.name, avatar: d.avatar, avatarFocus: d.avatarFocus, work: d.work, links: [], visibility: "coming-soon" }); return; }
       var base = typeof i === "number" ? C[i] : null; if (!Array.isArray(d.links)) d.links = base && base.links ? base.links : []; chars.push(base ? Object.assign({}, base, d) : d); });
     C.forEach(function (c, i) { if (!usedC[i]) chars.push(c); });
