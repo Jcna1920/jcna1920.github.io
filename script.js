@@ -571,7 +571,7 @@ const PLATFORM_FILTERS = (() => {
 
 /* ---------- helpers ---------- */
 /* ── 最新上架（作品與世界觀頂端的輪播）──
-   新角色上架時手動更新：把角色的 name（與 CHARACTERS 中的 name 完全相同）加到最前面，最多顯示 3 位。
+   新角色上架時手動更新：把角色的 name（與 CHARACTERS 中的 name 完全相同）加到最前面，最多顯示 4 位。
    找不到或屬於隱藏作品的名字會自動略過；清空陣列即隱藏整個輪播。 */
 const NEWEST = ["神名憐", "達拉斯", "赫拉分"];
 ;window.__applyPublishedNewest&&window.__applyPublishedNewest(NEWEST);
@@ -1164,7 +1164,7 @@ mountMarquees($("#worldIndex"));
 (() => {
   const box = $("#newest"); if (!box) return;
   const shown = new Set(SHOWN_WORKS.map(w => w.id));
-  const items = NEWEST.map(n => CHARACTERS.find(c => c.name === n)).filter(c => c && !isSoon(c) && shown.has(c.work) && OPEN_WORKS.some(w => w.id === c.work)).slice(0, 3);
+  const items = NEWEST.map(n => CHARACTERS.find(c => c.name === n)).filter(c => c && !isSoon(c) && shown.has(c.work) && OPEN_WORKS.some(w => w.id === c.work)).slice(0, 4);
   if (!items.length) { box.hidden = true; return; }
   const multi = items.length > 1;
   const slide = (c, i) => { const w = workOf(c);
